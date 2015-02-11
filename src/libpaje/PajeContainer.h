@@ -55,12 +55,12 @@ public:
   PajeContainer (double time, std::string name, std::string alias, PajeContainer *parent, PajeType *type, PajeTraceEvent *event, double stopat);
   ~PajeContainer ();
   int numberOfEntities (void); //recursive
-  std::string description (void) const;
-  std::string identifier (void);
+  std::string description (void) const; // *
+  std::string identifier (void); // *
   bool isContainer (void) const;
-  PajeContainer *getRoot (void);
-  std::vector<PajeContainer*> getChildren (void);
-  bool isAncestorOf (PajeContainer *c);
+  PajeContainer *getRoot (void); // *
+  std::vector<PajeContainer*> getChildren (void); // *
+  bool isAncestorOf (PajeContainer *c); // *
   bool keepSimulating (void);
 
   //entry method

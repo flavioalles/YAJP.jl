@@ -107,20 +107,20 @@ public:
   //
 
   // The entity at the root of the hierarchy
-  PajeContainer *rootInstance (void);
+  PajeContainer *rootInstance (void); // *
 
   // The type of the entity at the root of the hierarchy
-  PajeType *rootEntityType (void);
+  PajeType *rootEntityType (void); // *
 
   // Array of types that are directly under given type in hierarchy
   std::vector<PajeType*> containedTypesForContainerType (PajeType *type);
 
   // All containers contained by container
-  std::vector<PajeContainer*> enumeratorOfContainersInContainer (PajeContainer *container);
+  std::vector<PajeContainer*> enumeratorOfContainersInContainer (PajeContainer *container); // *
 
   // All containers of a given type contained by container. Container must be
   // of a type ancestral of entityType in the hierarchy.
-  std::vector<PajeContainer*> enumeratorOfContainersTypedInContainer (PajeType *type, PajeContainer *container);
+  std::vector<PajeContainer*> enumeratorOfContainersTypedInContainer (PajeType *type, PajeContainer *container); // *
 
   // All entities of a given type that are in a container in a certain
   // time interval.
