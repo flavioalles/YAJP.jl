@@ -4,18 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <PajeType.h>
 #include "YarosTrace.h"
-
-namespace paje {
-    PajeTypeNature natureTypes[] = {
-        PAJE_EventType,
-        PAJE_LinkType,
-        PAJE_StateType,
-        PAJE_VariableType,
-        PAJE_UndefinedType
-    };
-}
 
 int main(int argc, char *argv[]) {
     // #arguments ok?
@@ -28,7 +17,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Inexistent trace file." << std::endl;
         return 2;
     }
-    // instatiate YarosTrace
+    // instatiate YarosTrace (TODO: treat exceptions?)
     YarosTrace *yarosTrace = new YarosTrace(argv[1]);
     return 0;
 }
