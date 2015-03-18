@@ -7,7 +7,7 @@ class YarosTrace {
 private:
     PajeUnity* pajeTrace;
 public:
-    YarosTrace(std::string tracefile);
+    YarosTrace(const std::string tracefile);
     ~YarosTrace();
     // Disallowing of compiler generated functions
     YarosTrace() = delete;
