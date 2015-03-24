@@ -1,4 +1,5 @@
 /* YarosTrace.cpp */
+#include <cstdlib>
 #include <queue>
 #include <vector>
 #include "YarosTmp.h"
@@ -8,7 +9,13 @@ YarosTrace::YarosTrace(const std::string tracefile) : pajeTrace{new PajeUnity(fa
 }
 
 YarosTrace::~YarosTrace() {
-    delete pajeTrace;
+    try {
+        delete pajeTrace;
+    }
+    catch (...) {
+        // TODO: log it
+        std::abort();
+    }
 }
 
 void YarosTrace::dumptrace() const {
