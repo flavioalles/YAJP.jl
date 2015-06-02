@@ -6,7 +6,7 @@
 #include <vector>
 #include "YarosTrace.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     // #arguments ok?
     if (argc != 2) {
         std::cout << "Wrong usage." << std::endl;
@@ -18,6 +18,6 @@ int main(int argc, char *argv[]) {
         return 2;
     }
     // instatiate YarosTrace (TODO: treat exceptions?)
-    YarosTrace *yarosTrace = new YarosTrace(argv[1]);
+    YarosTrace* yarosTrace = new YarosTrace(argv[1]);
     return 0;
 }
