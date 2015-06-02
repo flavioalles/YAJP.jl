@@ -9,7 +9,6 @@ private:
 public:
     YarosTrace(const std::string tracefile);
     ~YarosTrace();
-    void dumptrace() const;
     // Disallowing of compiler generated functions
     YarosTrace() = delete;
     YarosTrace(const YarosTrace&) = delete;
