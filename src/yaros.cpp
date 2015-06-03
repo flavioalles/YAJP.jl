@@ -19,5 +19,6 @@ int main(int argc, char* argv[]) {
     }
     // instatiate YarosTrace (TODO: treat exceptions?)
     YarosTrace* yarosTrace = new YarosTrace(argv[1]);
+    delete yarosTrace;
     return 0;
 }
