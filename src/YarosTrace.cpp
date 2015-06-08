@@ -25,3 +25,43 @@ std::vector<std::string*>& YarosTrace::getTopology() {
     }
     return *descriptions;
 }
+
+// std::vector<...> or std::list<...>?
+std::vector<PajeContainer*>& YarosTrace::getContainersOfDepth(int depth) {
+    std::vector<PajeContainer*> *containers = new std::vector<PajeContainer*>();
+    if (depth >= 0) {
+        std::queue<PajeContainer*> discovered;
+        discovered.push(this->rootInstance());
+        while (!discovered.empty()) {
+            PajeContainer* container = discovered.front();
+            discovered.pop();
+            if (container->depth == depth)
+                containers->push_back(container);
+            std::vector<PajeContainer*> children = container->getChildren();
+            std::vector<PajeContainer*>::iterator childrenIt;
+            for (childrenIt = children.begin(); childrenIt != children.end(); childrenIt++)
+                discovered.push(*childrenIt);
+        }
+    }
+    return *containers;
+}
+
+// std::vector<...> or std::list<...>?
+std::vector<PajeContainer*>& YarosTrace::getContainersOfName(std::string name) {
+    std::vector<PajeContainer*> *containers = new std::vector<PajeContainer*>();
+    if (!name.empty()) {
+        std::queue<PajeContainer*> discovered;
+        discovered.push(this->rootInstance());
+        while (!discovered.empty()) {
+            PajeContainer* container = discovered.front();
+            discovered.pop();
+            if (container->type()->name() == name)
+                containers->push_back(container);
+            std::vector<PajeContainer*> children = container->getChildren();
+            std::vector<PajeContainer*>::iterator childrenIt;
+            for (childrenIt = children.begin(); childrenIt != children.end(); childrenIt++)
+                discovered.push(*childrenIt);
+        }
+    }
+    return *containers;
+}
