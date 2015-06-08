@@ -1,5 +1,3 @@
-/* test.cpp */
-
 #include <boost/filesystem.hpp>
 #include <iostream>
 #include <string>

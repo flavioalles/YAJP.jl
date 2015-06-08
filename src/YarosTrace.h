@@ -1,4 +1,3 @@
-/* YarosTrace.h */
 #ifndef YAROS_TRACE_H
 #define YAROS_TRACE_H
 #include <PajeUnity.h>
