@@ -2,9 +2,7 @@
 #define YAROS_TRACE_H
 #include <PajeUnity.h>
 
-class YarosTrace {
-private:
-    PajeUnity* pajeTrace;
+class YarosTrace : public PajeUnity {
 public:
     YarosTrace(const std::string tracefile);
     ~YarosTrace();
