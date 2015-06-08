@@ -1,5 +1,6 @@
 #ifndef YAROS_TRACE_H
 #define YAROS_TRACE_H
+#include <PajeContainer.h>
 #include <PajeUnity.h>
 
 class YarosTrace : public PajeUnity {
