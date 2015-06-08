@@ -1,7 +1,5 @@
 #include <boost/filesystem.hpp>
 #include <iostream>
-#include <string>
-#include <vector>
 #include "YarosTrace.h"
 
 int main(int argc, char* argv[]) {
