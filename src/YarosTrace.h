@@ -10,7 +10,7 @@ public:
     YarosTrace() = delete;
     YarosTrace(const YarosTrace&) = delete;
     YarosTrace& operator=(const YarosTrace&) = delete;
-    std::vector<std::string*>& getTopology();
+    std::map<int,std::vector<PajeContainer*>>& getContainerTopology();
     std::vector<PajeContainer*>& getContainersOfDepth(int depth);
     std::vector<PajeContainer*>& getContainersOfName(std::string name);
 };

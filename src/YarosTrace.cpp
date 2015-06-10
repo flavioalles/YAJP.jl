@@ -1,4 +1,5 @@
 #include "YarosTrace.h"
+#include <map>
 #include <queue>
 #include <string>
 #include <vector>
@@ -9,21 +10,26 @@ YarosTrace::YarosTrace(const std::string tracefile): PajeUnity(false, false, tra
 YarosTrace::~YarosTrace() {
 }
 
-// std::vector<...> or std::list<...>?
-std::vector<std::string*>& YarosTrace::getTopology() {
-    std::vector<std::string*> *descriptions = new std::vector<std::string*>();
+std::map<int,std::vector<PajeContainer*>>& YarosTrace::getContainerTopology() {
+    std::map<int,std::vector<PajeContainer*>>* containers = new std::map<int,std::vector<PajeContainer*>>();
     std::queue<PajeContainer*> discovered;
     discovered.push(this->rootInstance());
     while (!discovered.empty()) {
         PajeContainer* container = discovered.front();
         discovered.pop();
-        descriptions->push_back(new std::string("[" + std::to_string(container->depth) + "] " + container->description() + " (" + std::to_string((container->getChildren()).size()) + ")"));
-        std::vector<PajeContainer*> children = container->getChildren();
-        std::vector<PajeContainer*>::iterator childrenIt;
-        for (childrenIt = children.begin(); childrenIt != children.end(); childrenIt++)
-            discovered.push(*childrenIt);
+        auto keyValuePair = containers->find(container->depth);
+        if (keyValuePair == containers->end()) {
+            std::vector<PajeContainer*>* contV = new std::vector<PajeContainer*>;
+            contV->push_back(container);
+            containers->insert({container->depth, *contV});
+        }
+        else {
+            (keyValuePair->second).push_back(container);
+        }
+        for (auto &child: container->getChildren())
+            discovered.push(child);
     }
-    return *descriptions;
+    return *containers;
 }
 
 // std::vector<...> or std::list<...>?
