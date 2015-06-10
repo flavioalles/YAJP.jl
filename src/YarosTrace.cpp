@@ -43,10 +43,8 @@ std::vector<PajeContainer*>& YarosTrace::getContainersOfDepth(int depth) {
             discovered.pop();
             if (container->depth == depth)
                 containers->push_back(container);
-            std::vector<PajeContainer*> children = container->getChildren();
-            std::vector<PajeContainer*>::iterator childrenIt;
-            for (childrenIt = children.begin(); childrenIt != children.end(); childrenIt++)
-                discovered.push(*childrenIt);
+            for (auto &child: container->getChildren())
+                discovered.push(child);
         }
     }
     return *containers;
@@ -63,10 +61,8 @@ std::vector<PajeContainer*>& YarosTrace::getContainersOfName(std::string name) {
             discovered.pop();
             if (container->type()->name() == name)
                 containers->push_back(container);
-            std::vector<PajeContainer*> children = container->getChildren();
-            std::vector<PajeContainer*>::iterator childrenIt;
-            for (childrenIt = children.begin(); childrenIt != children.end(); childrenIt++)
-                discovered.push(*childrenIt);
+            for (auto &child: container->getChildren())
+                discovered.push(child);
         }
     }
     return *containers;
