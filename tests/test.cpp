@@ -18,9 +18,6 @@ int main(int argc, char* argv[]) {
     }
     // instatiate YarosTrace (TODO: treat exceptions?)
     YarosTrace* yarosTrace = new YarosTrace(argv[1]);
-    std::vector<PajeContainer*> containers = yarosTrace->getContainersOfDepth(DEPTH);
-    std::vector<PajeContainer*>::iterator containersIt;
-    for (containersIt = containers.begin(); containersIt != containers.end(); containersIt++);
     delete yarosTrace;
     return 0;
 }
