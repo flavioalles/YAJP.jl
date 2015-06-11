@@ -67,3 +67,27 @@ std::vector<PajeContainer*>& YarosTrace::getContainersOfName(std::string name) {
     }
     return *containers;
 }
+
+std::map<int,std::vector<PajeType*>>& YarosTrace::getTypeTopology() {
+    std::map<int,std::vector<PajeType*>>* types = new std::map<int,std::vector<PajeType*>>();
+    std::queue<PajeType*> discovered;
+    discovered.push(this->rootEntityType());
+    while (!discovered.empty()) {
+        PajeType* type = discovered.front();
+        discovered.pop();
+        auto keyValuePair = types->find(type->depth());
+        if (keyValuePair == types->end()) {
+            std::vector<PajeType*>* typeV = new std::vector<PajeType*>;
+            typeV->push_back(type);
+            types->insert({type->depth(), *typeV});
+        }
+        else {
+            (keyValuePair->second).push_back(type);
+        }
+        if (type->nature() == PAJE_ContainerType) {
+            for (auto &child: (dynamic_cast<PajeContainerType*>(type))->children())
+                discovered.push(child.second);
+        }
+    }
+    return *types;
+}
