@@ -1,16 +1,16 @@
-#include "YarosTrace.h"
+#include "YarosUnity.h"
 #include <map>
 #include <queue>
 #include <string>
 #include <vector>
 
-YarosTrace::YarosTrace(const std::string tracefile): PajeUnity(false, false, tracefile, -1, 1, nullptr) {
+YarosUnity::YarosUnity(const std::string tracefile): PajeUnity(false, false, tracefile, -1, 1, nullptr) {
 }
 
-YarosTrace::~YarosTrace() {
+YarosUnity::~YarosUnity() {
 }
 
-std::map<int,std::vector<PajeContainer*>>& YarosTrace::getContainerTopology() {
+std::map<int,std::vector<PajeContainer*>>& YarosUnity::getContainerTopology() {
     std::map<int,std::vector<PajeContainer*>>* containers = new std::map<int,std::vector<PajeContainer*>>();
     std::queue<PajeContainer*> discovered;
     discovered.push(this->rootInstance());
@@ -33,7 +33,7 @@ std::map<int,std::vector<PajeContainer*>>& YarosTrace::getContainerTopology() {
 }
 
 // std::vector<...> or std::list<...>?
-std::vector<PajeContainer*>& YarosTrace::getContainersOfDepth(int depth) {
+std::vector<PajeContainer*>& YarosUnity::getContainersOfDepth(int depth) {
     std::vector<PajeContainer*> *containers = new std::vector<PajeContainer*>();
     if (depth >= 0) {
         std::queue<PajeContainer*> discovered;
@@ -51,7 +51,7 @@ std::vector<PajeContainer*>& YarosTrace::getContainersOfDepth(int depth) {
 }
 
 // std::vector<...> or std::list<...>?
-std::vector<PajeContainer*>& YarosTrace::getContainersOfName(std::string name) {
+std::vector<PajeContainer*>& YarosUnity::getContainersOfName(std::string name) {
     std::vector<PajeContainer*> *containers = new std::vector<PajeContainer*>();
     if (!name.empty()) {
         std::queue<PajeContainer*> discovered;
@@ -68,7 +68,7 @@ std::vector<PajeContainer*>& YarosTrace::getContainersOfName(std::string name) {
     return *containers;
 }
 
-std::map<int,std::vector<PajeType*>>& YarosTrace::getTypeTopology() {
+std::map<int,std::vector<PajeType*>>& YarosUnity::getTypeTopology() {
     std::map<int,std::vector<PajeType*>>* types = new std::map<int,std::vector<PajeType*>>();
     std::queue<PajeType*> discovered;
     discovered.push(this->rootEntityType());
