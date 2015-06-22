@@ -1,9 +1,10 @@
 #include <boost/filesystem.hpp>
 #include <iostream>
-#include "../src/YarosData.h"
-#include "../src/YarosTrace.h"
+#include "../src/YarosContainer.h"
+#include "../src/YarosUnity.h"
 
-int DEPTH = 5;
+int CONTAINER_DEPTH = 5;
+std::string TYPE_NAME = "Worker State";
 
 int main(int argc, char* argv[]) {
     // #arguments ok?
@@ -16,8 +17,11 @@ int main(int argc, char* argv[]) {
         std::cout << "Inexistent trace file." << std::endl;
         return 2;
     }
-    // instatiate YarosTrace (TODO: treat exceptions?)
-    YarosTrace* yarosTrace = new YarosTrace(argv[1]);
-    delete yarosTrace;
+    YarosUnity* unity = new YarosUnity(argv[1]);
+    for (auto& c: unity->getContainersOfDepth(CONTAINER_DEPTH)) {
+        YarosContainer* container = new YarosContainer(*c);
+        for (auto& d: container->getData(unity->entityTypeWithName(TYPE_NAME)));
+    }
+    delete unity;
     return 0;
 }
