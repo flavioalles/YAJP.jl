@@ -6,7 +6,7 @@
 
 class YarosContainer : public PajeContainer {
 public:
-    YarosContainer(const PajeContainer&);
+    YarosContainer(const PajeContainer& container);
     ~YarosContainer();
     YarosContainer() = delete;
     YarosContainer(const YarosContainer&) = delete;
