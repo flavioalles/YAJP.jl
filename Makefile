@@ -1,4 +1,6 @@
-test:
-	clang -std=c++11 -o yaros tests/test.cpp src/*.cpp -lstdc++ -lpaje -lboost_system -lboost_filesystem
-	install -d $(HOME)/bin
-	install yaros $(HOME)/bin
+lib:
+	clang -c -std=c++11 -fpic src/*.cpp
+	clang -shared -o libyaros.so *.o
+	rm --force *.o
+clean:
+	rm --force libyaros.so
