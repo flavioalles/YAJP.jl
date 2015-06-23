@@ -19,8 +19,7 @@ int main(int argc, char* argv[]) {
     }
     YarosUnity* unity = new YarosUnity(argv[1]);
     for (auto& c: unity->getContainersOfDepth(CONTAINER_DEPTH)) {
-        YarosContainer* container = new YarosContainer(*c);
-        for (auto& d: container->getData(unity->entityTypeWithName(TYPE_NAME)));
+        for (auto& d: static_cast<YarosContainer*>(c)->getData(unity->entityTypeWithName(TYPE_NAME)));
     }
     delete unity;
     return 0;
