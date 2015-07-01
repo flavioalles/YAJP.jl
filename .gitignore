@@ -1,5 +1,5 @@
 .*
 !.gitignore
-*.so
+lib/
 tests/
-yaros
+bin/
