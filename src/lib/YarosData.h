@@ -1,12 +1,14 @@
 #ifndef YAROS_DATA_H
 #define YAROS_DATA_H
 #include <stdexcept>
+#include <string>
 
 class YarosData {
 public:
     virtual std::string getName();
     virtual double getStart();
     virtual double getEnd();
+    virtual std::string dumpData();
     virtual ~YarosData() {};
 };
 
@@ -22,6 +24,7 @@ public:
     YarosEvent& operator=(const YarosEvent&) = delete;
     std::string getName();
     double getStart();
+    std::string dumpData();
 };
 
 class YarosState : public YarosData {
@@ -38,5 +41,6 @@ public:
     std::string getName();
     double getStart();
     double getEnd();
+    std::string dumpData();
 };
 #endif

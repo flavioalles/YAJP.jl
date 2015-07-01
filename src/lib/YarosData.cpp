@@ -5,12 +5,15 @@ std::string YarosData::getName() {
     throw std::runtime_error("Undefined for the derived class");
 }
 
-
 double YarosData::getStart() {
     throw std::runtime_error("Undefined for the derived class");
 }
 
 double YarosData::getEnd() {
+    throw std::runtime_error("Undefined for the derived class");
+}
+
+std::string YarosData::dumpData() {
     throw std::runtime_error("Undefined for the derived class");
 }
 
@@ -29,6 +32,10 @@ std::string YarosEvent::getName() {
 
 double YarosEvent::getStart() {
     return this->start;
+}
+
+std::string YarosEvent::dumpData() {
+    return this->name + " " + std::to_string(this->start);
 }
 
 /* YarosState */
@@ -51,4 +58,8 @@ double YarosState::getStart() {
 
 double YarosState::getEnd() {
     return this->end;
+}
+
+std::string YarosState::dumpData() {
+    return this->name + " " + std::to_string(this->start) + " " + std::to_string(this->end);
 }
