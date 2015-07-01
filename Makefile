@@ -1,6 +1,7 @@
 lib:
+	install -d lib
 	clang -c -std=c++11 -fpic src/lib/*.cpp
-	clang -shared -o libyaros.so *.o
+	clang -shared -o lib/libyaros.so *.o
 	rm --force *.o
 clean:
-	rm --force libyaros.so
+	rm --force lib/libyaros.so
