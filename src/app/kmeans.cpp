@@ -1,5 +1,4 @@
 #include <boost/filesystem.hpp>
-#include <dlib/svm/kkmeans.h>
 #include <iostream>
 #include "../lib/YarosUnity.h"
 #include "../lib/YarosContainer.h"
