@@ -23,9 +23,6 @@ int main(int argc, char* argv[]) {
             if (d->getName() == STATE_NAME);
         break;
     }
-    // dlib::pick_initial_centers();
-    // dlib::find_clusters_using_kmeans();
-    // dlib::nearest_center();
     delete unity;
     return 0;
 }
