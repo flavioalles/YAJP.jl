@@ -1,5 +1,5 @@
 .*
 !.gitignore
 lib/
-tests/
+src/test/
 bin/
