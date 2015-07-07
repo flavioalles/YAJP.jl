@@ -11,6 +11,7 @@ public:
     YarosContainer() = delete;
     YarosContainer(const YarosContainer&) = delete;
     YarosContainer& operator=(const YarosContainer&) = delete; 
+    std::vector<YarosData*>& getData();
     std::vector<YarosData*>& getData(PajeType* type);
 };
 #endif
