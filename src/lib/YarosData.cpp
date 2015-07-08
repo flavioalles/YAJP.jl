@@ -18,8 +18,9 @@ std::string YarosData::dumpData() {
 }
 
 /* YarosEvent */
-YarosEvent::YarosEvent(std::string name, double start) {
+YarosEvent::YarosEvent(std::string name, std::string type, double start) {
     this->name = name;
+    this->type = type;
     this->start = start;
 }
 
@@ -30,12 +31,16 @@ std::string YarosEvent::getName() {
     return this->name;
 }
 
+std::string YarosEvent::getType() {
+    return this->type;
+}
+
 double YarosEvent::getStart() {
     return this->start;
 }
 
 std::string YarosEvent::dumpData() {
-    return this->name + " " + std::to_string(this->start);
+    return this->name + " " + this->type + " " + std::to_string(this->start);
 }
 
 /* YarosLink */

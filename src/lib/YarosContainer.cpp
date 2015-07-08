@@ -13,7 +13,7 @@ std::vector<YarosData*>& YarosContainer::getData() {
         for (auto& e: t.second) {
             switch (e->type()->nature()) {
                 case PAJE_EventType:
-                    yd = new YarosEvent(e->value()->name(), e->startTime());
+                    yd = new YarosEvent(e->value()->name(), e->type()->name(), e->startTime());
                     break;
                 case PAJE_LinkType:
                     if (!e->endContainer())
@@ -40,7 +40,7 @@ std::vector<YarosData*>& YarosContainer::getData(PajeType* type) {
     for (auto& e: this->enumeratorOfEntitiesTyped(type)) {
         switch (e->type()->nature()) {
             case PAJE_EventType:
-                yd = new YarosEvent(e->value()->name(), e->startTime());
+                yd = new YarosEvent(e->value()->name(), e->type()->name(), e->startTime());
                 break;
             case PAJE_LinkType:
                 if (!e->endContainer())

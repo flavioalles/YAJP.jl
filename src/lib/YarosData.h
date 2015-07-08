@@ -15,14 +15,16 @@ public:
 class YarosEvent : public YarosData {
 private:
     std::string name;
+    std::string type;
     double start;
 public:
-    YarosEvent(std::string name, double start);
+    YarosEvent(std::string name, std::string type, double start);
     ~YarosEvent();
     YarosEvent() = delete;
     YarosEvent(const YarosEvent&) = delete;
     YarosEvent& operator=(const YarosEvent&) = delete;
     std::string getName();
+    std::string getType();
     double getStart();
     std::string dumpData();
 };
