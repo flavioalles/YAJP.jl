@@ -5,6 +5,10 @@ std::string YarosData::getName() {
     throw std::runtime_error("Undefined for the derived class");
 }
 
+std::string YarosData::getType() {
+    throw std::runtime_error("Undefined for the derived class");
+}
+
 double YarosData::getStart() {
     throw std::runtime_error("Undefined for the derived class");
 }

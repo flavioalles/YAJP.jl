@@ -6,6 +6,7 @@
 class YarosData {
 public:
     virtual std::string getName();
+    virtual std::string getType();
     virtual double getStart();
     virtual double getEnd();
     virtual std::string dumpData();
