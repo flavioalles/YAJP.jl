@@ -13,7 +13,7 @@ public:
     YarosUnity& operator=(const YarosUnity&) = delete;
     std::map<int,std::vector<PajeContainer*>>& getContainerTopology();
     std::vector<PajeContainer*>& getContainersOfDepth(int depth);
-    std::vector<PajeContainer*>& getContainersOfName(std::string name);
+    std::vector<PajeContainer*>& getContainersOfType(std::string name);
     std::map<int,std::vector<PajeType*>>& getTypeTopology();
 };
 #endif

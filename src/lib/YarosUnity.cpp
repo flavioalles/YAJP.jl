@@ -49,7 +49,7 @@ std::vector<PajeContainer*>& YarosUnity::getContainersOfDepth(int depth) {
     return *containers;
 }
 
-std::vector<PajeContainer*>& YarosUnity::getContainersOfName(std::string name) {
+std::vector<PajeContainer*>& YarosUnity::getContainersOfType(std::string name) {
     std::vector<PajeContainer*> *containers = new std::vector<PajeContainer*>();
     if (!name.empty()) {
         std::queue<PajeContainer*> discovered;
