@@ -54,17 +54,21 @@ public:
 class YarosState : public YarosData {
 private:
     std::string name;
+    std::string type;
     double start;
     double end;
+    int imbrication;
 public:
-    YarosState(std::string name, double start, double end);
+    YarosState(std::string name, std::string type, double start, double end, int imbrication);
     ~YarosState();
     YarosState() = delete;
     YarosState(const YarosState&) = delete;
     YarosState& operator=(const YarosState&) = delete;
     std::string getName();
+    std::string getType();
     double getStart();
     double getEnd();
+    int getImbrication();
     std::string dumpData();
 };
 #endif

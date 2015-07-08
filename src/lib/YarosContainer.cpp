@@ -22,7 +22,7 @@ std::vector<YarosData*>& YarosContainer::getData() {
                         yd = new YarosLink(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->startContainer()->name());
                     break;
                 case PAJE_StateType:
-                    yd = new YarosState(e->value()->name(), e->startTime(), e->endTime());
+                    yd = new YarosState(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->imbricationLevel());
                     break;
                 case PAJE_VariableType:
                 default:
@@ -49,7 +49,7 @@ std::vector<YarosData*>& YarosContainer::getData(PajeType* type) {
                     yd = new YarosLink(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->startContainer()->name());
                 break;
             case PAJE_StateType:
-                yd = new YarosState(e->value()->name(), e->startTime(), e->endTime());
+                yd = new YarosState(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->imbricationLevel());
                 break;
             case PAJE_VariableType:
             default:

@@ -92,10 +92,12 @@ std::string YarosLink::dumpData() {
 }
 
 /* YarosState */
-YarosState::YarosState(std::string name, double start, double end) {
+YarosState::YarosState(std::string name, std::string type, double start, double end, int imbrication) {
     this->name = name;
+    this->type = type;
     this->start = start;
     this->end = end;
+    this->imbrication = imbrication;
 }
 
 YarosState::~YarosState() {
@@ -103,6 +105,10 @@ YarosState::~YarosState() {
 
 std::string YarosState::getName() {
     return this->name;
+}
+
+std::string YarosState::getType() {
+    return this->type;
 }
 
 double YarosState::getStart() {
@@ -113,6 +119,10 @@ double YarosState::getEnd() {
     return this->end;
 }
 
+int YarosState::getImbrication() {
+    return this->imbrication;
+}
+
 std::string YarosState::dumpData() {
-    return this->name + " " + std::to_string(this->start) + " " + std::to_string(this->end);
+    return this->name + " " + this->type + " " + std::to_string(this->start) + " " + std::to_string(this->end) + " " + std::to_string(this->imbrication);
 }
