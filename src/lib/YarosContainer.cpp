@@ -25,6 +25,8 @@ std::vector<YarosData*>& YarosContainer::getData() {
                     yd = new YarosState(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->imbricationLevel());
                     break;
                 case PAJE_VariableType:
+                    yd = new YarosVariable(e->type()->name(), e->startTime(), e->endTime(), e->doubleValue());
+                    break;
                 default:
                     throw PajeTypeException("Unknown PajeType.");
             }
@@ -52,6 +54,8 @@ std::vector<YarosData*>& YarosContainer::getData(PajeType* type) {
                 yd = new YarosState(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->imbricationLevel());
                 break;
             case PAJE_VariableType:
+                yd = new YarosVariable(e->type()->name(), e->startTime(), e->endTime(), e->doubleValue());
+                break;
             default:
                 throw PajeTypeException("Unknown PajeType.");
         }

@@ -73,4 +73,23 @@ public:
     int getImbrication();
     std::string dumpData();
 };
+
+class YarosVariable : public YarosData {
+private:
+    std::string type;
+    double start;
+    double end;
+    double value;
+public:
+    YarosVariable(std::string type, double start, double end, double value);
+    ~YarosVariable();
+    YarosVariable() = delete;
+    YarosVariable(const YarosVariable&) = delete;
+    YarosVariable& operator=(const YarosVariable&) = delete;
+    std::string getType();
+    double getStart();
+    double getEnd();
+    double getValue();
+    std::string dumpData();
+};
 #endif
