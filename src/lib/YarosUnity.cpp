@@ -32,7 +32,6 @@ std::map<int,std::vector<PajeContainer*>>& YarosUnity::getContainerTopology() {
     return *containers;
 }
 
-// std::vector<...> or std::list<...>?
 std::vector<PajeContainer*>& YarosUnity::getContainersOfDepth(int depth) {
     std::vector<PajeContainer*> *containers = new std::vector<PajeContainer*>();
     if (depth >= 0) {
@@ -50,7 +49,6 @@ std::vector<PajeContainer*>& YarosUnity::getContainersOfDepth(int depth) {
     return *containers;
 }
 
-// std::vector<...> or std::list<...>?
 std::vector<PajeContainer*>& YarosUnity::getContainersOfName(std::string name) {
     std::vector<PajeContainer*> *containers = new std::vector<PajeContainer*>();
     if (!name.empty()) {
