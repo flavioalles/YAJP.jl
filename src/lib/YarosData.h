@@ -27,6 +27,30 @@ public:
     std::string dumpData();
 };
 
+class YarosLink : public YarosData {
+private:
+    std::string name;
+    std::string type;
+    double start;
+    double end;
+    std::string startContainer;
+    std::string endContainer;
+public:
+    YarosLink(std::string name, std::string type, double start, double end, std::string startContainer);
+    YarosLink(std::string name, std::string type, double start, double end, std::string startContainer, std::string endContainer);
+    ~YarosLink();
+    YarosLink() = delete;
+    YarosLink(const YarosLink&) = delete;
+    YarosLink& operator=(const YarosLink&) = delete;
+    std::string getName();
+    std::string getType();
+    double getStart();
+    double getEnd();
+    std::string getStartContainer();
+    std::string getEndContainer();
+    std::string dumpData();
+};
+
 class YarosState : public YarosData {
 private:
     std::string name;

@@ -15,10 +15,15 @@ std::vector<YarosData*>& YarosContainer::getData() {
                 case PAJE_EventType:
                     yd = new YarosEvent(e->value()->name(), e->startTime());
                     break;
+                case PAJE_LinkType:
+                    if (!e->endContainer())
+                        yd = new YarosLink(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->startContainer()->name(), e->endContainer()->name());
+                    else
+                        yd = new YarosLink(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->startContainer()->name());
+                    break;
                 case PAJE_StateType:
                     yd = new YarosState(e->value()->name(), e->startTime(), e->endTime());
                     break;
-                case PAJE_LinkType:
                 case PAJE_VariableType:
                 default:
                     throw PajeTypeException("Unknown PajeType.");
@@ -37,10 +42,15 @@ std::vector<YarosData*>& YarosContainer::getData(PajeType* type) {
             case PAJE_EventType:
                 yd = new YarosEvent(e->value()->name(), e->startTime());
                 break;
+            case PAJE_LinkType:
+                if (!e->endContainer())
+                    yd = new YarosLink(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->startContainer()->name(), e->endContainer()->name());
+                else
+                    yd = new YarosLink(e->value()->name(), e->type()->name(), e->startTime(), e->endTime(), e->startContainer()->name());
+                break;
             case PAJE_StateType:
                 yd = new YarosState(e->value()->name(), e->startTime(), e->endTime());
                 break;
-            case PAJE_LinkType:
             case PAJE_VariableType:
             default:
                 throw PajeTypeException("Unknown PajeType.");
