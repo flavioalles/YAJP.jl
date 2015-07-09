@@ -1,5 +1,6 @@
 .*
 !.gitignore
 lib/
+!src/lib
 src/test/
 bin/
