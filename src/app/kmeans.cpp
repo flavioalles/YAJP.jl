@@ -10,6 +10,7 @@ int K = 3;
 std::list<std::string> NAMES {"chol_model_11","chol_model_21","chol_model_22"};
 std::list<std::string> TYPES {"Worker"};
 std::string OUTPUT_FILE {"kmeans.out"};
+std::string SEP {","};
 
 bool dataInNames(std::string name) {
     for (auto n: NAMES)
@@ -70,10 +71,14 @@ int main(int argc, char* argv[]) {
         }
     }
     filestream.open(outputPath, std::ios::out);
+    filestream << "Container" << SEP << "Centroid";
+    for (auto n: NAMES)
+        filestream << SEP << n;
+    filestream << std::endl;
     for (auto& c: gMap) {
-        filestream << c.first << "," << c.second;
+        filestream << c.first << SEP << c.second;
         for (auto& n: NAMES)
-            filestream << "," << (((cMap->find(c.first))->second).find(n))->second;
+            filestream << SEP << (((cMap->find(c.first))->second).find(n))->second;
         filestream << std::endl;
     }
     filestream.close();
