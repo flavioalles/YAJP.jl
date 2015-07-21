@@ -1,0 +1,6 @@
+%YAML 1.2
+# Example YAML Config. File
+containers: [Worker]
+data:
+    tasks: [chol_model_11, chol_model_21, chol_model_22]
+    misc: [Callback, FetchingInput, Initializing, Overhead, PushingOutput, Scheduling]
