@@ -13,6 +13,7 @@ const std::string OUTPUT_FILE {"kmeans.out"};
 const std::string SEP {","};
 
 int main(int argc, char* argv[]) {
+    /* Verify if call is good */
     if ((argc < 3) || (argc > 4) || ((argc == 4) && (argv[1] != std::string("--no-overwrite")))) {
         std::cout << "Wrong usage." << std::endl;
         return 1;
@@ -29,6 +30,7 @@ int main(int argc, char* argv[]) {
         std::cout << "Inexistent trace file." << std::endl;
         return 4;
     }
+    /* Get configuration from YAML file & Simulate trace */
     std::cout << "Get clustering config. & simulating Paje trace..." << std::endl;
     YAML::Node config;
     YarosUnity* unity;
@@ -40,6 +42,7 @@ int main(int argc, char* argv[]) {
         config = YarosUtils::getConfig(argv[2]);
         unity = new YarosUnity(argv[3]);
     }
+    /* Acquire data specified in YAML file from simulated trace */
     std::cout << "Retrieving data..." << std::endl;
     std::map<std::string,std::map<std::string,double>>* cMap = new std::map<std::string,std::map<std::string,double>>();
     for (auto t: config["containers"]) {
@@ -63,8 +66,10 @@ int main(int argc, char* argv[]) {
             cMap->insert({c->name(),*dMap});
         }
     }
+    /* Cluster acquired data */
     std::cout << "Clustering data..." << std::endl;
     std::map<std::string,std::string> gMap = YarosCluster::kMeans(K, *cMap);
+    /* Output clustering results to file */
     std::cout << "Writing results to file..." << std::endl;
     std::fstream filestream;
     std::string outputPath;
