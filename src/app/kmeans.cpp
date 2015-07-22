@@ -16,6 +16,7 @@ int main(int argc, char* argv[]) {
     /* Verify if call is good */
     if ((argc < 3) || (argc > 4) || ((argc == 4) && (argv[1] != std::string("--no-overwrite")))) {
         std::cout << "Wrong usage." << std::endl;
+        std::cout << "kmeans [--no-overwrite] <yaml-config> <paje-trace>" << std::endl;
         return 1;
     }
     if (((argc == 3) && (!boost::filesystem::is_regular_file(argv[1]))) || ((argc == 4) && (!boost::filesystem::is_regular_file(argv[2])))) {
