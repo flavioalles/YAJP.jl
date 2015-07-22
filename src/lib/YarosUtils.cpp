@@ -24,3 +24,11 @@ bool YarosUtils::checkConfig(const std::string yamlPath) {
 YAML::Node YarosUtils::getConfig(const std::string yamlPath) {
     return YAML::LoadFile(yamlPath);
 }
+
+std::string YarosUtils::dataInConfig(const YAML::Node config, const std::string name) {
+    for (auto d: config["data"])
+        for (auto n: d.second)
+            if (n.as<std::string>() == name)
+                return d.first.as<std::string>();
+    return std::string();
+}
