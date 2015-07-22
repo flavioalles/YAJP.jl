@@ -6,7 +6,7 @@
 
 namespace YarosUtils {
     extern const std::list<std::string> CONFIG_KEYS;
-    bool checkConfig(std::string yamlPath);
-    YAML::Node getConfig(std::string yamlPath);
+    bool checkConfig(const std::string yamlPath);
+    YAML::Node getConfig(const std::string yamlPath);
 }
 #endif

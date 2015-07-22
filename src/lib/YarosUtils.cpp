@@ -2,7 +2,7 @@
 
 const std::list<std::string> YarosUtils::CONFIG_KEYS {"containers","data"};
 
-bool YarosUtils::checkConfig(std::string yamlPath) {
+bool YarosUtils::checkConfig(const std::string yamlPath) {
     YAML::Node config = YAML::LoadFile(yamlPath);
     if (config.size() != YarosUtils::CONFIG_KEYS.size())
         return false;
@@ -21,6 +21,6 @@ bool YarosUtils::checkConfig(std::string yamlPath) {
     return true;
 }
 
-YAML::Node YarosUtils::getConfig(std::string yamlPath) {
+YAML::Node YarosUtils::getConfig(const std::string yamlPath) {
     return YAML::LoadFile(yamlPath);
 }
