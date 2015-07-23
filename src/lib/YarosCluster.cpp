@@ -100,7 +100,7 @@ std::map<std::string,std::string>& YarosCluster::kMeans(const int k, const std::
             (gMap->find(container.first))->second = closestCentroid;
         }
         // Recompute the centroid of each cluster
-        oldCentroids = std::move(centroids);
+        oldCentroids = centroids;
         centroids = KMeans::recomputeCentroids(cMap, *gMap, centroids);
     }
     // Until Centroids do not change
