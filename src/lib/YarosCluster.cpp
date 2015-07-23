@@ -7,9 +7,9 @@ namespace KMeans {
         while (indexes.size() != k) {
             std::srand(std::time(nullptr));
             indexes.push_back((std::rand()%gMap.size()));
+            indexes.sort();
             indexes.unique();
         }
-        indexes.sort();
         int i = 0;
         int index = indexes.front();
         indexes.pop_front();
