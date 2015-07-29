@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
         }
     }
     filestream.open(outputPath, std::ios::out);
-    filestream << "Container" << SEP << "Centroid";
+    filestream << "Container" << SEP << "Group";
     // assuming that iteration over std::pair's of std::map always follows the same order
     for (auto d: config["data"])
         filestream << SEP << d.first;
