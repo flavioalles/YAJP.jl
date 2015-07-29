@@ -76,8 +76,7 @@ int main(int argc, char* argv[]) {
     std::string outputPath;
     if (argc == 3) {
         outputPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(OUTPUT_FILE)).string();
-    }
-    else {
+    } else {
         int index = 1;
         outputPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(OUTPUT_FILE)).string();
         std::string basePath = outputPath;
