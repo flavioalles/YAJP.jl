@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
     }
     /* Cluster acquired data */
     std::cout << "Clustering data..." << std::endl;
-    std::map<std::string,std::string> gMap = YarosCluster::kMeans(K, *cMap);
+    std::map<std::string,int> gMap = YarosCluster::kMeans(K, *cMap);
     /* Output clustering results to file */
     std::cout << "Writing results to file..." << std::endl;
     std::fstream filestream;

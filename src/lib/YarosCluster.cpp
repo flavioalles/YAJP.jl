@@ -1,21 +1,21 @@
 #include "YarosCluster.h"
 
 namespace KMeans {
-    std::vector<std::string> initCentroids(const int k, const std::map<std::string,std::string>& gMap) {
-        std::vector<std::string> centroids;
-        std::list<int> indexes = std::list<int>();
+    std::vector<std::map<std::string,double>> initCentroids(const int k, const std::map<std::string,std::map<std::string,double>>& cMap) {
+        std::list<int> indexes;
+        std::vector<std::map<std::string,double>> centroids;
         while (indexes.size() != k) {
             std::srand(std::time(nullptr));
-            indexes.push_back((std::rand()%gMap.size()));
+            indexes.push_back((std::rand()%cMap.size()));
             indexes.sort();
             indexes.unique();
         }
         int i = 0;
         int index = indexes.front();
         indexes.pop_front();
-        for (auto& container: gMap) {
+        for (auto& container: cMap) {
             if (i == index) {
-                centroids.push_back(container.first); 
+                centroids.push_back(container.second);
                 if (indexes.empty()) {
                     break;
                 }
@@ -36,75 +36,62 @@ namespace KMeans {
         return std::sqrt(distance);
     }
 
-    std::vector<std::string> recomputeCentroids(const std::map<std::string,std::map<std::string,double>>& cMap, const std::map<std::string,std::string>& gMap, const std::vector<std::string>& oldCentroids) {
-        std::vector<std::string>* newCentroids = new std::vector<std::string>();
+    std::vector<std::map<std::string,double>> computeCentroids(const std::map<std::string,std::map<std::string,double>>& cMap, const std::map<std::string,int>& gMap, const std::vector<std::map<std::string,double>>& oldCentroids) {
+        std::vector<std::map<std::string,double>> newCentroids;
         // for every GROUP (centroid)
-        for (auto& centroid: oldCentroids) {
+        for (int i = 0; i != oldCentroids.size(); ++i) {
             int counter = 0;
-            std::map<std::string,double> sum = std::map<std::string,double>();
-            // for every MEMBER: accumulate SUM
+            std::map<std::string,double> newCentroid;
+            // accumulate SUM
             for (auto& container: gMap) {
-                if (centroid == container.second) {
+                if (i == container.second) {
                     for (auto& data: (cMap.find(container.first))->second) {
-                        if (sum.find(data.first) == sum.end())
-                            sum.insert({data.first, data.second});
+                        if (newCentroid.find(data.first) == newCentroid.end())
+                            newCentroid.insert({data.first, data.second});
                         else
-                            (sum.find(data.first))->second += data.second;
+                            (newCentroid.find(data.first))->second += data.second;
                     }
                     ++counter;
                 }
             }
             // calculate MEAN
-            std::map<std::string,double> mean = std::map<std::string,double>();
-            for (auto& data: sum)
-                mean.insert({data.first,data.second/counter});
-            // for every CONTAINER: determine new centroid (closest to MEAN)
-            double shortestDist = std::numeric_limits<double>::max();
-            std::string newCentroid = std::string();
-            for (auto& container: gMap) {
-                double currentDist = computeDistance(mean,cMap.find(container.first)->second);
-                if (shortestDist > currentDist) {
-                    shortestDist = currentDist;
-                    newCentroid = container.first;
-                }
-            }
-            newCentroids->push_back(newCentroid);
+            for (auto& data: newCentroid)
+                data.second /= counter;
+            newCentroids.push_back(newCentroid);
         }
-        return *newCentroids;
+        return newCentroids;
     }
 }
 
-std::map<std::string,std::string>& YarosCluster::kMeans(const int k, const std::map<std::string,std::map<std::string,double>>& cMap) {
+std::map<std::string,int> YarosCluster::kMeans(const int k, const std::map<std::string,std::map<std::string,double>>& cMap) {
     if (k <= 0) {
         throw std::invalid_argument("k (#-of-clusters) must be a natural number.");
     }
-    std::map<std::string,std::string>* gMap = new std::map<std::string,std::string>();
-    for (auto& container: cMap)
-        gMap->insert({container.first,std::string()});
+    std::map<std::string,int> gMap = std::map<std::string,int>();
     // Select 'k' points as initial centroids
-    std::vector<std::string> centroids = KMeans::initCentroids(k, *gMap);
-    std::vector<std::string> oldCentroids {};
+    std::vector<std::map<std::string,double>> centroids = KMeans::initCentroids(k, cMap);
+    std::vector<std::map<std::string,double>> oldCentroids;
     // Repeat
     while (centroids != oldCentroids) {
         // Form 'k' clusters by assigning each point to its closest centroid
         for (auto& container: cMap) {
+            int closestCentroid = -1;
             double shortestDist = std::numeric_limits<double>::max();
-            std::string closestCentroid = std::string();
-            for (auto currentCentroid: centroids) {
-                double currentDist = KMeans::computeDistance(cMap.find(currentCentroid)->second, container.second);
-                if (shortestDist > currentDist) {
+            for (int i = 0; i != centroids.size(); ++i) {
+                double currentDist = KMeans::computeDistance(centroids[i], container.second);
+                if (currentDist < shortestDist) {
                     shortestDist = currentDist;
-                    closestCentroid = currentCentroid;
+                    closestCentroid = i;
                 }
             }
-            (gMap->find(container.first))->second = closestCentroid;
+            gMap[container.first] = closestCentroid;
         }
         // Recompute the centroid of each cluster
         oldCentroids = centroids;
-        centroids = KMeans::recomputeCentroids(cMap, *gMap, centroids);
+        centroids = KMeans::computeCentroids(cMap, gMap, centroids);
     }
     // Until Centroids do not change
-    return *gMap;
+    return gMap;
 }
 
 double YarosCluster::intraGroupEval(const std::map<std::string,std::string>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {

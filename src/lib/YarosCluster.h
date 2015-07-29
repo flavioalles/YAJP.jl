@@ -10,7 +10,7 @@
 #include <vector>
 
 namespace YarosCluster {
-    std::map<std::string,std::string>& kMeans(const int k, const std::map<std::string,std::map<std::string,double>>& cMap);
+    std::map<std::string,int> kMeans(const int k, const std::map<std::string,std::map<std::string,double>>& cMap);
     double intraGroupEval(const std::map<std::string,std::string>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap);
     double interGroupEval(const std::map<std::string,std::string>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap);
 }
