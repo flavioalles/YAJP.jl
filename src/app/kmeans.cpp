@@ -87,13 +87,11 @@ int main(int argc, char* argv[]) {
     }
     filestream.open(outputPath, std::ios::out);
     filestream << "Container" << SEP << "Group";
-    // assuming that iteration over std::pair's of std::map always follows the same order
     for (auto d: config["data"])
         filestream << SEP << d.first;
     filestream << std::endl;
     for (auto& c: gMap) {
         filestream << c.first << SEP << c.second;
-        // assuming that iteration over std::pair's of std::map follows the same order
         for (auto d: config["data"])
             filestream << SEP << (((cMap->find(c.first))->second).find(d.first.as<std::string>()))->second;
         filestream << std::endl;
