@@ -36,30 +36,53 @@ namespace KMeans {
         return squaredDist;
     }
 
-    std::vector<std::map<std::string,double>> computeCentroids(const std::map<std::string,std::map<std::string,double>>& cMap, const std::map<std::string,int>& gMap, const std::vector<std::map<std::string,double>>& oldCentroids) {
-        std::vector<std::map<std::string,double>> newCentroids;
-        // for every GROUP (centroid)
-        for (int i = 0; i != oldCentroids.size(); ++i) {
-            int counter = 0;
-            std::map<std::string,double> newCentroid;
-            // accumulate SUM
-            for (auto& container: gMap) {
-                if (i == container.second) {
-                    for (auto& data: (cMap.find(container.first))->second) {
-                        if (newCentroid.find(data.first) == newCentroid.end())
-                            newCentroid.insert({data.first, data.second});
-                        else
-                            (newCentroid.find(data.first))->second += data.second;
-                    }
-                    ++counter;
+    std::map<std::string,double> computeCentroid(const int group, const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {
+        /* Return centroid for group <group> (Not accounting for empty groups) */
+        int counter = 0;
+        std::map<std::string,double> centroid;
+        // accumulate SUM
+        for (auto& container: gMap) {
+            if (group == container.second) {
+                for (auto& data: (cMap.find(container.first))->second) {
+                    if (centroid.find(data.first) == centroid.end())
+                        centroid.insert({data.first, data.second});
+                    else
+                        (centroid.find(data.first))->second += data.second;
                 }
+                ++counter;
             }
-            // calculate MEAN
-            for (auto& data: newCentroid)
-                data.second /= counter;
-            newCentroids.push_back(newCentroid);
         }
-        return newCentroids;
+        // calculate MEAN
+        for (auto& data: centroid)
+            data.second /= counter;
+        return centroid;
+    }
+
+    std::map<std::string,double> computeCentroid(const std::map<std::string,std::map<std::string,double>>& cMap) {
+        /* Computes centroid of all data */
+        std::map<std::string,double> centroid;
+        // accumulate SUM
+        for (auto& container: cMap) {
+            for (auto& data: container.second) {
+                if (centroid.find(data.first) == centroid.end())
+                    centroid.insert({data.first, data.second});
+                else
+                    (centroid.find(data.first))->second += data.second;
+            }
+        }
+        // calculate MEAN
+        for (auto& data: centroid)
+            data.second /= cMap.size();
+        return centroid;
+    }
+
+    int memberCount(int i, std::map<std::string,int> gMap) {
+        int counter = 0;
+        for (auto& c: gMap) {
+            if (i == c.second)
+                ++counter;
+        }
+        return counter;
     }
 }
 
@@ -87,8 +110,9 @@ std::map<std::string,int> YarosCluster::kMeans(const int k, const std::map<std::
             gMap[container.first] = closestCentroid;
         }
         // Recompute the centroid of each cluster
-        oldCentroids = centroids;
-        centroids = KMeans::computeCentroids(cMap, gMap, centroids);
+        oldCentroids = std::move(centroids);
+        for (int i = 0; i != k; ++i)
+            centroids.push_back(KMeans::computeCentroid(i, gMap, cMap));
     }
     // Until Centroids do not change
     return gMap;
