@@ -30,10 +30,10 @@ namespace KMeans {
     }
 
     double computeDistance(std::map<std::string,double> centroid, std::map<std::string,double> container) {
-        double distance = 0.0;
+        double squaredDist = 0.0;
         for (auto s: centroid)
-            distance += std::pow((s.second)-(container.find(s.first))->second,2);
-        return std::sqrt(distance);
+            squaredDist += std::pow((s.second)-(container.find(s.first))->second,2);
+        return squaredDist;
     }
 
     std::vector<std::map<std::string,double>> computeCentroids(const std::map<std::string,std::map<std::string,double>>& cMap, const std::map<std::string,int>& gMap, const std::vector<std::map<std::string,double>>& oldCentroids) {
