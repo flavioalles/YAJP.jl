@@ -94,30 +94,19 @@ std::map<std::string,int> YarosCluster::kMeans(const int k, const std::map<std::
     return gMap;
 }
 
-double YarosCluster::intraGroupEval(const std::map<std::string,std::string>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {
-    /* Average distance between elements and their associated centroids */
-    double totalDistance = 0.0;
-    for (auto& container: gMap) {
-        totalDistance += KMeans::computeDistance(cMap.find(container.second)->second, cMap.find(container.first)->second);
-    }
-    return (totalDistance/gMap.size());
+double YarosCluster::SSE(const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {
+    /* Measure of COHESION: Sum of the squared Euclidian distance of every object to its cluster centroid */
+    double totalSSE = 0.0;
+    for (auto& container: gMap)
+        totalSSE += KMeans::computeDistance(KMeans::computeCentroid(container.second,gMap,cMap), cMap.find(container.first)->second);
+    return totalSSE;
 }
 
-double YarosCluster::interGroupEval(const std::map<std::string,std::string>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {
-    /* Average distance between centroids */
-    std::list<std::string> centroids = std::list<std::string>();
-    for (auto& container: gMap) {
-        centroids.push_back(container.second);
-        centroids.sort();
-    }
-    centroids.unique();
-    double totalAvgDistance = 0.0;
-    for (auto& centroid: centroids) {
-        double totalDistance = 0.0;
-        for (auto& otherCentroid: centroids)
-            if (centroid != otherCentroid)
-                totalDistance += KMeans::computeDistance(cMap.find(centroid)->second, cMap.find(otherCentroid)->second);
-        totalAvgDistance += (totalDistance/(centroids.size()-1));
-    }
-    return (totalAvgDistance/(centroids.size()-1));
+double YarosCluster::SSB(const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {
+    /* Measure of SEPARATION: Weigthed sum of the squared Euclidian distance of every cluster centroid to the data centroid */
+    double totalSSB = 0.0;
+    std::map<std::string,double> centroid = KMeans::computeCentroid(cMap);
+    for (int i = 0; i != k; ++i)
+        totalSSB += (KMeans::memberCount(i,gMap))*(KMeans::computeDistance(centroid,KMeans::computeCentroid(i,gMap,cMap)));
+    return totalSSB;
 }

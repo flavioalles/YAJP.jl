@@ -11,7 +11,7 @@
 
 namespace YarosCluster {
     std::map<std::string,int> kMeans(const int k, const std::map<std::string,std::map<std::string,double>>& cMap);
-    double intraGroupEval(const std::map<std::string,std::string>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap);
-    double interGroupEval(const std::map<std::string,std::string>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap);
+    double SSE(const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap);
+    double SSB(const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap);
 }
 #endif

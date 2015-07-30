@@ -1,6 +1,7 @@
 #include <boost/filesystem.hpp>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "../lib/YarosCluster.h"
@@ -8,7 +9,7 @@
 #include "../lib/YarosUnity.h"
 #include "../lib/YarosUtils.h"
 
-const int K = 3;
+const int DIV = 2;
 const std::string OUTPUT_FILE {"kmeans.out"};
 const std::string SEP {","};
 
@@ -69,7 +70,18 @@ int main(int argc, char* argv[]) {
     }
     /* Cluster acquired data */
     std::cout << "Clustering data..." << std::endl;
-    std::map<std::string,int> gMap = YarosCluster::kMeans(K, *cMap);
+    int bestK;
+    double minSSE = std::numeric_limits<double>::max();
+    std::map<std::string,std::string> gMap;
+    for (int k = 2; k <= (cMap->size()/DIV); ++k) {
+        std::map<std::string,int> currentGMap = YarosCluster::kMeans(k, *cMap);
+        double currentSSE = YarosCluster::SSE(currentGMap,*cMap);
+        if (currentSSE < minSSE) {
+            minSSE = currentSSE;
+            bestK = k;
+            gMap = std::move(currentGMap);
+        }
+    }
     /* Output clustering results to file */
     std::cout << "Writing results to file..." << std::endl;
     std::fstream filestream;
