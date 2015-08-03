@@ -6,7 +6,7 @@ namespace KMeans {
         std::vector<std::map<std::string,double>> centroids;
         while (indexes.size() != k) {
             std::srand(std::time(nullptr));
-            indexes.push_back((std::rand()%cMap.size()));
+            indexes.push_back(std::rand()%cMap.size());
             indexes.sort();
             indexes.unique();
         }
