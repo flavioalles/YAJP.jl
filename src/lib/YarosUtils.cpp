@@ -1,7 +1,5 @@
 #include "YarosUtils.h"
 
-const std::list<std::string> YarosUtils::CONFIG_KEYS {"containers","data"};
-
 bool YarosUtils::checkConfig(const std::string yamlPath) {
     YAML::Node config = YAML::LoadFile(yamlPath);
     if (config.size() != YarosUtils::CONFIG_KEYS.size())

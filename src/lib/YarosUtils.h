@@ -5,7 +5,7 @@
 #include <yaml-cpp/yaml.h>
 
 namespace YarosUtils {
-    extern const std::list<std::string> CONFIG_KEYS;
+    const std::list<std::string> CONFIG_KEYS {"containers","data"};
     bool checkConfig(const std::string yamlPath);
     YAML::Node getConfig(const std::string yamlPath);
     std::string dataInConfig(const YAML::Node config, const std::string name);
