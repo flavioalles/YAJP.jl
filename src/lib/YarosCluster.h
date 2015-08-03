@@ -1,6 +1,7 @@
 #ifndef YAROS_CLUSTER_H
 #define YAROS_CLUSTER_H
 #include <cmath>
+#include <cstdlib>
 #include <ctime>
 #include <exception>
 #include <limits>
