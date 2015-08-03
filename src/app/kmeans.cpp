@@ -10,6 +10,7 @@
 #include "../lib/YarosUtils.h"
 
 const int DIV = 2;
+const int RUNS = 10;
 const std::string OUTPUT_FILE {"kmeans.out"};
 const std::string SEP {","};
 
@@ -74,16 +75,24 @@ int main(int argc, char* argv[]) {
     std::cout << "Clustering data..." << std::endl;
     int bestK;
     double minSSE = std::numeric_limits<double>::max();
-    std::map<std::string,std::string> gMap;
-    for (int k = 2; k <= (cMap->size()/DIV); ++k) {
-        std::map<std::string,int> currentGMap = YarosCluster::kMeans(k, *cMap);
-        double currentSSE = YarosCluster::SSE(currentGMap,*cMap);
-        if (currentSSE < minSSE) {
-            minSSE = currentSSE;
-            bestK = k;
-            gMap = std::move(currentGMap);
+    std::map<std::string,int> gMap;
+    for (int k = 2; k <= int(cMap->size()/DIV); ++k) {
+        std::cout << "  (K = " << k << ") ";
+        for (int r = 0; r != RUNS; ++r) {
+            std::cout << ".";
+            std::map<std::string,int> currentGMap = YarosCluster::kMeans(k, *cMap);
+            double currentSSE = YarosCluster::SSE(currentGMap,*cMap);
+            if (currentSSE < minSSE) {
+                minSSE = currentSSE;
+                bestK = k;
+                gMap = std::move(currentGMap);
+            }
         }
+        std::cout << " Done."<< std::endl;
     }
+    double SSB = YarosCluster::SSB(gMap, *cMap);
+    std::cout << " (K = " << bestK << ") SSE = " << minSSE;
+    std::cout << " | SSB = " << SSB << std::endl;
     /* Output clustering results to file */
     std::cout << "Writing results to file..." << std::endl;
     std::fstream filestream;
