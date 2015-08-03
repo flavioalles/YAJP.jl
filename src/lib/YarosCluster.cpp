@@ -95,7 +95,8 @@ std::map<std::string,int> YarosCluster::kMeans(const int k, const std::map<std::
     std::vector<std::map<std::string,double>> centroids = KMeans::initCentroids(k, cMap);
     std::vector<std::map<std::string,double>> oldCentroids;
     // Repeat
-    while (centroids != oldCentroids) {
+    int iterations = 1;
+    while ((centroids != oldCentroids) && (iterations != YarosCluster::MAX_ITERATIONS)) {
         // Form 'k' clusters by assigning each point to its closest centroid
         for (auto& container: cMap) {
             int closestCentroid = -1;
@@ -113,6 +114,7 @@ std::map<std::string,int> YarosCluster::kMeans(const int k, const std::map<std::
         oldCentroids = std::move(centroids);
         for (int i = 0; i != k; ++i)
             centroids.push_back(KMeans::computeCentroid(i, gMap, cMap));
+        ++iterations;
     }
     // Until Centroids do not change
     return gMap;

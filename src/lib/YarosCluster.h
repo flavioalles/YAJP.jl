@@ -11,6 +11,7 @@
 #include <vector>
 
 namespace YarosCluster {
+    const int MAX_ITERATIONS = 100;
     std::map<std::string,int> kMeans(const int k, const std::map<std::string,std::map<std::string,double>>& cMap);
     double SSE(const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap);
     double SSB(const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap);
