@@ -14,6 +14,8 @@ const std::string OUTPUT_FILE {"kmeans.out"};
 const std::string SEP {","};
 
 int main(int argc, char* argv[]) {
+    /* Make std::cout an unbuffered stream */
+    std::cout.setf(std::ios::unitbuf);
     /* Verify if call is good */
     if ((argc < 3) || (argc > 4) || ((argc == 4) && (argv[1] != std::string("--no-overwrite")))) {
         std::cout << "Wrong usage." << std::endl;
