@@ -3,4 +3,5 @@
 containers: [Worker]
 data:
     tasks: [chol_model_11, chol_model_21, chol_model_22]
+    idle: [Idle, Sleeping]
     misc: [Callback, FetchingInput, Initializing, Overhead, PushingOutput, Scheduling]
