@@ -131,8 +131,13 @@ double YarosCluster::SSE(const std::map<std::string,int>& gMap, const std::map<s
 double YarosCluster::SSB(const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {
     /* Measure of SEPARATION: Weigthed sum of the squared Euclidian distance of every cluster centroid to the data centroid */
     double totalSSB = 0.0;
-    std::map<std::string,double> centroid = KMeans::computeCentroid(cMap);
-    for (int i = 0; i != k; ++i)
-        totalSSB += (KMeans::memberCount(i,gMap))*(KMeans::computeDistance(centroid,KMeans::computeCentroid(i,gMap,cMap)));
+    std::set<int> computed;
+    std::map<std::string,double> centroid = KMeans::overallCentroid(cMap);
+    for (auto& container: gMap) {
+        if (computed.find(container.second) == computed.end()) {
+            totalSSB += (KMeans::memberCount(container.second,gMap))*(KMeans::computeDistance(centroid,KMeans::groupCentroid(container.second,gMap,cMap)));
+            computed.insert(container.second);
+        }
+    }
     return totalSSB;
 }
