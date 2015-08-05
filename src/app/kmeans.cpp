@@ -9,7 +9,7 @@
 #include "../lib/YarosUnity.h"
 #include "../lib/YarosUtils.h"
 
-const int DIV = 2;
+const int MAX_GROUPS = 4;
 const int RUNS = 10;
 const std::string OUTPUT_FILE {"kmeans.out"};
 const std::string SEP {","};
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
     int bestK;
     double minSSE = std::numeric_limits<double>::max();
     std::map<std::string,int> gMap;
-    for (int k = 2; k <= int(cMap->size()/DIV); ++k) {
+    for (int k = 1; k <= MAX_GROUPS; ++k) {
         std::cout << "  (K = " << k << ") ";
         for (int r = 0; r != RUNS; ++r) {
             std::cout << ".";
