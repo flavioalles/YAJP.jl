@@ -36,7 +36,7 @@ namespace KMeans {
         return squaredDist;
     }
 
-    std::map<std::string,double> computeCentroid(const int group, const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {
+    std::map<std::string,double> groupCentroid(const int group, const std::map<std::string,int>& gMap, const std::map<std::string,std::map<std::string,double>>& cMap) {
         /* Return centroid for group <group> (Not accounting for empty groups) */
         int counter = 0;
         std::map<std::string,double> centroid;
@@ -58,7 +58,7 @@ namespace KMeans {
         return centroid;
     }
 
-    std::map<std::string,double> computeCentroid(const std::map<std::string,std::map<std::string,double>>& cMap) {
+    std::map<std::string,double> overallCentroid(const std::map<std::string,std::map<std::string,double>>& cMap) {
         /* Computes centroid of all data */
         std::map<std::string,double> centroid;
         // accumulate SUM
@@ -113,7 +113,7 @@ std::map<std::string,int> YarosCluster::kMeans(const int k, const std::map<std::
         // Recompute the centroid of each cluster
         oldCentroids = std::move(centroids);
         for (int i = 0; i != k; ++i)
-            centroids.push_back(KMeans::computeCentroid(i, gMap, cMap));
+            centroids.push_back(KMeans::groupCentroid(i, gMap, cMap));
         ++iterations;
     }
     // Until Centroids do not change
@@ -124,7 +124,7 @@ double YarosCluster::SSE(const std::map<std::string,int>& gMap, const std::map<s
     /* Measure of COHESION: Sum of the squared Euclidian distance of every object to its cluster centroid */
     double totalSSE = 0.0;
     for (auto& container: gMap)
-        totalSSE += KMeans::computeDistance(KMeans::computeCentroid(container.second,gMap,cMap), cMap.find(container.first)->second);
+        totalSSE += KMeans::computeDistance(KMeans::groupCentroid(container.second,gMap,cMap), cMap.find(container.first)->second);
     return totalSSE;
 }
 
