@@ -8,6 +8,9 @@ libyaros-osx:
 	clang -c -std=c++11 -fpic src/lib/*.cpp
 	clang -shared -o lib/libyaros.dylib *.o -lstdc++ -lpaje -lyaml-cpp
 	rm -f *.o
+dump:
+	install -d bin
+	clang -std=c++11 -o bin/dump src/app/dump.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem -lyaml-cpp
 explore:
 	install -d bin
 	clang -std=c++11 -O3 -o bin/explore src/app/explore.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem
