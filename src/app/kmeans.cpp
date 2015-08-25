@@ -11,7 +11,8 @@
 
 const int MAX_GROUPS = 4;
 const int RUNS = 10;
-const std::string OUTPUT_FILE {"kmeans.out"};
+const std::string KMEANS_OUTPUT {"kmeans.csv"};
+const std::string RESULTS_OUTPUT {"results.csv"};
 const std::string SEP {","};
 
 int main(int argc, char* argv[]) {
@@ -91,24 +92,23 @@ int main(int argc, char* argv[]) {
         std::cout << " Done."<< std::endl;
     }
     double SSB = YarosCluster::SSB(gMap, *cMap);
-    std::cout << " (K = " << bestK << ") SSE = " << minSSE;
-    std::cout << " | SSB = " << SSB << std::endl;
     /* Output clustering results to file */
-    std::cout << "Writing results to file..." << std::endl;
+    std::cout << "Writing results to files..." << std::endl;
     std::fstream filestream;
-    std::string outputPath;
+    // Groupings
+    std::string kmeansPath;
     if (argc == 3) {
-        outputPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(OUTPUT_FILE)).string();
+        kmeansPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(KMEANS_OUTPUT)).string();
     } else {
         int index = 1;
-        outputPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(OUTPUT_FILE)).string();
-        std::string basePath = outputPath;
-        while (boost::filesystem::is_regular_file(boost::filesystem::path(outputPath))) {
-            outputPath = (boost::filesystem::path(basePath)).replace_extension(boost::filesystem::path(std::to_string(index)+(boost::filesystem::path(OUTPUT_FILE).extension().string()))).string();
+        kmeansPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(KMEANS_OUTPUT)).string();
+        std::string basePath = kmeansPath;
+        while (boost::filesystem::is_regular_file(boost::filesystem::path(kmeansPath))) {
+            kmeansPath = (boost::filesystem::path(basePath)).replace_extension(boost::filesystem::path(std::to_string(index)+(boost::filesystem::path(KMEANS_OUTPUT).extension().string()))).string();
             ++index;
         }
     }
-    filestream.open(outputPath, std::ios::out);
+    filestream.open(kmeansPath, std::ios::out);
     filestream << "Container" << SEP << "Group";
     for (auto d: config["data"])
         filestream << SEP << d.first;
@@ -120,7 +120,26 @@ int main(int argc, char* argv[]) {
         filestream << std::endl;
     }
     filestream.close();
-    std::cout << "Done. Results in '" << outputPath << "'." << std::endl;
+    // Results
+    std::string resultsPath;
+    if (argc == 3) {
+        resultsPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(RESULTS_OUTPUT)).string();
+    } else {
+        int index = 1;
+        resultsPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(RESULTS_OUTPUT)).string();
+        std::string basePath = resultsPath;
+        while (boost::filesystem::is_regular_file(boost::filesystem::path(resultsPath))) {
+            resultsPath = (boost::filesystem::path(basePath)).replace_extension(boost::filesystem::path(std::to_string(index)+(boost::filesystem::path(KMEANS_OUTPUT).extension().string()))).string();
+            ++index;
+        }
+    }
+    filestream.open(resultsPath, std::ios::out);
+    filestream << "Runtime" << SEP << "K" << SEP << "SSE" << SEP << "SSB" << std::endl;
+    filestream << (unity->endTime()-unity->startTime()) << SEP << bestK << SEP << minSSE << SEP << SSB << std::endl;
+    filestream.close();
+    std::cout << "Done." << std::endl;
+    std::cout << "Groupings in '" << kmeansPath << "'." << std::endl;
+    std::cout << "Results in '" << resultsPath << "'." << std::endl;
     delete unity;
     return 0;
 }
