@@ -10,19 +10,19 @@ libyaros-osx:
 	rm -f *.o
 dump:
 	install -d bin
-	clang -std=c++11 -o bin/dump src/app/dump.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem -lyaml-cpp
+	clang -std=c++11 -o bin/yaros-dump src/app/dump.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem -lyaml-cpp
 explore:
 	install -d bin
-	clang -std=c++11 -O3 -o bin/explore src/app/explore.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem
+	clang -std=c++11 -O3 -o bin/yaros-explore src/app/explore.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem
 kmeans:
 	install -d bin
-	clang -std=c++11 -O3 -o bin/kmeans src/app/kmeans.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem -lyaml-cpp
+	clang -std=c++11 -O3 -o bin/yaros-kmeans src/app/kmeans.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem -lyaml-cpp
 plot:
 	install -d ${HOME}/bin
 	install src/app/plot.py ${HOME}/bin
 topology:
 	install -d bin
-	clang -std=c++11 -O3 -o bin/topology src/app/topology.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem
+	clang -std=c++11 -O3 -o bin/yaros-topology src/app/topology.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem
 install:
 	install -C bin/* /usr/local/bin
 	install -C lib/* /usr/local/lib
