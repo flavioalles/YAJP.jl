@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
         }
     }
     filestream.open(kmeansPath, std::ios::out);
-    filestream << "Container" << SEP << "Group";
+    filestream << "container" << SEP << "group";
     for (auto d: config["data"])
         filestream << SEP << d.first;
     filestream << std::endl;
@@ -134,7 +134,7 @@ int main(int argc, char* argv[]) {
         }
     }
     filestream.open(resultsPath, std::ios::out);
-    filestream << "Runtime" << SEP << "K" << SEP << "SSE" << SEP << "SSB" << std::endl;
+    filestream << "runtime" << SEP << "K" << SEP << "SSE" << SEP << "SSB" << std::endl;
     filestream << (unity->endTime()-unity->startTime()) << SEP << bestK << SEP << minSSE << SEP << SSB << std::endl;
     filestream.close();
     std::cout << "Done." << std::endl;
