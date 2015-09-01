@@ -95,10 +95,12 @@ int main(int argc, char* argv[]) {
     /* Output clustering results to file */
     std::cout << "Writing results to files..." << std::endl;
     std::fstream filestream;
+    std::string filename;
     // Groupings
     std::string kmeansPath;
     if (argc == 3) {
-        kmeansPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(KMEANS_OUTPUT)).string();
+        filename = "kmeans-" + boost::filesystem::path(argv[1]).filename().replace_extension("csv").string();
+        kmeansPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     } else {
         int index = 1;
         kmeansPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(KMEANS_OUTPUT)).string();
@@ -123,7 +125,8 @@ int main(int argc, char* argv[]) {
     // Results
     std::string resultsPath;
     if (argc == 3) {
-        resultsPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(RESULTS_OUTPUT)).string();
+        filename = "results-" + boost::filesystem::path(argv[1]).filename().replace_extension("csv").string();
+        resultsPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     } else {
         int index = 1;
         resultsPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(RESULTS_OUTPUT)).string();
