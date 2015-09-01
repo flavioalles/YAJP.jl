@@ -68,7 +68,8 @@ int main(int argc, char* argv[]) {
     std::fstream filestream;
     std::string dumpPath;
     if (argc == 3) {
-        dumpPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(DUMP_OUTPUT)).string();
+        std::string filename = "dump-" + boost::filesystem::path(argv[1]).filename().replace_extension("csv").string();
+        dumpPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     } else {
         int index = 1;
         dumpPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(DUMP_OUTPUT)).string();
