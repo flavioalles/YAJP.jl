@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
     // Groupings
     std::string kmeansPath;
     if (argc == 3) {
-        filename = "kmeans-" + boost::filesystem::path(argv[1]).filename().replace_extension("csv").string();
+        filename = boost::filesystem::path(argv[1]).filename().replace_extension().string() + ".kmeans.csv";
         kmeansPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     } else {
         int index = 1;
@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
     // Results
     std::string resultsPath;
     if (argc == 3) {
-        filename = "results-" + boost::filesystem::path(argv[1]).filename().replace_extension("csv").string();
+        filename = boost::filesystem::path(argv[1]).filename().replace_extension().string() + ".results.csv";
         resultsPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     } else {
         int index = 1;
