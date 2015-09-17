@@ -9,7 +9,6 @@
 #include "../lib/YarosUnity.h"
 #include "../lib/YarosUtils.h"
 
-const std::string DUMP_OUTPUT {"dump.csv"};
 const std::string SEP {","};
 
 int main(int argc, char* argv[]) {
@@ -68,18 +67,8 @@ int main(int argc, char* argv[]) {
     std::fstream filestream;
     std::string dumpPath;
     std::string filename;
-    if (argc == 3) {
-        filename = boost::filesystem::path(argv[1]).filename().replace_extension().string() + ".dump.csv";
-        dumpPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
-    } else {
-        int index = 1;
-        dumpPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(DUMP_OUTPUT)).string();
-        std::string basePath = dumpPath;
-        while (boost::filesystem::is_regular_file(boost::filesystem::path(dumpPath))) {
-            dumpPath = (boost::filesystem::path(basePath)).replace_extension(boost::filesystem::path(std::to_string(index)+(boost::filesystem::path(DUMP_OUTPUT).extension().string()))).string();
-            ++index;
-        }
-    }
+    filename = boost::filesystem::path(argv[1]).filename().replace_extension().string() + ".dump.csv";
+    dumpPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     filestream.open(dumpPath, std::ios::out);
     filestream << "Container";
     for (auto d: config["data"])
