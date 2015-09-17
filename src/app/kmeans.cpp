@@ -19,20 +19,20 @@ int main(int argc, char* argv[]) {
     /* Make std::cout an unbuffered stream */
     std::cout.setf(std::ios::unitbuf);
     /* Verify if call is good */
-    if ((argc < 3) || (argc > 4) || ((argc == 4) && (argv[1] != std::string("--no-overwrite")))) {
+    if (argc != 3) {
         std::cout << "Wrong usage." << std::endl;
-        std::cout << "kmeans [--no-overwrite] <yaml-config> <paje-trace>" << std::endl;
+        std::cout << "kmeans <yaml-config> <paje-trace>" << std::endl;
         return 1;
     }
-    if (((argc == 3) && (!boost::filesystem::is_regular_file(argv[1]))) || ((argc == 4) && (!boost::filesystem::is_regular_file(argv[2])))) {
+    if (!boost::filesystem::is_regular_file(argv[1])) {
         std::cout << "Inexistent config. file." << std::endl;
         return 2;
     }
-    if (((argc == 3) && (!YarosUtils::checkConfig(argv[1]))) || ((argc == 4) && (!YarosUtils::checkConfig(argv[2])))) {
+    if (!YarosUtils::checkConfig(argv[1])) {
         std::cout << "Inconsistent config. file." << std::endl;
         return 3;
     }
-    if (((argc == 3) && (!boost::filesystem::is_regular_file(argv[2]))) || ((argc == 4) && (!boost::filesystem::is_regular_file(argv[3])))) {
+    if (!boost::filesystem::is_regular_file(argv[2])) {
         std::cout << "Inexistent trace file." << std::endl;
         return 4;
     }
@@ -98,18 +98,8 @@ int main(int argc, char* argv[]) {
     std::string filename;
     // Groupings
     std::string kmeansPath;
-    if (argc == 3) {
-        filename = boost::filesystem::path(argv[1]).filename().replace_extension().string() + ".kmeans.csv";
-        kmeansPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
-    } else {
-        int index = 1;
-        kmeansPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(KMEANS_OUTPUT)).string();
-        std::string basePath = kmeansPath;
-        while (boost::filesystem::is_regular_file(boost::filesystem::path(kmeansPath))) {
-            kmeansPath = (boost::filesystem::path(basePath)).replace_extension(boost::filesystem::path(std::to_string(index)+(boost::filesystem::path(KMEANS_OUTPUT).extension().string()))).string();
-            ++index;
-        }
-    }
+    filename = boost::filesystem::path(argv[1]).filename().replace_extension().string() + ".kmeans.csv";
+    kmeansPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     filestream.open(kmeansPath, std::ios::out);
     filestream << "container" << SEP << "group";
     for (auto d: config["data"])
@@ -124,18 +114,8 @@ int main(int argc, char* argv[]) {
     filestream.close();
     // Results
     std::string resultsPath;
-    if (argc == 3) {
-        filename = boost::filesystem::path(argv[1]).filename().replace_extension().string() + ".results.csv";
-        resultsPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
-    } else {
-        int index = 1;
-        resultsPath = (boost::filesystem::path(argv[3]).parent_path()/boost::filesystem::path(RESULTS_OUTPUT)).string();
-        std::string basePath = resultsPath;
-        while (boost::filesystem::is_regular_file(boost::filesystem::path(resultsPath))) {
-            resultsPath = (boost::filesystem::path(basePath)).replace_extension(boost::filesystem::path(std::to_string(index)+(boost::filesystem::path(KMEANS_OUTPUT).extension().string()))).string();
-            ++index;
-        }
-    }
+    filename = boost::filesystem::path(argv[1]).filename().replace_extension().string() + ".results.csv";
+    resultsPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     filestream.open(resultsPath, std::ios::out);
     filestream << "runtime" << SEP << "K" << SEP << "SSE" << SEP << "SSB" << std::endl;
     filestream << (unity->endTime()-unity->startTime()) << SEP << bestK << SEP << minSSE << SEP << SSB << std::endl;
