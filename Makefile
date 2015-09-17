@@ -17,9 +17,6 @@ explore:
 kmeans:
 	install -d bin
 	clang -std=c++11 -O3 -o bin/yaros-kmeans src/app/kmeans.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem -lyaml-cpp
-plot:
-	install -d ${HOME}/bin
-	install src/app/plot.py ${HOME}/bin
 topology:
 	install -d bin
 	clang -std=c++11 -O3 -o bin/yaros-topology src/app/topology.cpp -L${PWD}/lib -lstdc++ -lyaros -lpaje -lboost_system -lboost_filesystem
