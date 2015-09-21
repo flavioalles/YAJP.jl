@@ -1,4 +1,5 @@
 #include <boost/filesystem.hpp>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -9,7 +10,6 @@
 #include "../lib/YarosUnity.h"
 #include "../lib/YarosUtils.h"
 
-const int MAX_GROUPS = 4;
 const int RUNS = 10;
 const std::string KMEANS_OUTPUT {"kmeans.csv"};
 const std::string RESULTS_OUTPUT {"results.csv"};
@@ -74,23 +74,20 @@ int main(int argc, char* argv[]) {
     }
     /* Cluster acquired data */
     std::cout << "Clustering data..." << std::endl;
-    int bestK;
+    int k = std::round(std::sqrt(cMap->size()/2));
     double minSSE = std::numeric_limits<double>::max();
     std::map<std::string,int> gMap;
-    for (int k = 1; k <= MAX_GROUPS; ++k) {
-        std::cout << "  (K = " << k << ") ";
-        for (int r = 0; r != RUNS; ++r) {
-            std::cout << ".";
-            std::map<std::string,int> currentGMap = YarosCluster::kMeans(k, *cMap);
-            double currentSSE = YarosCluster::SSE(currentGMap,*cMap);
-            if (currentSSE < minSSE) {
-                minSSE = currentSSE;
-                bestK = k;
-                gMap = std::move(currentGMap);
-            }
+    std::cout << "  (K = " << k << ") ";
+    for (int r = 0; r != RUNS; ++r) {
+        std::cout << ".";
+        std::map<std::string,int> currentGMap = YarosCluster::kMeans(k, *cMap);
+        double currentSSE = YarosCluster::SSE(currentGMap,*cMap);
+        if (currentSSE < minSSE) {
+            minSSE = currentSSE;
+            gMap = std::move(currentGMap);
         }
-        std::cout << " Done."<< std::endl;
     }
+    std::cout << " Done."<< std::endl;
     double SSB = YarosCluster::SSB(gMap, *cMap);
     /* Output clustering results to file */
     std::cout << "Writing results to files..." << std::endl;
@@ -118,7 +115,7 @@ int main(int argc, char* argv[]) {
     resultsPath = (boost::filesystem::path(argv[2]).parent_path()/boost::filesystem::path(filename)).string();
     filestream.open(resultsPath, std::ios::out);
     filestream << "runtime" << SEP << "K" << SEP << "SSE" << SEP << "SSB" << std::endl;
-    filestream << (unity->endTime()-unity->startTime()) << SEP << bestK << SEP << minSSE << SEP << SSB << std::endl;
+    filestream << (unity->endTime()-unity->startTime()) << SEP << k << SEP << minSSE << SEP << SSB << std::endl;
     filestream.close();
     std::cout << "Done." << std::endl;
     std::cout << "Groupings in '" << kmeansPath << "'." << std::endl;
