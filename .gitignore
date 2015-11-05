@@ -5,3 +5,4 @@ bin/
 lib/
 !src/lib
 src/test/
+tmp/
