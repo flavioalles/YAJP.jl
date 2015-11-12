@@ -83,6 +83,10 @@ type Worker
     tasqs::Vector{Tasq}
 end
 
+==(x::Worker, y::Worker) = (x.name == y.name)? true : false
+
+isequal(x::Worker, y::Worker) = (x.name == y.name)? true : false
+
 """
 TODO
 """
