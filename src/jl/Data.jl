@@ -5,10 +5,10 @@ export Trace, Worker, Tasq, TasqType
 import Base: ==, isequal, show
 
 """
-TODO
+Type that contains information information about `Tasq`s that are not particular for each instance of `Tasq`. Created to reduce storage footprint. Bellow is a list explaining the fields that compose the type.
     * `kind`: string that identifies the task type. `type` would be a better name for this field but it is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/types/#composite-types) in Julia.
-    * `tag`:
-    * `params`:
+    * `tag`: `ByteString` identifier.
+    * `params`: `ByteString` describing the parameters the task expects.
     * `size`: `Int` that determines the size of the task.
 """
 type TasqType
@@ -107,7 +107,10 @@ function span(wk::Worker, tt::TasqType)
 end
 
 """
-TODO
+Type representing a traced execution. The fields are described bellow.
+    * `name`: name of the trace/application.
+    * `workers`: array that collect all `Worker`s (of interest) found in the trace.
+    * `tasqtypes`: array that contains (unique) `TasqType`s found within the trace.
 """
 type Trace
     name::ByteString # Is it necessary for a Trace to have a name?
