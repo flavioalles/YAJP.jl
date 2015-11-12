@@ -1,6 +1,6 @@
 module Data
 
-export Trace, Worker, Tasq, TasqType
+export Trace, Worker, Tasq, TasqType, span, executed
 
 import Base: ==, isequal, show
 
