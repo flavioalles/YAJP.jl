@@ -87,6 +87,25 @@ end
 
 isequal(x::Worker, y::Worker) = (x.name == y.name)? true : false
 
+
+"Return how many times tasks of type `tt` was executed on worker `wk`"
+function executed(wk::Worker, tt::TasqType)
+    exec = 0
+    for tq in wk.tasqs
+        (tq.kind == tt.kind)? exec+= 1 : nothing
+    end
+    return exec
+end
+
+"Return the aggregated span of tasks of type `tt` on worker `wk`"
+function span(wk::Worker, tt::TasqType)
+    aggspan = 0
+    for tq in wk.tasqs
+        (tq.kind == tt.kind)? aggspan += span(tq) : nothing
+    end
+    return aggspan
+end
+
 """
 TODO
 """
