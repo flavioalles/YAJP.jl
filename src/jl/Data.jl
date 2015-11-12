@@ -70,6 +70,8 @@ function isequal(x::Tasq, y::Tasq)
     end
 end
 
+span(tq::Tasq) = tq.ended - tq.began
+
 """
 Type that will represent information gathered from each worker (i.e. process). Below follows a description of what each field represents.
     * `name`: the name of the worker (i.e. the name of the Pajé Container that represented the worker).
