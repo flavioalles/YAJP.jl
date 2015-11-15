@@ -70,6 +70,7 @@ function isequal(x::Tasq, y::Tasq)
     end
 end
 
+"Return task `tq` span"
 span(tq::Tasq) = tq.ended - tq.began
 
 # TODO: document
