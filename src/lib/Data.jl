@@ -1,8 +1,8 @@
 module Data
 
-export Trace, Worker, Tasq, TasqType, span, executed
+export Trace, Worker, Tasq, TasqType, span, executed, dump
 
-import Base: ==, isequal, show
+import Base: ==, isequal, show, dump
 
 """
 Type that contains information information about `Tasq`s that are not particular for each instance of `Tasq`. Created to reduce storage footprint. Bellow is a list explaining the fields that compose the type.
@@ -72,6 +72,21 @@ end
 
 span(tq::Tasq) = tq.ended - tq.began
 
+# TODO: document
+function dump(tq::Tasq, worker::AbstractString, tasqtypes::Vector{TasqType}, sep::AbstractString)
+   # gather tq info
+    str = "$(worker)$(sep)$(tq.kind)$(sep)$(tq.id)$(sep)"
+    str *= "$(tq.began)$(sep)$(tq.ended)$(sep)$(span(tq))$(sep)"
+    # iterate over tasqtypes
+    for tt in tasqtypes
+        if tq.kind == tt.kind
+            str *= "$(tt.tag)$(sep)$(tt.params)$(sep)$(tt.size)\n"
+            break
+        end
+    end
+    return str
+end
+
 """
 Type that will represent information gathered from each worker (i.e. process). Below follows a description of what each field represents.
     * `name`: the name of the worker (i.e. the name of the Pajé Container that represented the worker).
@@ -104,6 +119,21 @@ function span(wk::Worker, tt::TasqType)
         (tq.kind == tt.kind)? aggspan += span(tq) : nothing
     end
     return aggspan
+end
+
+# TODO: document
+function dump(wk::Worker, tasqtypes::Vector{TasqType}, sep::AbstractString)
+    # get wk name
+    str = "$(wk.name)$(sep)"
+    # iterate over tasqtypes
+    for (index,tt) in enumerate(tasqtypes)
+        if index != length(tasqtypes)
+            str *= "$(executed(wk, tt))$(sep)$(span(wk, tt))$(sep)"
+        else
+            str *= "$(executed(wk, tt))$(sep)$(span(wk, tt))\n"
+        end
+    end
+    return str
 end
 
 """
