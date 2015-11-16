@@ -122,21 +122,6 @@ function span(wk::Worker, tt::TasqType)
     return aggspan
 end
 
-# TODO: document
-function dump(wk::Worker, tasqtypes::Vector{TasqType}, sep::AbstractString)
-    # get wk name
-    str = "$(wk.name)$(sep)"
-    # iterate over tasqtypes
-    for (index,tt) in enumerate(tasqtypes)
-        if index != length(tasqtypes)
-            str *= "$(executed(wk, tt))$(sep)$(span(wk, tt))$(sep)"
-        else
-            str *= "$(executed(wk, tt))$(sep)$(span(wk, tt))\n"
-        end
-    end
-    return str
-end
-
 """
 Type representing a traced execution. The fields are described bellow.
     * `name`: name of the trace/application.

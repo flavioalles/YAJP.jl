@@ -8,20 +8,17 @@ using Data, Parser
 SEP = ","
 
 # TODO: document
-function dumpworkers(tr::Trace, path::AbstractString)
+function dumpworkers(tr::Trace, path::AbstractString, sep::AbstractString)
     output = open(joinpath(path, "workers.csv"), "w")
     # generate header
-    write(output, "resource$(SEP)")
-    for (index,tt) in enumerate(tr.tasqtypes)
-        if index != length(tr.tasqtypes)
-            write(output, "$(tt.kind)_exec$(SEP)$(tt.kind)_span$(SEP)")
-        else
-            write(output, "$(tt.kind)_exec$(SEP)$(tt.kind)_span\n")
-        end
-    end
+    write(output, "resource$(sep)event$(sep)executed$(sep)span\n")
     # iterate over workers
     for wk in tr.workers
-        write(output, dump(wk, tr.tasqtypes, SEP))
+        # iterate over tasqtypes
+        for tt in tr.tasqtypes
+            str = "$(wk.name)$(sep)$(tt.kind)$(sep)$(executed(wk, tt))$(sep)$(span(wk, tt))"
+            write(output, "$(str)\n")
+        end
     end
     close(output)
     return joinpath(path, "workers.csv")
@@ -49,7 +46,7 @@ if length(ARGS) == 1 && isfile(ARGS[1])
     tr = Parser.parsecsv(ARGS[1])
     println("done.")
     println("Dumping workers...")
-    location = dumpworkers(tr, dirname(ARGS[1]))
+    location = dumpworkers(tr, dirname(ARGS[1]), SEP)
     println("Done. Worker data in $(location).")
     println("Dumping tasks...")
     location = dumptasks(tr, dirname(ARGS[1]))
