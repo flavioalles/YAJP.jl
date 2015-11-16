@@ -14,9 +14,9 @@ function dumpworkers(tr::Trace, path::AbstractString)
     write(output, "resource$(SEP)")
     for (index,tt) in enumerate(tr.tasqtypes)
         if index != length(tr.tasqtypes)
-            write(output, "$(tt.kind)-exec$(SEP)$(tt.kind)-span$(SEP)")
+            write(output, "$(tt.kind)_exec$(SEP)$(tt.kind)_span$(SEP)")
         else
-            write(output, "$(tt.kind)-exec$(SEP)$(tt.kind)-span\n")
+            write(output, "$(tt.kind)_exec$(SEP)$(tt.kind)_span\n")
         end
     end
     # iterate over workers
