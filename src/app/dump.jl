@@ -11,12 +11,12 @@ SEP = ","
 function dumpworkers(tr::Trace, path::AbstractString, sep::AbstractString)
     output = open(joinpath(path, "workers.csv"), "w")
     # generate header
-    write(output, "resource$(sep)event$(sep)executed$(sep)span\n")
+    write(output, "resource$(sep)event$(sep)count$(sep)span\n")
     # iterate over workers
     for wk in tr.workers
         # iterate over tasqtypes
         for tt in tr.tasqtypes
-            str = "$(wk.name)$(sep)$(tt.kind)$(sep)$(executed(wk, tt))$(sep)$(span(wk, tt))"
+            str = "$(wk.name)$(sep)$(tt.kind)$(sep)$(count(wk, tt))$(sep)$(span(wk, tt))"
             write(output, "$(str)\n")
         end
     end

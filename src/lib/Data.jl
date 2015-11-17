@@ -1,8 +1,8 @@
 module Data
 
-export Trace, Worker, Tasq, TasqType, span, executed, dump
+export Trace, Worker, Tasq, TasqType, span, count, dump
 
-import Base: ==, isequal, show, dump
+import Base: ==, isequal, show, count, dump
 
 """
 Type that contains information information about `Tasq`s that are not particular for each instance of `Tasq`. Created to reduce storage footprint. Bellow is a list explaining the fields that compose the type.
@@ -105,7 +105,7 @@ isequal(x::Worker, y::Worker) = (x.name == y.name)? true : false
 
 
 "Return how many times tasks of type `tt` was executed on worker `wk`"
-function executed(wk::Worker, tt::TasqType)
+function count(wk::Worker, tt::TasqType)
     exec = 0
     for tq in wk.tasqs
         (tq.kind == tt.kind)? exec+= 1 : nothing
