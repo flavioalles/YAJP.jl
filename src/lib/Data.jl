@@ -91,8 +91,7 @@ end
 """
 Type that will represent information gathered from each worker (i.e. process). Below follows a description of what each field represents.
     * `name`: the name of the worker (i.e. the name of the Pajé Container that represented the worker).
-    * `computed`: associative array that maps a tasks name to the amount of time (aggregated) that tasks executed in that worker.
-    * `executed`: associative array that maps a tasks name to the amount of times that task was executed in that worker.
+    * `tasqs`: list of `Tasq`s associated with the Worker
 """
 type Worker
     name::ByteString
