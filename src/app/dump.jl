@@ -11,12 +11,12 @@ SEP = ","
 function dumpworkers(tr::Trace, path::AbstractString, sep::AbstractString)
     output = open(joinpath(path, "workers.csv"), "w")
     # generate header
-    write(output, "resource$(sep)event$(sep)count$(sep)span\n")
+    write(output, "resource$(sep)node$(sep)event$(sep)count$(sep)span\n")
     # iterate over workers
     for wk in tr.workers
         # iterate over tasqtypes
         for tt in tr.tasqtypes
-            str = "$(wk.name)$(sep)$(tt.kind)$(sep)$(count(wk, tt))$(sep)$(span(wk, tt))"
+            str = "$(wk.name)$(sep)$(wk.node)$(sep)$(tt.kind)$(sep)$(count(wk, tt))$(sep)$(span(wk, tt))"
             write(output, "$(str)\n")
         end
     end
@@ -25,16 +25,16 @@ function dumpworkers(tr::Trace, path::AbstractString, sep::AbstractString)
 end
 
 # TODO: document
-function dumptasks(tr::Trace, path::AbstractString)
+function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
     output = open(joinpath(path, "tasks.csv"), "w")
     # generate header
-    write(output, "resource$(SEP)type$(SEP)id$(SEP)began$(SEP)ended$(SEP)span$(SEP)")
-    write(output, "tag$(SEP)params$(SEP)size\n")
+    write(output, "type$(sep)resource$(sep)node$(sep)id$(sep)began$(sep)")
+    write(output, "ended$(sep)span$(sep)tag$(sep)params$(sep)size\n")
     # iterate over workers
     for wk in tr.workers
         # iterate over tasqs
         for tq in wk.tasqs
-            write(output, dump(tq, wk.name, tr.tasqtypes, SEP))
+            write(output, dump(tq, wk.name, wk.node, tr.tasqtypes, sep))
         end
     end
     close(output)
@@ -49,7 +49,7 @@ if length(ARGS) == 1 && isfile(ARGS[1])
     location = dumpworkers(tr, dirname(ARGS[1]), SEP)
     println("Done. Worker data in $(location).")
     println("Dumping tasks...")
-    location = dumptasks(tr, dirname(ARGS[1]))
+    location = dumptasks(tr, dirname(ARGS[1]), SEP)
     println("Done. Tasks data in $(location).")
     exit(0)
 else

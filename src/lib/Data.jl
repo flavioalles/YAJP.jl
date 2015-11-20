@@ -74,9 +74,9 @@ end
 span(tq::Tasq) = tq.ended - tq.began
 
 # TODO: document
-function dump(tq::Tasq, worker::AbstractString, tasqtypes::Vector{TasqType}, sep::AbstractString)
+function dump(tq::Tasq, worker::AbstractString, node::AbstractString, tasqtypes::Vector{TasqType}, sep::AbstractString)
    # gather tq info
-    str = "$(worker)$(sep)$(tq.kind)$(sep)$(tq.id)$(sep)"
+    str = "$(tq.kind)$(sep)$(worker)$(sep)$(node)$(sep)$(tq.id)$(sep)"
     str *= "$(tq.began)$(sep)$(tq.ended)$(sep)$(span(tq))$(sep)"
     # iterate over tasqtypes
     for tt in tasqtypes
@@ -91,17 +91,18 @@ end
 """
 Type that will represent information gathered from each worker (i.e. process). Below follows a description of what each field represents.
     * `name`: the name of the worker (i.e. the name of the Pajé Container that represented the worker).
+    * `node`: NUMA node where the worker is located
     * `tasqs`: list of `Tasq`s associated with the Worker
 """
 type Worker
     name::ByteString
+    node::ByteString
     tasqs::Vector{Tasq}
 end
 
 ==(x::Worker, y::Worker) = (x.name == y.name)? true : false
 
 isequal(x::Worker, y::Worker) = (x.name == y.name)? true : false
-
 
 "Return how many times tasks of type `tt` was executed on worker `wk`"
 function count(wk::Worker, tt::TasqType)

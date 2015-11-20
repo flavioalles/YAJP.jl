@@ -1,13 +1,6 @@
 module Parser
 
-using Data
-
-# arrays that contain the container, events, and task names used in each application tested."
-const CONTAINERS = ["Worker"]
-const EVENTS = ["Worker State"]
-const TASKS = ["cl11", "cl21", "cl22", "cl22_p",
-               "starpu_slu_lu_model_11", "starpu_slu_lu_model_12",
-               "starpu_slu_lu_model_21", "starpu_slu_lu_model_22"]
+using Constants, Data
 
 """
 Acquires desired `StarPU` information from csv dump of Pajé trace.
@@ -27,7 +20,7 @@ function parsecsv(path::AbstractString)
         # check what line represents and react accordingly
         if splitline[1] == "Container" && splitline[3] in CONTAINERS
             # build Worker and push it to return array
-            wk = Worker(splitline[end], Vector{Tasq}())
+            wk = Worker(splitline[end], node(string(splitline[end])), Vector{Tasq}())
             push!(tr.workers, wk)
         elseif splitline[3] in EVENTS && splitline[8] in TASKS
             # check if TasqType has been added to Trace
