@@ -11,7 +11,7 @@ SEP = ","
 function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
     output = open(joinpath(path, "dump.csv"), "w")
     # generate header
-    write(output, "type$(sep)resource$(sep)node$(sep)id$(sep)began$(sep)")
+    write(output, "event$(sep)resource$(sep)node$(sep)id$(sep)began$(sep)")
     write(output, "ended$(sep)span$(sep)tag$(sep)params$(sep)size\n")
     # iterate over workers
     for wk in tr.workers
