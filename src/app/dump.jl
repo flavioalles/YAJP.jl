@@ -8,25 +8,8 @@ using Data, Parser
 SEP = ","
 
 # TODO: document
-function dumpworkers(tr::Trace, path::AbstractString, sep::AbstractString)
-    output = open(joinpath(path, "workers.csv"), "w")
-    # generate header
-    write(output, "resource$(sep)node$(sep)event$(sep)count$(sep)span\n")
-    # iterate over workers
-    for wk in tr.workers
-        # iterate over tasqtypes
-        for tt in tr.tasqtypes
-            str = "$(wk.name)$(sep)$(wk.node)$(sep)$(tt.kind)$(sep)$(count(wk, tt))$(sep)$(span(wk, tt))"
-            write(output, "$(str)\n")
-        end
-    end
-    close(output)
-    return joinpath(path, "workers.csv")
-end
-
-# TODO: document
 function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
-    output = open(joinpath(path, "tasks.csv"), "w")
+    output = open(joinpath(path, "dump.csv"), "w")
     # generate header
     write(output, "type$(sep)resource$(sep)node$(sep)id$(sep)began$(sep)")
     write(output, "ended$(sep)span$(sep)tag$(sep)params$(sep)size\n")
@@ -38,19 +21,17 @@ function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
         end
     end
     close(output)
-    return joinpath(path, "tasks.csv")
+    return joinpath(path, "dump.csv")
 end
 
 if length(ARGS) == 1 && isfile(ARGS[1])
     print("Acquiring trace data...")
     tr = Parser.parsecsv(ARGS[1])
     println("done.")
-    println("Dumping workers...")
-    location = dumpworkers(tr, dirname(ARGS[1]), SEP)
-    println("Done. Worker data in $(location).")
-    println("Dumping tasks...")
+    print("Dumping data...")
     location = dumptasks(tr, dirname(ARGS[1]), SEP)
-    println("Done. Tasks data in $(location).")
+    println("done.")
+    println("Data in $(location).")
     exit(0)
 else
     println("Wrong usage.")
