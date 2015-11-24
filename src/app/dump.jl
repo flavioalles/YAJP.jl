@@ -8,8 +8,21 @@ using Data, Parser
 SEP = ","
 
 # TODO: document
+function dumptrace(tr::Trace, path::AbstractString, sep::AbstractString)
+    location = joinpath(path, "dump.trace.csv")
+    output = open(location, "w")
+    # generate header
+    write(output, "span\n")
+    # output span
+    write(output, "$(span(tr))\n")
+    close(output)
+    return location
+end
+
+# TODO: document
 function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
-    output = open(joinpath(path, "dump.csv"), "w")
+    location = joinpath(path, "dump.tasks.csv")
+    output = open(location, "w")
     # generate header
     write(output, "event$(sep)resource$(sep)node$(sep)id$(sep)began$(sep)")
     write(output, "ended$(sep)span$(sep)tag$(sep)params$(sep)size\n")
@@ -21,17 +34,21 @@ function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
         end
     end
     close(output)
-    return joinpath(path, "dump.csv")
+    return location
 end
 
 if length(ARGS) == 1 && isfile(ARGS[1])
     print("Acquiring trace data...")
     tr = Parser.parsecsv(ARGS[1])
     println("done.")
-    print("Dumping data...")
+    print("Dumping trace data...")
+    location = dumptrace(tr, dirname(ARGS[1]), SEP)
+    println("done.")
+    println("Trace data in $(location).")
+    print("Dumping tasks data...")
     location = dumptasks(tr, dirname(ARGS[1]), SEP)
     println("done.")
-    println("Data in $(location).")
+    println("Tasks data in $(location).")
     exit(0)
 else
     println("Wrong usage.")
