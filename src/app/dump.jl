@@ -8,8 +8,8 @@ using Data, Parser
 SEP = ","
 
 # TODO: document
-function dumptrace(tr::Trace, path::AbstractString, sep::AbstractString)
-    location = joinpath(path, "dump.trace.csv")
+function dumpspan(tr::Trace, path::AbstractString, sep::AbstractString)
+    location = joinpath(path, "span.csv")
     output = open(location, "w")
     # generate header
     write(output, "span\n")
@@ -21,7 +21,7 @@ end
 
 # TODO: document
 function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
-    location = joinpath(path, "dump.tasks.csv")
+    location = joinpath(path, "tasks.csv")
     output = open(location, "w")
     # generate header
     write(output, "event$(sep)resource$(sep)node$(sep)id$(sep)began$(sep)")
@@ -41,10 +41,10 @@ if length(ARGS) == 1 && isfile(ARGS[1])
     print("Acquiring trace data...")
     tr = Parser.parsecsv(ARGS[1])
     println("done.")
-    print("Dumping trace data...")
-    location = dumptrace(tr, dirname(ARGS[1]), SEP)
+    print("Dumping span...")
+    location = dumpspan(tr, dirname(ARGS[1]), SEP)
     println("done.")
-    println("Trace data in $(location).")
+    println("Span in $(location).")
     print("Dumping tasks data...")
     location = dumptasks(tr, dirname(ARGS[1]), SEP)
     println("done.")
