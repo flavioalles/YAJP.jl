@@ -97,6 +97,8 @@ Type that will represent information gathered from each worker (i.e. process). B
 type Worker
     name::ByteString
     node::ByteString
+    began::Float64
+    ended::Float64
     tasqs::Vector{Tasq}
 end
 
@@ -112,6 +114,9 @@ function count(wk::Worker, tt::TasqType)
     end
     return exec
 end
+
+"Return the `wk`s span"
+span(wk::Worker) = wk.ended - wk.began
 
 "Return the aggregated span of tasks of type `tt` on worker `wk`"
 function span(wk::Worker, tt::TasqType)
@@ -132,6 +137,16 @@ type Trace
     name::ByteString # Is it necessary for a Trace to have a name?
     workers::Vector{Worker}
     tasqtypes::Vector{TasqType}
+end
+
+"Return the `tr`s span - measured by the `Worker` with largest span"
+function span(tr::Trace)
+    # iterate over workers
+    sp = zero(Float64)
+    for wk in tr.workers
+        sp < span(wk)? sp = span(wk) : nothing
+    end
+    return sp
 end
 
 end
