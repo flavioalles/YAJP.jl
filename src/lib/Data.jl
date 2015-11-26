@@ -79,12 +79,16 @@ function dump(tq::Tasq, worker::AbstractString, node::AbstractString, tasqtypes:
     str = "$(tq.kind)$(sep)$(worker)$(sep)$(node)$(sep)$(tq.id)$(sep)"
     str *= "$(tq.began)$(sep)$(tq.ended)$(sep)$(span(tq))$(sep)"
     # iterate over tasqtypes
+    found = false
     for tt in tasqtypes
         if tq.kind == tt.kind
             str *= "$(tt.tag)$(sep)$(tt.params)$(sep)$(tt.size)\n"
+            found = true
             break
         end
     end
+    # if tq not in tasqtypes, fill string with NA values
+    found? nothing : str *= "NA$(sep)NA$(sep)NA\n"
     return str
 end
 
