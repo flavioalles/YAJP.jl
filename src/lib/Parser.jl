@@ -9,7 +9,7 @@ The expected argument is a path to the csv that will be parsed. No checking is d
 
 The function returns an object of type `Trace` (exported by the `Data` module).
 """
-function parsecsv(path::AbstractString)
+function parsecsv(path::AbstractString; states=false)
     # build trace (FYI: trace is a reserved word (its a function))
     # TODO: came up with a scheme to name a Trace obj.
     tr = Trace("name", Vector{Worker}(), Vector{TasqType}())
@@ -18,7 +18,7 @@ function parsecsv(path::AbstractString)
         # split line in comma-separated fields, remove whitespace and trailing newline
         splitline = map(strip, split(line, ",", keep=true))
         # check what line represents and react accordingly
-        if splitline[1] == "Container" && splitline[3] in CONTAINERS
+        if splitline[3] in CONTAINERS
             # build Worker and push it to return array
             wk = Worker(splitline[end], node(string(splitline[end])), parse(Float64, splitline[4]), parse(Float64, splitline[5]), Vector{Tasq}())
             push!(tr.workers, wk)
@@ -29,6 +29,11 @@ function parsecsv(path::AbstractString)
             # build task object and add to worker
             # assumes that the current task always belongs to the previously added Worker
             tq = Tasq(splitline[8], parse(Int, splitline[10]), parse(Float64, splitline[4]), parse(Float64, splitline[5]))
+            push!(tr.workers[end].tasqs, tq)
+        elseif states && splitline[3] in EVENTS && splitline[8] in STATES
+            # build task object and add to worker
+            # assumes that the current task always belongs to the previously added Worker
+            tq = Tasq(splitline[8], zero(Int), parse(Float64, splitline[4]), parse(Float64, splitline[5]))
             push!(tr.workers[end].tasqs, tq)
         end
     end

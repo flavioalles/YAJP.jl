@@ -39,7 +39,7 @@ end
 
 if length(ARGS) == 1 && isfile(ARGS[1])
     print("Acquiring trace data...")
-    tr = Parser.parsecsv(ARGS[1])
+    tr = Parser.parsecsv(ARGS[1], states=true)
     println("done.")
     print("Dumping span...")
     location = dumpspan(tr, dirname(ARGS[1]), SEP)
