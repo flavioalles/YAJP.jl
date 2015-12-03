@@ -8,7 +8,7 @@ using Data, Parser
 SEP = ","
 
 "Dumps to `csv` file macroscopic data (trace span and an lb metric)"
-function dumptrace(tr::Trace, path::AbstractString, sep::AbstractString)
+function dumpmacro(tr::Trace, path::AbstractString, sep::AbstractString)
     location = joinpath(path, "macro.csv")
     output = open(location, "w")
     # generate header
@@ -41,10 +41,10 @@ if length(ARGS) == 1 && isfile(ARGS[1])
     print("Acquiring trace data...")
     tr = Parser.parsecsv(ARGS[1], states=true)
     println("done.")
-    print("Dumping span...")
-    location = dumptrace(tr, dirname(ARGS[1]), SEP)
+    print("Dumping macro data...")
+    location = dumpmacro(tr, dirname(ARGS[1]), SEP)
     println("done.")
-    println("Span in $(location).")
+    println("Macro data in $(location).")
     print("Dumping tasks data...")
     location = dumptasks(tr, dirname(ARGS[1]), SEP)
     println("done.")
