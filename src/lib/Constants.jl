@@ -8,8 +8,6 @@ const EVENTS = ["Worker State"]
 const TASKS = ["cl11", "cl21", "cl22", "cl22_p",
                "starpu_slu_lu_model_11", "starpu_slu_lu_model_12",
                "starpu_slu_lu_model_21", "starpu_slu_lu_model_22"]
-const STATES = ["Initializing", "Callback", "Overhead",
-                "Scheduling", "PushingOutput", "FetchingInput"]
 
 # array describing Worker associativity with NUMA nodes on tested machines
 const TURING = Dict{ByteString, Vector{ByteString}}("NUMA1" => ["CPU0", "CPU4", "CPU8", "CPU12", "CPU16", "CPU20", "CPU24", "CPU28"],

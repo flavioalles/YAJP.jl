@@ -29,11 +29,6 @@ function parsecsv(path::AbstractString; states=false)
             # assumes that the current task always belongs to the previously added Worker
             tq = Tasq(splitline[8], parse(Int, splitline[10]), parse(Float64, splitline[4]), parse(Float64, splitline[5]))
             push!(tr.workers[end].tasqs, tq)
-        elseif states && splitline[3] in EVENTS && splitline[8] in STATES
-            # build task object and add to worker
-            # assumes that the current task always belongs to the previously added Worker
-            tq = Tasq(splitline[8], zero(Int), parse(Float64, splitline[4]), parse(Float64, splitline[5]))
-            push!(tr.workers[end].tasqs, tq)
         end
     end
     return tr
