@@ -11,8 +11,7 @@ The function returns an object of type `Trace` (exported by the `Data` module).
 """
 function parsecsv(path::AbstractString; states=false)
     # build trace (FYI: trace is a reserved word (its a function))
-    # TODO: came up with a scheme to name a Trace obj.
-    tr = Trace("name", Vector{Worker}(), Vector{TasqType}())
+    tr = Trace(Vector{Worker}(), Vector{TasqType}())
     file = open(path, "r")
     for line in eachline(file)
         # split line in comma-separated fields, remove whitespace and trailing newline
@@ -29,11 +28,6 @@ function parsecsv(path::AbstractString; states=false)
             # build task object and add to worker
             # assumes that the current task always belongs to the previously added Worker
             tq = Tasq(splitline[8], parse(Int, splitline[10]), parse(Float64, splitline[4]), parse(Float64, splitline[5]))
-            push!(tr.workers[end].tasqs, tq)
-        elseif states && splitline[3] in EVENTS && splitline[8] in STATES
-            # build task object and add to worker
-            # assumes that the current task always belongs to the previously added Worker
-            tq = Tasq(splitline[8], zero(Int), parse(Float64, splitline[4]), parse(Float64, splitline[5]))
             push!(tr.workers[end].tasqs, tq)
         end
     end
