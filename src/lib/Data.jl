@@ -133,12 +133,10 @@ end
 
 """
 Type representing a traced execution. The fields are described bellow.
-    * `name`: name of the trace/application.
     * `workers`: array that collect all `Worker`s (of interest) found in the trace.
     * `tasqtypes`: array that contains (unique) `TasqType`s found within the trace.
 """
 type Trace
-    name::ByteString # Is it necessary for a Trace to have a name?
     workers::Vector{Worker}
     tasqtypes::Vector{TasqType}
 end

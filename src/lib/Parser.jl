@@ -11,8 +11,7 @@ The function returns an object of type `Trace` (exported by the `Data` module).
 """
 function parsecsv(path::AbstractString; states=false)
     # build trace (FYI: trace is a reserved word (its a function))
-    # TODO: came up with a scheme to name a Trace obj.
-    tr = Trace("name", Vector{Worker}(), Vector{TasqType}())
+    tr = Trace(Vector{Worker}(), Vector{TasqType}())
     file = open(path, "r")
     for line in eachline(file)
         # split line in comma-separated fields, remove whitespace and trailing newline
