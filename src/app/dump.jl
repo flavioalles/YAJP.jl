@@ -12,9 +12,9 @@ function dumpmacro(tr::Trace, path::AbstractString, sep::AbstractString)
     location = joinpath(path, "macro.csv")
     output = open(location, "w")
     # generate header
-    write(output, "span$(sep)lb\n")
+    write(output, "span$(sep)nodes$(sep)workers\n")
     # output span
-    write(output, "$(span(tr))$(sep)$(lb(tr))\n")
+    write(output, "$(span(tr))$(sep)$(lb(tr, true))$(sep)$(lb(tr))\n")
     close(output)
     return location
 end
