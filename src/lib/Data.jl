@@ -1,6 +1,6 @@
 module Data
 
-export Trace, Worker, Tasq, TasqType, span, count, dump
+export Trace, Worker, Tasq, TasqType, span, count, dump, lb
 
 import Base: ==, isequal, show, count, dump
 
@@ -149,6 +149,19 @@ function span(tr::Trace)
         sp < span(wk)? sp = span(wk) : nothing
     end
     return sp
+end
+
+"Returns the Euclidean norm of vector of loads for every `Worker` in `tr`"
+function lb(tr::Trace)
+    loads = Float64[]
+    for wk in tr.workers
+        load = zero(Float64)
+        for tt in tr.tasqtypes
+            load += span(wk, tt)
+        end
+        push!(loads, load)
+    end
+    return norm(loads, 2)
 end
 
 end

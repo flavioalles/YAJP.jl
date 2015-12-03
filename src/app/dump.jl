@@ -7,19 +7,19 @@ using Data, Parser
 
 SEP = ","
 
-# TODO: document
-function dumpspan(tr::Trace, path::AbstractString, sep::AbstractString)
-    location = joinpath(path, "span.csv")
+"Dumps to `csv` file macroscopic data (trace span and an lb metric)"
+function dumptrace(tr::Trace, path::AbstractString, sep::AbstractString)
+    location = joinpath(path, "macro.csv")
     output = open(location, "w")
     # generate header
-    write(output, "span\n")
+    write(output, "span$(sep)lb\n")
     # output span
-    write(output, "$(span(tr))\n")
+    write(output, "$(span(tr))$(sep)$(lb(tr))\n")
     close(output)
     return location
 end
 
-# TODO: document
+"Dumps to `csv` file info. on every `tasq` parsed"
 function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
     location = joinpath(path, "tasks.csv")
     output = open(location, "w")
@@ -42,7 +42,7 @@ if length(ARGS) == 1 && isfile(ARGS[1])
     tr = Parser.parsecsv(ARGS[1], states=true)
     println("done.")
     print("Dumping span...")
-    location = dumpspan(tr, dirname(ARGS[1]), SEP)
+    location = dumptrace(tr, dirname(ARGS[1]), SEP)
     println("done.")
     println("Span in $(location).")
     print("Dumping tasks data...")
