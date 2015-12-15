@@ -31,6 +31,7 @@ function starpu(path::AbstractString)
             push!(tr.workers[end].tasqs, tq)
         end
     end
+    close(file)
     return tr
 end
 
