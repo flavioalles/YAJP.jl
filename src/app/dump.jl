@@ -39,7 +39,7 @@ end
 
 if length(ARGS) == 1 && isfile(ARGS[1])
     print("Acquiring trace data...")
-    tr = Parser.parsecsv(ARGS[1], states=true)
+    tr = Parser.starpu(ARGS[1])
     println("done.")
     print("Dumping macro data...")
     location = dumpmacro(tr, dirname(ARGS[1]), SEP)

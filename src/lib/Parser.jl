@@ -9,7 +9,7 @@ The expected argument is a path to the csv that will be parsed. No checking is d
 
 The function returns an object of type `Trace` (exported by the `Data` module).
 """
-function parsecsv(path::AbstractString; states=false)
+function starpu(path::AbstractString)
     # build trace (FYI: trace is a reserved word (its a function))
     tr = Trace(Vector{Worker}(), Vector{TasqType}())
     file = open(path, "r")
