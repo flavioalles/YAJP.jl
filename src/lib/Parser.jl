@@ -3,19 +3,28 @@ module Parser
 using Constants, Data
 
 """
-Acquires desired `StarPU` information from csv dump of Pajé trace.
+Acquires desired `StarPU` information from csv or wsv dump of Pajé trace.
 
-The expected argument is a path to the csv that will be parsed. No checking is done to insure existence and/or readability of file - `SystemError` is thrown and propagated (i.e. not caught here) in case the file cannot be opened.
+The expected argument is a path to the csv (or wsv) trace that will be parsed. No checking is done to insure existence and/or readability of file - `SystemError` is thrown and propagated (i.e. not caught here) in case the file cannot be opened.
 
 The function returns an object of type `Trace` (exported by the `Data` module).
 """
 function starpu(path::AbstractString)
     # build trace (FYI: trace is a reserved word (its a function))
     tr = Trace(Vector{Worker}(), Vector{TasqType}())
+    # set field separator Char according to file extension (csv or wsv)
+    if split(basename(path), '.')[end] == "csv"
+        sep = ','
+    elseif split(basename(path), '.')[end] == "wsv"
+        sep = ' '
+    else
+        error("Unrecognized extension in trace file.")
+    end
+    # open trace stream
     file = open(path, "r")
     for line in eachline(file)
-        # split line in comma-separated fields, remove whitespace and trailing newline
-        splitline = map(strip, split(line, ",", keep=true))
+        # split line, remove whitespace and trailing newline
+        splitline = map(strip, split(line, sep, keep=true))
         # check what line represents and react accordingly
         if splitline[3] in CONTAINERS
             # build Worker and push it to return array
