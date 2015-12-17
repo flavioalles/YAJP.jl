@@ -2,7 +2,7 @@ module Constants
 
 export CONTAINERS, EVENTS, STATES, TASKS, TURING, node
 
-# arrays that contain the container, events, and task names used in each application tested."
+# arrays that contain the container, events, and task names used in each application tested.
 const CONTAINERS = ["Worker"]
 const EVENTS = ["Worker State"]
 const TASKS = ["cl11", "cl21", "cl22", "cl22_p",
