@@ -26,11 +26,11 @@ function starpu(path::AbstractString)
         # split line, remove whitespace and trailing newline
         splitline = map(strip, split(line, sep, keep=true))
         # check what line represents and react accordingly
-        if splitline[3] in CONTAINERS
+        if splitline[3] in STARPU_CONTAINERS
             # build Worker and push it to return array
             wk = Worker(splitline[end], node(string(splitline[end])), parse(Float64, splitline[4]), parse(Float64, splitline[5]), Vector{Tasq}())
             push!(tr.workers, wk)
-        elseif splitline[3] in EVENTS && splitline[8] in TASKS
+        elseif splitline[3] in STARPU_STATES && splitline[8] in STARPU_EVENTS
             # check if TasqType has been added to Trace
             tt = TasqType(splitline[8], splitline[9], splitline[11], parse(Int, splitline[12]))
             !(tt in tr.tasqtypes)? push!(tr.tasqtypes, tt): nothing
