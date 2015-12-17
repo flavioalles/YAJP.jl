@@ -20,7 +20,7 @@ function starpu(path::AbstractString, discard=false)
     elseif split(basename(path), '.')[end] == "wsv"
         sep = ' '
     else
-        error("Unrecognized extension in trace file.")
+        error("Unrecognized trace file extension.")
     end
     # open trace stream
     file = open(path, "r")
