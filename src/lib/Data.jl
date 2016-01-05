@@ -1,6 +1,6 @@
 module Data
 
-export Trace, Worker, Tasq, TasqType, span, count, dump, lb
+export Trace, Worker, Tasq, span, count, dump
 
 import Base: ==, isequal, show, count, dump
 
