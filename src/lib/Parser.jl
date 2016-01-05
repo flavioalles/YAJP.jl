@@ -30,7 +30,7 @@ function starpu(path::AbstractString, discard=false)
         # check what line represents and react accordingly
         if splitline[3] in STARPU_CONTAINERS
             # build Worker and push it to return array
-            wk = Worker(splitline[end], node(string(splitline[end])), parse(Float64, splitline[4]), parse(Float64, splitline[5]), Vector{Tasq}())
+            wk = Worker(splitline[end], parse(Float64, splitline[4]), parse(Float64, splitline[5]), Vector{Tasq}())
             push!(tr.workers, wk)
         elseif splitline[3] in STARPU_STATES
             if (!discard && splitline[8] in STARPU_EVENTS) || (discard && !(splitline[8] in STARPU_EVENTS))

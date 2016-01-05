@@ -28,22 +28,19 @@ isequal(x::Tasq, y::Tasq) = x.kind == y.kind && x.began == y.began && x.ended ==
 span(tq::Tasq) = tq.ended - tq.began
 
 # TODO: document
-function dump(tq::Tasq, worker::AbstractString, node::AbstractString, sep::AbstractString)
+function dump(tq::Tasq, worker::AbstractString, sep::AbstractString)
     # gather tq info
-    str = "$(tq.kind)$(sep)$(worker)$(sep)$(node)$(sep)"
-    str *= "$(tq.began)$(sep)$(tq.ended)$(sep)$(span(tq))\n"
+    str = "$(tq.kind)$(sep)$(worker)$(sep)$(tq.began)$(sep)$(tq.ended)$(sep)$(span(tq))\n"
     return str
 end
 
 """
 Type that will represent information gathered from each worker (i.e. process). Below follows a description of what each field represents.
     * `name`: the name of the worker (i.e. the name of the Pajé Container that represented the worker).
-    * `node`: NUMA node where the worker is located
     * `tasqs`: list of `Tasq`s associated with the Worker
 """
 type Worker
     name::ByteString
-    node::ByteString
     began::Float64
     ended::Float64
     tasqs::Vector{Tasq}
