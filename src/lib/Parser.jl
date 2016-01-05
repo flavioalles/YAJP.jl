@@ -13,7 +13,7 @@ The function returns an object of type `Trace` (exported by the `Data` module).
 """
 function starpu(path::AbstractString, discard=false)
     # build trace (FYI: trace is a reserved word (its a function))
-    tr = Trace(Vector{Worker}(), Vector{TasqType}())
+    tr = Trace(Vector{Worker}())
     # set field separator Char according to file extension (csv or wsv)
     if split(basename(path), '.')[end] == "csv"
         sep = ','
@@ -34,22 +34,10 @@ function starpu(path::AbstractString, discard=false)
             push!(tr.workers, wk)
         elseif splitline[3] in STARPU_STATES
             if (!discard && splitline[8] in STARPU_EVENTS) || (discard && !(splitline[8] in STARPU_EVENTS))
-                # check if splitline is user-defined event
-                if length(splitline) > 8
-                    tt = TasqType(splitline[8], splitline[9], splitline[11], parse(Int, splitline[12]))
-                else
-                    tt = TasqType(splitline[8], "NA", "NA", zero(Int))
-                end
-                # check if TasqType has been added to Trace
-                !(tt in tr.tasqtypes)? push!(tr.tasqtypes, tt): nothing
                 # build task object and add to worker
-                # assumes that the current task always belongs to the previously added Worker
-                # check if splitline is user-defined event
-                if length(splitline) > 8
-                    tq = Tasq(splitline[8], parse(Int, splitline[10]), parse(Float64, splitline[4]), parse(Float64, splitline[5]))
-                else
-                    tq = Tasq(splitline[8], zero(Int), parse(Float64, splitline[4]), parse(Float64, splitline[5]))
-                end
+                # assumes that the current task always belongs to the most recently added Worker
+                # and that tasks are chronologically ordered
+                tq = Tasq(splitline[8], parse(Float64, splitline[4]), parse(Float64, splitline[5]))
                 push!(tr.workers[end].tasqs, tq)
             end
         end

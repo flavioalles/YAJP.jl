@@ -24,13 +24,12 @@ function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
     location = joinpath(path, "tasks.csv")
     output = open(location, "w")
     # generate header
-    write(output, "event$(sep)resource$(sep)node$(sep)id$(sep)began$(sep)")
-    write(output, "ended$(sep)span$(sep)tag$(sep)params$(sep)size\n")
+    write(output, "event$(sep)resource$(sep)node$(sep)began$(sep)ended$(sep)span\n")
     # iterate over workers
     for wk in tr.workers
         # iterate over tasqs
         for tq in wk.tasqs
-            write(output, dump(tq, wk.name, wk.node, tr.tasqtypes, sep))
+            write(output, dump(tq, wk.name, wk.node, sep))
         end
     end
     close(output)
