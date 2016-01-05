@@ -7,9 +7,9 @@ using Data, Parser
 
 SEP = ","
 
-"Dumps to `csv` file macroscopic data (trace span and an lb metric)"
-function dumpmacro(tr::Trace, path::AbstractString, sep::AbstractString)
-    location = joinpath(path, "macro.csv")
+"Dumps to `csv` trace perf. data. Dump is made in the same dir. as `path` - i.e. trace."
+function dumpperf(tr::Trace, path::AbstractString, sep::AbstractString)
+    location = joinpath(path, "perf.csv")
     output = open(location, "w")
     # generate header
     write(output, "span\n")
@@ -40,10 +40,10 @@ if length(ARGS) == 2 && isfile(ARGS[1]) && isfile(ARGS[2])
     print("Acquiring trace data...")
     tr = Parser.parsetrace(ARGS[1], ARGS[2])
     println("done.")
-    print("Dumping macro data...")
-    location = dumpmacro(tr, dirname(ARGS[1]), SEP)
+    print("Dumping performance data...")
+    location = dumpperf(tr, dirname(ARGS[1]), SEP)
     println("done.")
-    println("Macro data in $(location).")
+    println("Performance data in $(location).")
     print("Dumping tasks data...")
     location = dumptasks(tr, dirname(ARGS[1]), SEP)
     println("done.")
