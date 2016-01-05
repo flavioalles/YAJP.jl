@@ -92,22 +92,4 @@ function span(tr::Trace)
     return sp
 end
 
-"Returns the Euclidean norm of vector of loads for every `Worker` or NUMA node in `tr`"
-function lb(tr::Trace, nodes=false)
-    nodes? loads = Dict{AbstractString,Float64}() : loads = Float64[]
-    for wk in tr.workers
-        load = zero(Float64)
-        for tt in tr.tasqtypes
-            load += span(wk, tt)
-        end
-        if nodes
-            haskey(loads, wk.node)? loads[wk.node] += load : loads[wk.node] = load
-        else
-            push!(loads, load)
-        end
-    end
-    nodes? n = norm(collect(values(loads)), 2) : n = norm(loads, 2)
-    return n
-end
-
 end
