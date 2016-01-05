@@ -36,9 +36,9 @@ function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
     return location
 end
 
-if length(ARGS) == 1 && isfile(ARGS[1])
+if length(ARGS) == 2 && isfile(ARGS[1]) && isfile(ARGS[2])
     print("Acquiring trace data...")
-    tr = Parser.starpu(ARGS[1])
+    tr = Parser.parsetrace(ARGS[1], ARGS[2])
     println("done.")
     print("Dumping macro data...")
     location = dumpmacro(tr, dirname(ARGS[1]), SEP)
@@ -51,6 +51,6 @@ if length(ARGS) == 1 && isfile(ARGS[1])
     exit(0)
 else
     println("Wrong usage.")
-    println("dump.jl <csv-trace>")
+    println("dump.jl <csv-trace> <yaml-config>")
     exit(1)
 end

@@ -1,0 +1,11 @@
+# Example YAML Config. File for dump.jl
+containers:
+    - Worker
+states:
+    - Worker State
+events:
+    - cl12
+    - cl21
+    - cl22
+    - cl22_p
+discard: false
