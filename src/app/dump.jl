@@ -19,7 +19,7 @@ function dumpperf(tr::Trace, path::AbstractString, sep::AbstractString)
     return location
 end
 
-"Dumps to `csv` file info. on every `tasq` parsed"
+"Dumps to `csv` file info. on every `tasq` parsed. Dump is made in the same dir. as `path` - i.e. trace."
 function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
     location = joinpath(path, "tasks.csv")
     output = open(location, "w")
