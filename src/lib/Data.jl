@@ -1,6 +1,6 @@
 module Data
 
-export Trace, Container, Event, span, count, dump
+export Trace, Container, Event, span, count, dump, load
 
 import Base: ==, isequal, show, count, dump
 
@@ -67,6 +67,11 @@ function span(ct::Container, kind::ByteString)
         (ev.kind == kind)? aggspan += span(ev) : nothing
     end
     return aggspan
+end
+
+"Return `ct`'s load"
+function load(ct::Container)
+    return mapreduce(span, +, zero(Float64), ct.events)
 end
 
 """
