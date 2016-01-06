@@ -17,7 +17,7 @@ function parsetrace(tracepath::AbstractString, configpath::AbstractString)
         error("Inconsistent config. file")
     end
     # build trace (FYI: trace is a reserved word (its a function))
-    tr = Trace(Vector{Worker}())
+    tr = Trace(Vector{Container}())
     # set field separator Char according to file extension (csv or wsv)
     if split(basename(tracepath), '.')[end] == "csv"
         sep = ','
@@ -33,16 +33,16 @@ function parsetrace(tracepath::AbstractString, configpath::AbstractString)
         splitline = map(strip, split(line, sep, keep=true))
         # check what line represents and react accordingly
         if splitline[3] in config["containers"]
-            # build Worker and push it to return array
-            wk = Worker(splitline[end], parse(Float64, splitline[4]), parse(Float64, splitline[5]), Vector{Tasq}())
-            push!(tr.workers, wk)
+            # build Container and push it to return array
+            ct = Container(splitline[end], parse(Float64, splitline[4]), parse(Float64, splitline[5]), Vector{Event}())
+            push!(tr.containers, ct)
         elseif splitline[3] in config["states"]
             if (!config["discard"] && splitline[8] in config["events"]) || (config["discard"] && !(splitline[8] in config["events"]))
-                # build task object and add to worker
-                # assumes that the current task always belongs to the most recently added Worker
-                # and that tasks are chronologically ordered
-                tq = Tasq(splitline[8], parse(Float64, splitline[4]), parse(Float64, splitline[5]))
-                push!(tr.workers[end].tasqs, tq)
+                # build event object and add to container
+                # assumes that the current event always belongs to the most recently added Container
+                # and that events are chronologically ordered
+                ev = Event(splitline[8], parse(Float64, splitline[4]), parse(Float64, splitline[5]))
+                push!(tr.containers[end].events, ev)
             end
         end
     end

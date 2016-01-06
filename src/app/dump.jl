@@ -19,17 +19,17 @@ function dumpperf(tr::Trace, path::AbstractString, sep::AbstractString)
     return location
 end
 
-"Dumps to `csv` file info. on every `tasq` parsed. Dump is made in the same dir. as `path` - i.e. trace."
-function dumptasks(tr::Trace, path::AbstractString, sep::AbstractString)
-    location = joinpath(path, "tasks.csv")
+"Dumps to `csv` file info. on every `event` parsed. Dump is made in the same dir. as `path` - i.e. trace."
+function dumpevents(tr::Trace, path::AbstractString, sep::AbstractString)
+    location = joinpath(path, "events.csv")
     output = open(location, "w")
     # generate header
     write(output, "event$(sep)resource$(sep)began$(sep)ended$(sep)span\n")
-    # iterate over workers
-    for wk in tr.workers
-        # iterate over tasqs
-        for tq in wk.tasqs
-            write(output, dump(tq, wk.name, sep))
+    # iterate over containers
+    for ct in tr.containers
+        # iterate over events
+        for ev in ct.events
+            write(output, dump(ev, ct.name, sep))
         end
     end
     close(output)
@@ -44,10 +44,10 @@ if length(ARGS) == 2 && isfile(ARGS[1]) && isfile(ARGS[2])
     location = dumpperf(tr, dirname(ARGS[1]), SEP)
     println("done.")
     println("Performance data in $(location).")
-    print("Dumping tasks data...")
-    location = dumptasks(tr, dirname(ARGS[1]), SEP)
+    print("Dumping events data...")
+    location = dumpevents(tr, dirname(ARGS[1]), SEP)
     println("done.")
-    println("Tasks data in $(location).")
+    println("Events data in $(location).")
     exit(0)
 else
     println("Wrong usage.")

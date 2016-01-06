@@ -1,90 +1,88 @@
 module Data
 
-export Trace, Worker, Tasq, span, count, dump
+export Trace, Container, Event, span, count, dump
 
 import Base: ==, isequal, show, count, dump
 
 """
-Type that represents an individual task execution. What follows below is a list describing what each field stands for.
-    * `kind`: string that identifies the task type. `type` would be a better name for this field but it is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/types/#composite-types) in Julia.
-    * `began`: marks at what point - relative to the beginning of the execution - the task began to execute.
-    * `ended`: marks at what point - relative to the beginning of the execution - the task ended execution.
-
-Obs: `Tasq` and not `Task` because `Task` is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/control-flow/#man-tasks) in Julia.
+Type that represents an individual event execution. What follows below is a list describing what each field stands for.
+    * `kind`: string that identifies the event type. `type` would be a better name for this field but it is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/types/#composite-types) in Julia.
+    * `began`: marks at what point - relative to the beginning of the execution - the event began to execute.
+    * `ended`: marks at what point - relative to the beginning of the execution - the event ended execution.
 """
-type Tasq
+type Event
     kind::ByteString # splitline[8]
     began::Float64 # splitline[4]
     ended::Float64 # splitline[5]
 end
 
-show(io::IO, x::Tasq) = print(io, "$(x.kind) $(x.began) $(x.ended)")
+show(io::IO, x::Event) = print(io, "$(x.kind) $(x.began) $(x.ended)")
 
-==(x::Tasq, y::Tasq) = x.kind == y.kind && x.began == y.began && x.ended == y.ended? true : false
+==(x::Event, y::Event) = x.kind == y.kind && x.began == y.began && x.ended == y.ended? true : false
 
-isequal(x::Tasq, y::Tasq) = x.kind == y.kind && x.began == y.began && x.ended == y.ended? true : false
+isequal(x::Event, y::Event) = x.kind == y.kind && x.began == y.began && x.ended == y.ended? true : false
 
-"Return task `tq` span"
-span(tq::Tasq) = tq.ended - tq.began
+"Return event `ev` span"
+span(ev::Event) = ev.ended - ev.began
 
 # TODO: document
-function dump(tq::Tasq, worker::AbstractString, sep::AbstractString)
-    # gather tq info
-    str = "$(tq.kind)$(sep)$(worker)$(sep)$(tq.began)$(sep)$(tq.ended)$(sep)$(span(tq))\n"
+function dump(ev::Event, container::AbstractString, sep::AbstractString)
+    # gather ev info
+    str = "$(ev.kind)$(sep)$(container)$(sep)$(ev.began)$(sep)$(ev.ended)$(sep)$(span(ev))\n"
     return str
 end
 
 """
-Type that will represent information gathered from each worker (i.e. process). Below follows a description of what each field represents.
-    * `name`: the name of the worker (i.e. the name of the Pajé Container that represented the worker).
-    * `tasqs`: list of `Tasq`s associated with the Worker
+Type that will represent information gathered from each container (i.e. process). Below follows a description of what each field represents.
+    * `name`: the name of the container (i.e. the name of the Pajé Container that represented the container).
+    * `events`: list of `Event`s associated with the Container
 """
-type Worker
+type Container
     name::ByteString
     began::Float64
     ended::Float64
-    tasqs::Vector{Tasq}
+    events::Vector{Event}
 end
 
-==(x::Worker, y::Worker) = (x.name == y.name)? true : false
+==(x::Container, y::Container) = (x.name == y.name)? true : false
 
-isequal(x::Worker, y::Worker) = (x.name == y.name)? true : false
+isequal(x::Container, y::Container) = (x.name == y.name)? true : false
 
-"Return how many times tasks of type `kind` were executed on worker `wk`"
-function count(wk::Worker, kind::ByteString)
+"Return how many times events of type `kind` were executed on container `ct`"
+function count(ct::Container, kind::ByteString)
     exec = 0
-    for tq in wk.tasqs
-        (tq.kind == kind)? exec+= 1 : nothing
+    for ev in ct.events
+        (ev.kind == kind)? exec+= 1 : nothing
     end
     return exec
 end
 
-"Return `wk`s span"
-span(wk::Worker) = wk.ended - wk.began
+"Return `ct`s span"
+span(ct::Container) = ct.ended - ct.began
 
-"Return the aggregated span of tasks of type `kind` on worker `wk`"
-function span(wk::Worker, kind::ByteString)
+"Return the aggregated span of events of type `kind` on container `ct`"
+function span(ct::Container, kind::ByteString)
     aggspan = 0
-    for tq in wk.tasqs
-        (tq.kind == kind)? aggspan += span(tq) : nothing
+    for ev in ct.events
+        (ev.kind == kind)? aggspan += span(ev) : nothing
     end
     return aggspan
 end
 
 """
 Type representing a traced execution. The fields are described bellow.
-    * `workers`: array that collect all `Worker`s (of interest) found in the trace.
+    * `containers`: array that collect all `Container`s (of interest) found in the trace.
 """
 type Trace
-    workers::Vector{Worker}
+    containers::Vector{Container}
 end
 
-"Return the `tr`s span - measured by the `Worker` with largest span"
+"Return the `tr`s span - measured by the `Container` with largest span"
 function span(tr::Trace)
-    # iterate over workers
+    # iterate over containers
     sp = zero(Float64)
-    for wk in tr.workers
-        sp < span(wk)? sp = span(wk) : nothing
+    for ct in tr.containers
+        sp < span(ct)? sp = span(ct) : nothing
     end
     return sp
 end
