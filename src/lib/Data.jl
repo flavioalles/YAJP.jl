@@ -82,14 +82,9 @@ type Trace
     containers::Vector{Container}
 end
 
-"Return the `tr`s span - measured by the `Container` with largest span"
+"Return the `Trace`'s (`tr`) span - measured by the `Container` with largest span"
 function span(tr::Trace)
-    # iterate over containers
-    sp = zero(Float64)
-    for ct in tr.containers
-        sp < span(ct)? sp = span(ct) : nothing
-    end
-    return sp
+    return maximum(map(Data.span, tr.containers))
 end
 
 end
