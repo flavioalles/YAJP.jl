@@ -1,6 +1,6 @@
 module Data
 
-export Trace, Container, Event, span, count, dump, load
+export Trace, Container, Event, span, load
 
 import Base: ==, isequal, show, count, dump
 
