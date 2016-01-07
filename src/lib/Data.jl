@@ -1,6 +1,6 @@
 module Data
 
-export Trace, Container, Event, span, load
+export Trace, Container, Event, span, began, ended, load
 
 import Base: ==, isequal, show, count, dump
 
@@ -80,6 +80,24 @@ Type representing a traced execution. The fields are described bellow.
 """
 type Trace
     containers::Vector{Container}
+end
+
+"Return `tr`s beginning timestamp - represented by the `Container` with smallest `began` timestamp"
+function began(tr::Trace)
+    bg = Inf
+    for ct in tr.containers
+        ct.began < bg? bg = ct.began : nothing
+    end
+    return bg
+end
+
+"Return `tr`s ending timestamp - represented by the `Container` with highest `ended` timestamp"
+function ended(tr::Trace)
+    ed = zero(Float64)
+    for ct in tr.containers
+        ct.ended > ed? ed = ct.ended : nothing
+    end
+    return ed
 end
 
 "Return the `Trace`'s (`tr`) span - measured by the `Container` with largest span"
