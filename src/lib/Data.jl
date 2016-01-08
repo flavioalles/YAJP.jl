@@ -85,6 +85,11 @@ function load(ct::Container)
     return mapreduce(span, +, zero(Float64), ct.events)
 end
 
+"Return `ct`'s load - considering events starting between `start` and `finish`"
+function load(ct::Container, start::Float64, finish::Float64)
+    return mapreduce(span, +, zero(Float64), events(ct, start, finish))
+end
+
 """
 Type representing a traced execution. The fields are described bellow.
     * `containers`: array that collect all `Container`s (of interest) found in the trace.
