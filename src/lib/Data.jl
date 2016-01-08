@@ -1,6 +1,6 @@
 module Data
 
-export Trace, Container, Event, span, began, ended, load
+export Trace, Container, Event, span, events, began, ended, load
 
 import Base: ==, isequal, show, count, dump
 
@@ -55,6 +55,17 @@ function count(ct::Container, kind::ByteString)
         (ev.kind == kind)? exec+= 1 : nothing
     end
     return exec
+end
+
+"Return collection of `Container` (`ct`) events that `began` between `start` and `finish`"
+function events(ct::Container, start::Float64, finish::Float64)
+    evs = Vector{Event}()
+    for ev in ct.events
+        if ev.began >= start && ev.began < finish
+            push!(evs, ev)
+        end
+    end
+    return evs
 end
 
 "Return `ct`s span"
