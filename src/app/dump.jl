@@ -99,6 +99,6 @@ if checkargs(ARGS)
     exit(0)
 else
     println("Wrong usage.")
-    println("dump.jl <csv-trace> <yaml-config>")
+    println("dump.jl <csv-trace> <yaml-config> [--slices=#]")
     exit(1)
 end
