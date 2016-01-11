@@ -118,7 +118,7 @@ end
 
 "Return the `Trace`'s (`tr`) span - measured by the `Container` with largest span"
 function span(tr::Trace)
-    return maximum(map(Data.span, tr.containers))
+    return ended(tr) - began(tr)
 end
 
 end
