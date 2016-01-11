@@ -2,7 +2,7 @@ module Load
 
 using Data, Distributions
 
-export pimbalance, imbalancep, imbalancet
+export skewness, kurtosis, pimbalance, imbalancep, imbalancet
 
 import Base: std
 import Distributions: skewness, kurtosis
