@@ -29,6 +29,35 @@ function checkargs{T<:AbstractString}(args::Vector{T})
     return true
 end
 
+# TODO: doc
+function dumploads(tr::Trace, path::AbstractString, slices::Int, sep::AbstractString)
+    location = joinpath(path, "loads.csv")
+    output = open(location, "w")
+    # generate header
+    header = "slice$(sep)"
+    for ct in tr.containers
+        ct != tr.containers[end]? header *= "$(ct.name)$(sep)" : header *= "$(ct.name)\n"
+    end
+    write(output, header)
+    # output slice loads
+    timestep = (ended(tr) - began(tr))/slices
+    for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
+        loads = "$(slice)$(sep)"
+        if slice <= slices
+            for ct in tr.containers
+                if ct != tr.containers[end]
+                    loads *= "$(load(ct, ts, ts+timestep))$(sep)"
+                else
+                    loads *= "$(load(ct, ts, ts+timestep))\n"
+                end
+            end
+            write(output, loads)
+        end
+    end
+    close(output)
+    return location
+end
+
 "Dumps to `csv` load balancing metrics. Dump is made in the same dir. as `path` - i.e. trace location."
 function dumpmetrics(tr::Trace, path::AbstractString, slices::Int, sep::AbstractString)
     location = joinpath(path, "metrics.csv")
@@ -76,6 +105,14 @@ if checkargs(ARGS)
     print("Acquiring trace data...")
     tr = Parser.parsetrace(ARGS[1], ARGS[2])
     println("done.")
+    print("Dumping containers loads...")
+    if length(ARGS) == 2
+        location = dumploads(tr, dirname(ARGS[1]), 1, SEP)
+    else
+        location = dumploads(tr, dirname(ARGS[1]), parse(Int, replace(ARGS[3], "--slices=","")), SEP)
+    end
+    println("done.")
+    println("Loads data in $(location).")
     print("Dumping load balancing metrics...")
     if length(ARGS) == 2
         location = dumpmetrics(tr, dirname(ARGS[1]), 1, SEP)
