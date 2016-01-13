@@ -57,11 +57,11 @@ function count(ct::Container, kind::ByteString)
     return exec
 end
 
-"Return collection of `Container` (`ct`) events that `began` between `start` and `finish`"
+"Return collection of `Container` (`ct`) events that executed - totally or partially - between `start` and `finish`"
 function events(ct::Container, start::Float64, finish::Float64)
     evs = Vector{Event}()
     for ev in ct.events
-        if ev.began >= start && ev.began < finish
+        if ev.began < finish && ev.ended > start
             push!(evs, ev)
         end
     end
@@ -87,7 +87,13 @@ end
 
 "Return `ct`'s load - considering events starting between `start` and `finish`"
 function load(ct::Container, start::Float64, finish::Float64)
-    return mapreduce(span, +, zero(Float64), events(ct, start, finish))
+    sp = zero(Float64)
+    for ev in events(ct, start, finish)
+        sp += span(ev)
+        ev.began < start? sp -= (start - ev.began) : nothing
+        ev.ended > finish? sp -= (ev.ended - finish) : nothing
+    end
+    return sp
 end
 
 """
