@@ -73,7 +73,7 @@ function dumpmetrics(tr::Trace, path::AbstractString, slices::Int, sep::Abstract
 end
 
 "Dumps to `csv` trace perf. data. Dump is made in the same dir. as `path` - i.e. trace."
-function dumpperf(tr::Trace, path::AbstractString, slices::Int, sep::AbstractString)
+function dumpperf(tr::Trace, path::AbstractString, sep::AbstractString)
     location = joinpath(path, "perf.csv")
     output = open(location, "w")
     # generate header
@@ -122,11 +122,7 @@ if checkargs(ARGS)
     println("done.")
     println("Metrics data in $(location).")
     print("Dumping performance data...")
-    if length(ARGS) == 2
-        location = dumpperf(tr, dirname(ARGS[1]), 1, SEP)
-    else
-        location = dumpperf(tr, dirname(ARGS[1]), parse(Int, replace(ARGS[3], "--slices=","")), SEP)
-    end
+    location = dumpperf(tr, dirname(ARGS[1]), SEP)
     println("done.")
     println("Performance data in $(location).")
     print("Dumping events data...")
