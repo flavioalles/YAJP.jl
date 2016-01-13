@@ -13,12 +13,11 @@ function std(tr::Trace)
 end
 
 # TODO: doc
-function std(tr::Trace, slices::Int)
-    @assert slices > 0 "# of slices must be positive"
-    timestep = (ended(tr) - began(tr))/slices
+function std{T<:Real}(tr::Trace, timestep::T)
+    @assert timestep > zero(Int) "Time step must be positive"
     stds = Float64[]
-    for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
-        if slice <= slices
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
             push!(stds, std(map(x -> load(x, ts, ts+timestep), tr.containers)))
         end
     end
@@ -31,12 +30,11 @@ function skewness(tr::Trace)
 end
 
 # TODO: doc
-function skewness(tr::Trace, slices::Int)
-    @assert slices > 0 "# of slices must be positive"
-    timestep = (ended(tr) - began(tr))/slices
+function skewness{T<:Real}(tr::Trace, timestep::T)
+    @assert timestep > zero(Int) "Time step must be positive"
     skews = Float64[]
-    for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
-        if slice <= slices
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
             push!(skews, skewness(map(x -> load(x, ts, ts+timestep), tr.containers)))
         end
     end
@@ -49,12 +47,11 @@ function kurtosis(tr::Trace)
 end
 
 # TODO: doc
-function kurtosis(tr::Trace, slices::Int)
-    @assert slices > 0 "# of slices must be positive"
-    timestep = (ended(tr) - began(tr))/slices
+function kurtosis{T<:Real}(tr::Trace, timestep::T)
+    @assert timestep > zero(Int) "Time step must be positive"
     kurts = Float64[]
-    for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
-        if slice <= slices
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
             push!(kurts, kurtosis(map(x -> load(x, ts, ts+timestep), tr.containers)))
         end
     end
@@ -68,12 +65,11 @@ function pimbalance(tr::Trace)
 end
 
 # TODO: doc
-function pimbalance(tr::Trace, slices::Int)
-    @assert slices > 0 "# of slices must be positive"
-    timestep = (ended(tr) - began(tr))/slices
+function pimbalance{T<:Real}(tr::Trace, timestep::T)
+    @assert timestep > zero(Int) "Time step must be positive"
     ps = Float64[]
-    for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
-        if slice <= slices
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
             loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             push!(ps, ((maximum(loads)/mean(loads)) - 1)*100)
         end
@@ -88,12 +84,11 @@ function imbalancep(tr::Trace)
 end
 
 # TODO: doc
-function imbalancep(tr::Trace, slices::Int)
-    @assert slices > 0 "# of slices must be positive"
-    timestep = (ended(tr) - began(tr))/slices
+function imbalancep{T<:Real}(tr::Trace, timestep::T)
+    @assert timestep > zero(Int) "Time step must be positive"
     ps = Float64[]
-    for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
-        if slice <= slices
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
             loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             push!(ps, ((maximum(loads) - mean(loads))/maximum(loads))*(length(loads)/(length(loads) - 1)))
         end
@@ -108,12 +103,11 @@ function imbalancet(tr::Trace)
 end
 
 # TODO: doc
-function imbalancet(tr::Trace, slices::Int)
-    @assert slices > 0 "# of slices must be positive"
-    timestep = (ended(tr) - began(tr))/slices
+function imbalancet{T<:Real}(tr::Trace, timestep::T)
+    @assert timestep > zero(Int) "Time step must be positive"
     ps = Float64[]
-    for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
-        if slice <= slices
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
             loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             push!(ps, maximum(loads) - mean(loads))
         end
