@@ -31,7 +31,7 @@ end
 
 # TODO: doc
 function dumploads(tr::Trace, path::AbstractString, timestep::Int, sep::AbstractString)
-    location = joinpath(path, "loads.csv")
+    location = joinpath(path,  "loads-" * string(timestep) * ".csv")
     output = open(location, "w")
     # generate header
     header = "slice$(sep)begin$(sep)midpoint$(sep)end$(sep)"
@@ -61,7 +61,7 @@ end
 
 "Dumps to `csv` load balancing metrics. Dump is made in the same dir. as `path` - i.e. trace location."
 function dumpmetrics(tr::Trace, path::AbstractString, timestep::Int, sep::AbstractString)
-    location = joinpath(path, "metrics.csv")
+    location = joinpath(path,  "metrics-" * string(timestep) * ".csv")
     output = open(location, "w")
     # generate header
     write(output, "slice$(sep)begin$(sep)midpoint$(sep)end$(sep)std$(sep)skewness$(sep)kurtosis$(sep)pimbalance$(sep)imbalancep$(sep)imbalancet\n")
