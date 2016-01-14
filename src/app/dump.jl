@@ -18,7 +18,7 @@ function checkargs{T<:AbstractString}(args::Vector{T})
             return false
         else
             try
-                if parse(Float64, replace(args[3], "--timestep=","")) < 1
+                if parse(Int, replace(args[3], "--timestep=","")) < 1
                     return false
                 end
             catch
@@ -30,7 +30,7 @@ function checkargs{T<:AbstractString}(args::Vector{T})
 end
 
 # TODO: doc
-function dumploads{T<:Real}(tr::Trace, path::AbstractString, timestep::T, sep::AbstractString)
+function dumploads(tr::Trace, path::AbstractString, timestep::Int, sep::AbstractString)
     location = joinpath(path, "loads.csv")
     output = open(location, "w")
     # generate header
@@ -60,7 +60,7 @@ function dumploads{T<:Real}(tr::Trace, path::AbstractString, timestep::T, sep::A
 end
 
 "Dumps to `csv` load balancing metrics. Dump is made in the same dir. as `path` - i.e. trace location."
-function dumpmetrics{T<:Real}(tr::Trace, path::AbstractString, timestep::T, sep::AbstractString)
+function dumpmetrics(tr::Trace, path::AbstractString, timestep::Int, sep::AbstractString)
     location = joinpath(path, "metrics.csv")
     output = open(location, "w")
     # generate header
@@ -113,7 +113,7 @@ if checkargs(ARGS)
     if length(ARGS) == 2
         location = dumploads(tr, dirname(ARGS[1]), 1, SEP)
     else
-        location = dumploads(tr, dirname(ARGS[1]), parse(Float64, replace(ARGS[3], "--timestep=","")), SEP)
+        location = dumploads(tr, dirname(ARGS[1]), parse(Int, replace(ARGS[3], "--timestep=","")), SEP)
     end
     println("done.")
     println("Loads data in $(location).")
@@ -121,7 +121,7 @@ if checkargs(ARGS)
     if length(ARGS) == 2
         location = dumpmetrics(tr, dirname(ARGS[1]), 1, SEP)
     else
-        location = dumpmetrics(tr, dirname(ARGS[1]), parse(Float64, replace(ARGS[3], "--timestep=","")), SEP)
+        location = dumpmetrics(tr, dirname(ARGS[1]), parse(Int, replace(ARGS[3], "--timestep=","")), SEP)
     end
     println("done.")
     println("Metrics data in $(location).")
