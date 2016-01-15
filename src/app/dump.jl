@@ -34,7 +34,7 @@ function dumploads(tr::Trace, path::AbstractString, timestep::Int, sep::Abstract
     location = joinpath(path,  "loads-" * string(timestep) * ".csv")
     output = open(location, "w")
     # generate header
-    header = "slice$(sep)begin$(sep)midpoint$(sep)end$(sep)"
+    header = "slice$(sep)began$(sep)midpoint$(sep)ended$(sep)"
     for ct in tr.containers
         ct != tr.containers[end]? header *= "$(ct.name)$(sep)" : header *= "$(ct.name)\n"
     end
@@ -64,7 +64,7 @@ function dumpmetrics(tr::Trace, path::AbstractString, timestep::Int, sep::Abstra
     location = joinpath(path,  "metrics-" * string(timestep) * ".csv")
     output = open(location, "w")
     # generate header
-    write(output, "slice$(sep)begin$(sep)midpoint$(sep)end$(sep)std$(sep)skewness$(sep)kurtosis$(sep)pimbalance$(sep)imbalancep$(sep)imbalancet\n")
+    write(output, "slice$(sep)began$(sep)midpoint$(sep)ended$(sep)std$(sep)skewness$(sep)kurtosis$(sep)pimbalance$(sep)imbalancep$(sep)imbalancet\n")
     # output slices
     for (index,metrics) in enumerate(zip(std(tr,timestep), skewness(tr,timestep), kurtosis(tr,timestep), pimbalance(tr,timestep), imbalancep(tr,timestep), imbalancet(tr,timestep)))
         bg = began(tr) + timestep*(index-1)
