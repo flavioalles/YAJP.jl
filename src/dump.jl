@@ -1,3 +1,22 @@
+# TODO: doc
+function loads(tr::Trace)
+    # create DataFrame
+    df = DataFrame(slice = Int[],
+                   began = Float64[],
+                   midpoint = Float64[],
+                   ended = Float64[])
+    # add one column per container (of type Float64[])
+    for ct in tr.containers
+        df[Symbol(ct.name)] = Float64[]
+    end
+    # insert slice loads
+    loads = [1, began(tr), (ended(tr)-began(tr))/2, ended(tr)]
+    for ct in tr.containers
+        push!(loads, load(ct))
+    end
+    push!(df, loads)
+    return df
+end
 
 # TODO: doc
 function loads(tr::Trace, timestep::Int)
@@ -25,7 +44,22 @@ function loads(tr::Trace, timestep::Int)
     return df
 end
 
-# TODO: docs
+# TODO: doc
+function metrics(tr::Trace)
+    # create DataFrame
+    return DataFrame(slice = @data([1]),
+                     began = @data([began(tr)]),
+                     midpoint = @data([(ended(tr)-began(tr))/2]),
+                     ended = @data([ended(tr)]),
+                     std = @data([std(tr)]),
+                     skewness = @data([skewness(tr)]),
+                     kurtosis = @data([kurtosis(tr)]),
+                     pimbalance = @data([pimbalance(tr)]),
+                     imbalancep = @data([imbalancep(tr)]),
+                     imbalancet = @data([imbalancet(tr)]))
+end
+
+# TODO: doc
 function metrics(tr::Trace, timestep::Int)
     # create DataFrame
     df = DataFrame(slice = Int[],
