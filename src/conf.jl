@@ -1,7 +1,7 @@
 const FIELDS = ["containers", "states", "events", "discard"]
 
 "Checks if YAML config. file represented by `config` is consistent"
-function check(path::AbstractString)
+function checkconfig(path::AbstractString)
     config = YAML.load_file(path)
     for field in FIELDS
         if !haskey(config, field)
@@ -16,6 +16,6 @@ function check(path::AbstractString)
 end
 
 "Returns config. contained in `path`"
-function get(path::AbstractString)
+function getconfig(path::AbstractString)
     return YAML.load_file(path)
 end
