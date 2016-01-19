@@ -80,8 +80,6 @@ function metrics(tr::Trace, timestep::Int)
         bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
         midpoint = bg +  (ed - bg)/2
         push!(df, [slice bg midpoint ed metrics[1] metrics[2] metrics[3] metrics[4] metrics[5] metrics[6]])
-        #push!(df, [slice, bg, midpoint, ed, metrics[1], metrics[2], metrics[3], metrics[4], metrics[5], metrics[6]])
-        #push!(df, [slice, bg, midpoint, ed, metrics])
     end
     return df
 end
