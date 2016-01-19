@@ -1,6 +1,3 @@
-module Dump
-
-using Data, DataFrames, Load, Parser
 
 # TODO: doc
 function loads(tr::Trace, timestep::Int)
@@ -67,10 +64,8 @@ function events(tr::Trace)
     for ct in tr.containers
         # iterate over events
         for event in ct.events
-            push!(df, [event.kind ct.name event.began event.ended Data.span(event)])
+            push!(df, [event.kind ct.name event.began event.ended span(event)])
         end
     end
     return df
-end
-
 end

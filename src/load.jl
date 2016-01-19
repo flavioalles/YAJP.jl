@@ -1,12 +1,3 @@
-module Load
-
-using Data, Distributions
-
-export skewness, kurtosis, pimbalance, imbalancep, imbalancet
-
-import Base: std
-import Distributions: skewness, kurtosis
-
 "Returns the **Standard Deviation** among the loads in `tr`s containers"
 function std(tr::Trace)
     return std(map(load, tr.containers))
@@ -113,6 +104,4 @@ function imbalancet{T<:Real}(tr::Trace, timestep::T)
         end
     end
     return ps
-end
-
 end

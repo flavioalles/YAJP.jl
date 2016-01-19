@@ -1,7 +1,3 @@
-module Conf
-
-using YAML
-
 const FIELDS = ["containers", "states", "events", "discard"]
 
 "Checks if YAML config. file represented by `config` is consistent"
@@ -22,6 +18,4 @@ end
 "Returns config. contained in `path`"
 function get(path::AbstractString)
     return YAML.load_file(path)
-end
-
 end

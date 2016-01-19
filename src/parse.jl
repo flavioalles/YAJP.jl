@@ -1,7 +1,3 @@
-module Parser
-
-using Conf, Data
-
 """
 Acquires desired trace information - as described by `configpath` configuration file - from csv or wsv dump of Pajé trace.
 
@@ -48,6 +44,4 @@ function parsetrace(tracepath::AbstractString, configpath::AbstractString)
     end
     close(file)
     return tr
-end
-
 end

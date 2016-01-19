@@ -1,9 +1,3 @@
-module Data
-
-export Trace, Container, Event, span, events, began, ended, load
-
-import Base: ==, isequal, show, count, dump
-
 """
 Type that represents an individual event execution. What follows below is a list describing what each field stands for.
     * `kind`: string that identifies the event type. `type` would be a better name for this field but it is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/types/#composite-types) in Julia.
@@ -125,6 +119,4 @@ end
 "Return the `Trace`'s (`tr`) span - measured by the `Container` with largest span"
 function span(tr::Trace)
     return ended(tr) - began(tr)
-end
-
 end
