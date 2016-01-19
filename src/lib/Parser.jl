@@ -10,12 +10,12 @@ The expected arguments are, respectively, a path to the csv (or wsv) trace that 
 The function returns an object of type `Trace` (exported by the `Data` module).
 """
 function parsetrace(tracepath::AbstractString, configpath::AbstractString)
+    # error checking
+    @assert isfile(tracepath) "Inexistent trace file"
+    @assert isfile(configpath) "Inexistent config. file"
+    @assert Conf.check(configpath) "Inconsistent config. file"
     # get configuration
-    if Conf.check(configpath)
-        config = Conf.get(configpath)
-    else
-        error("Inconsistent config. file")
-    end
+    config = Conf.get(configpath)
     # build trace (FYI: trace is a reserved word (its a function))
     tr = Trace(Vector{Container}())
     # set field separator Char according to file extension (csv or wsv)
