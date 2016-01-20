@@ -1,5 +1,5 @@
 # TODO: doc
-function loads(tr::Trace)
+function loads(tr::Trace, norm::Bool = false)
     # create DataFrame
     df = DataFrame(slice = Int[],
                    began = Float64[],
@@ -12,14 +12,14 @@ function loads(tr::Trace)
     # insert slice loads
     loads = [1, began(tr), (ended(tr)-began(tr))/2, ended(tr)]
     for ct in tr.containers
-        push!(loads, load(ct))
+        push!(loads, load(ct, norm))
     end
     push!(df, loads)
     return df
 end
 
 # TODO: doc
-function loads(tr::Trace, timestep::Int)
+function loads(tr::Trace, timestep::Int, norm::Bool = false)
     # create DataFrame
     df = DataFrame(slice = Int[],
                    began = Float64[],
@@ -36,7 +36,7 @@ function loads(tr::Trace, timestep::Int)
             midpoint = ts + (ed - ts)/2
             loads = [slice, ts, midpoint, ed]
             for ct in tr.containers
-                push!(loads, load(ct, ts, ts+timestep))
+                push!(loads, load(ct, ts, ts+timestep, norm))
             end
             push!(df, loads)
         end

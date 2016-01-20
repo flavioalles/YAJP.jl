@@ -75,18 +75,23 @@ function span(ct::Container, kind::ByteString)
 end
 
 "Return `ct`'s load"
-function load(ct::Container)
-    return mapreduce(span, +, zero(Float64), ct.events)
+function load(ct::Container, norm::Bool = false)
+    if norm
+        return mapreduce(span, +, zero(Float64), ct.events)/span(ct)
+    else
+        return mapreduce(span, +, zero(Float64), ct.events)
+    end
 end
 
 "Return `ct`'s load - considering events starting between `start` and `finish`"
-function load(ct::Container, start::Float64, finish::Float64)
+function load(ct::Container, start::Float64, finish::Float64, norm = false)
     sp = zero(Float64)
     for ev in events(ct, start, finish)
         sp += span(ev)
         ev.began < start? sp -= (start - ev.began) : nothing
         ev.ended > finish? sp -= (ev.ended - finish) : nothing
     end
+    norm? sp = sp/(finish - start) : nothing
     return sp
 end
 
