@@ -15,6 +15,14 @@ It contains methods to parse `csv` dumps of [Pajé](http://paje.sourceforge.net/
 
 Details regarding the floor version expected for each required package can be found in [`REQUIRE`](REQUIRE).
 
+### Installation
+
+To install `YAJP` simply type the following in a Julia REPL:
+
+    julia> Pkg.clone("https://github.com/flavioalles/YAJP.jl")
+
+As noted previously, the minimum Julia version required is `v0.4`. The package requirements are resolved by Julia's package manager (thus, there is no need in installing them manually).
+
 ### Organization
 
 `YAJP` consists in a collection of methods to parse and analyze - offline - traced parallel application executions. Currently, `YAJP` can only parse `csv` files obtained by running [`pj_dump`](https://github.com/schnorr/pajeng/wiki/pj_dump) on [Pajé](http://paje.sourceforge.net/download/publication/lang-paje.pdf) trace files. The following subsections provide a brief description of how the code is organized.
