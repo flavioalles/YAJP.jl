@@ -8,10 +8,10 @@ It contains methods to parse `csv` dumps of [Pajé](http://paje.sourceforge.net/
 
 `YAJP` has nothing but a few minor requirements to run. Those are:
 
-* `Julia 0.4` ([Download on julialang.org)](http://julialang.org/downloads/))
+* `Julia 0.4` ([Download on julialang.org](http://julialang.org/downloads/))
 * `DataFrames.jl` ([GitHub](https://github.com/JuliaStats/DataFrames.jl))
 * `Distributions.jl` ([GitHub](https://github.com/JuliaStats/Distributions.jl))
-* `YAML.jl` ([(GitHub)](https://github.com/dcjones/YAML.jl))
+* `YAML.jl` ([GitHub](https://github.com/dcjones/YAML.jl))
 
 Details regarding the floor version expected for each required package can be found in [`REQUIRE`](REQUIRE).
 
