@@ -42,6 +42,9 @@ end
 
 isequal(x::Container, y::Container) = (x.name == y.name)? true : false
 
+"Return how many events `Container` `ct` holds"
+count(ct::Container) = length(ct.events)
+
 "Return how many times events of type `kind` were executed on container `ct`"
 function count(ct::Container, kind::ByteString)
     exec = 0
