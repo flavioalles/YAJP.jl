@@ -106,6 +106,8 @@ type Trace
     containers::Vector{Container}
 end
 
+show(io::IO, x::Trace) = print(io, "Trace holding $(length(x.containers)) Containers and $(mapreduce(count, +, zero(Int), x.containers)) Events.")
+
 "Return `tr`s beginning timestamp - represented by the `Container` with smallest `began` timestamp"
 function began(tr::Trace)
     bg = Inf
