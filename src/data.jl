@@ -87,7 +87,7 @@ function load(ct::Container, norm::Bool = false)
 end
 
 "Return `ct`'s load - considering events starting between `start` and `finish`"
-function load(ct::Container, start::Float64, finish::Float64, norm = false)
+function load(ct::Container, start::Float64, finish::Float64, norm::Bool=false)
     sp = zero(Float64)
     for ev in events(ct, start, finish)
         sp += span(ev)
