@@ -88,14 +88,14 @@ end
 
 "Return `ct`'s load - considering events starting between `start` and `finish`"
 function load(ct::Container, start::Float64, finish::Float64, norm::Bool=false)
-    sp = zero(Float64)
+    ld = zero(Float64)
     for ev in events(ct, start, finish)
-        sp += span(ev)
-        ev.began < start? sp -= (start - ev.began) : nothing
-        ev.ended > finish? sp -= (ev.ended - finish) : nothing
+        ld += span(ev)
+        ev.began < start? ld -= (start - ev.began) : nothing
+        ev.ended > finish? ld -= (ev.ended - finish) : nothing
     end
-    norm? sp = sp/(finish - start) : nothing
-    return sp
+    norm? ld = ld/(finish - start) : nothing
+    return ld
 end
 
 """
