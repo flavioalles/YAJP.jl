@@ -4,17 +4,13 @@ function loads(tr::Trace, norm::Bool=false)
     df = DataFrame(slice = Int[],
                    began = Float64[],
                    midpoint = Float64[],
-                   ended = Float64[])
-    # add one column per container (of type Float64[])
-    for ct in tr.containers
-        df[Symbol(ct.name)] = Float64[]
-    end
+                   ended = Float64[],
+                   container = ByteString[],
+                   load = Float64[])
     # insert slice loads
-    loads = [1, began(tr), (ended(tr)-began(tr))/2, ended(tr)]
     for ct in tr.containers
-        push!(loads, load(ct, norm))
+        push!(df, [1, began(tr), (ended(tr)-began(tr))/2, ended(tr), ct.name, load(ct,norm)])
     end
-    push!(df, loads)
     return df
 end
 
@@ -24,21 +20,17 @@ function loads(tr::Trace, timestep::Int, norm::Bool=false)
     df = DataFrame(slice = Int[],
                    began = Float64[],
                    midpoint = Float64[],
-                   ended = Float64[])
-    # add one column per container (of type Float64[])
-    for ct in tr.containers
-        df[Symbol(ct.name)] = Float64[]
-    end
+                   ended = Float64[],
+                   container = ByteString[],
+                   load = Float64[])
     # insert slice loads
     for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
         if ts != ended(tr)
             ts + timestep < ended(tr)? ed = ts + timestep : ed = ended(tr)
             midpoint = ts + (ed - ts)/2
-            loads = [slice, ts, midpoint, ed]
             for ct in tr.containers
-                push!(loads, load(ct, ts, ed, norm))
+                push!(df, [slice, ts, midpoint, ed, ct.name, load(ct, ts, ed, norm)])
             end
-            push!(df, loads)
         end
     end
     return df
