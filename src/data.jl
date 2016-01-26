@@ -42,6 +42,8 @@ end
 
 isequal(x::Container, y::Container) = (x.name == y.name)? true : false
 
+show(io::IO, x::Container) = print(io, "Container \"$(x.name)\" holding $(length(x.events)) Events.")
+
 "Return how many events `Container` `ct` holds"
 count(ct::Container) = length(ct.events)
 
