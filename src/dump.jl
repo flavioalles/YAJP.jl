@@ -1,5 +1,5 @@
 # TODO: doc
-function loads(tr::Trace, norm::Bool = false)
+function loads(tr::Trace, norm::Bool=false)
     # create DataFrame
     df = DataFrame(slice = Int[],
                    began = Float64[],
@@ -19,7 +19,7 @@ function loads(tr::Trace, norm::Bool = false)
 end
 
 # TODO: doc
-function loads(tr::Trace, timestep::Int, norm::Bool = false)
+function loads(tr::Trace, timestep::Int, norm::Bool=false)
     # create DataFrame
     df = DataFrame(slice = Int[],
                    began = Float64[],

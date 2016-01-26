@@ -78,7 +78,7 @@ function span(ct::Container, kind::ByteString)
 end
 
 "Return `ct`'s load"
-function load(ct::Container, norm::Bool = false)
+function load(ct::Container, norm::Bool=false)
     if norm
         return mapreduce(span, +, zero(Float64), ct.events)/span(ct)
     else
