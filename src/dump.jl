@@ -1,35 +1,41 @@
 # TODO: doc
-function loads(tr::Trace, norm::Bool=false)
+function loads(tr::Trace)
     # create DataFrame
     df = DataFrame(slice = Int[],
                    began = Float64[],
                    midpoint = Float64[],
                    ended = Float64[],
                    container = ByteString[],
-                   load = Float64[])
+                   load = Float64[],
+                   normalized = Float64[])
     # insert slice loads
     for ct in tr.containers
-        push!(df, [1, began(tr), (ended(tr)-began(tr))/2, ended(tr), ct.name, load(ct,norm)])
+        ld = load(ct)
+        norm = ld/(ended(tr) - began(tr))
+        push!(df, [1, began(tr), (ended(tr)-began(tr))/2, ended(tr), ct.name, ld, norm])
     end
     return df
 end
 
 # TODO: doc
-function loads(tr::Trace, timestep::Int, norm::Bool=false)
+function loads(tr::Trace, timestep::Int)
     # create DataFrame
     df = DataFrame(slice = Int[],
                    began = Float64[],
                    midpoint = Float64[],
                    ended = Float64[],
                    container = ByteString[],
-                   load = Float64[])
+                   load = Float64[],
+                   normalized = Float64[])
     # insert slice loads
     for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
         if ts != ended(tr)
             ts + timestep < ended(tr)? ed = ts + timestep : ed = ended(tr)
             midpoint = ts + (ed - ts)/2
             for ct in tr.containers
-                push!(df, [slice, ts, midpoint, ed, ct.name, load(ct, ts, ed, norm)])
+                ld = load(ct, ts, ed)
+                norm = ld/(ed - ts)
+                push!(df, [slice, ts, midpoint, ed, ct.name, ld, norm])
             end
         end
     end
