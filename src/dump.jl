@@ -36,7 +36,7 @@ function loads(tr::Trace, timestep::Int, norm::Bool=false)
             midpoint = ts + (ed - ts)/2
             loads = [slice, ts, midpoint, ed]
             for ct in tr.containers
-                push!(loads, load(ct, ts, ts+timestep, norm))
+                push!(loads, load(ct, ts, ed, norm))
             end
             push!(df, loads)
         end
