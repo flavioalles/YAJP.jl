@@ -36,16 +36,19 @@ type Container
     began::Float64
     ended::Float64
     events::Vector{Event}
+    discarded::Vector{Event}
 end
 
 ==(x::Container, y::Container) = (x.name == y.name)? true : false
 
 isequal(x::Container, y::Container) = (x.name == y.name)? true : false
 
-show(io::IO, x::Container) = print(io, "Container \"$(x.name)\" holding $(length(x.events)) Events.")
+show(io::IO, x::Container) = print(io, "Container \"$(x.name)\" holding $(length(x.events)) kept Events and $(length(x.discarded)) discarded Events.")
 
 "Return how many events `Container` `ct` holds"
-count(ct::Container) = length(ct.events)
+function count(ct::Container, discarded::Bool=false)
+    discarded? length(ct.discarded) : length(ct.events)
+end
 
 "Return how many times events of type `kind` were executed on container `ct`"
 function count(ct::Container, kind::ByteString)
@@ -57,9 +60,10 @@ function count(ct::Container, kind::ByteString)
 end
 
 "Return collection of `Container` (`ct`) events that executed - totally or partially - between `start` and `finish`"
-function events(ct::Container, start::Float64, finish::Float64)
+function events(ct::Container, start::Float64, finish::Float64, discarded::Bool=false)
     evs = Vector{Event}()
-    for ev in ct.events
+    discarded? eventslist = ct.discarded : eventslist = ct.events
+    for ev in eventslist
         if ev.began < finish && ev.ended > start
             push!(evs, ev)
         end
@@ -82,20 +86,28 @@ end
 "Return `ct`'s load"
 function load(ct::Container, norm::Bool=false)
     if norm
-        return mapreduce(span, +, zero(Float64), ct.events)/span(ct)
+        return (mapreduce(span, +, zero(Float64), ct.events) - mapreduce(span, +, zero(Float64), ct.discarded))/span(ct)
     else
-        return mapreduce(span, +, zero(Float64), ct.events)
+        return mapreduce(span, +, zero(Float64), ct.events) - mapreduce(span, +, zero(Float64), ct.discarded)
     end
 end
 
 "Return `ct`'s load - considering events starting between `start` and `finish`"
 function load(ct::Container, start::Float64, finish::Float64, norm::Bool=false)
     ld = zero(Float64)
+    # get kept events
     for ev in events(ct, start, finish)
         ld += span(ev)
         ev.began < start? ld -= (start - ev.began) : nothing
         ev.ended > finish? ld -= (ev.ended - finish) : nothing
     end
+    # get discarded events
+    for ev in events(ct, start, finish, true)
+        ld -= span(ev)
+        ev.began < start? ld += (start - ev.began) : nothing
+        ev.ended > finish? ld += (ev.ended - finish) : nothing
+    end
+    # normalized load?
     norm? ld = ld/(finish - start) : nothing
     return ld
 end
@@ -108,7 +120,7 @@ type Trace
     containers::Vector{Container}
 end
 
-show(io::IO, x::Trace) = print(io, "Trace holding $(length(x.containers)) Containers and $(mapreduce(count, +, zero(Int), x.containers)) Events.")
+show(io::IO, x::Trace) = print(io, "Trace holding $(length(x.containers)) Containers, $(mapreduce(count, +, zero(Int), x.containers)) kept Events, and $(mapreduce(y -> count(y, true), +, zero(Int), x.containers)) discarded Events.")
 
 "Return `tr`s beginning timestamp - represented by the `Container` with smallest `began` timestamp"
 function began(tr::Trace)

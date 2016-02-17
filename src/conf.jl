@@ -1,4 +1,4 @@
-const FIELDS = ["containers", "states", "events", "discard"]
+const FIELDS = ["containers", "states", "keep", "discard"]
 
 "Checks if YAML config. file represented by `config` is consistent"
 function checkconfig(path::AbstractString)
@@ -6,9 +6,7 @@ function checkconfig(path::AbstractString)
     for field in FIELDS
         if !haskey(config, field)
             return false
-        elseif field == "discard" && typeof(config[field]) != Bool
-            return false
-        elseif field != "discard" && typeof(config[field]) != Array{Any,1}
+        elseif typeof(config[field]) != Array{Any,1}
             return false
         end
     end
