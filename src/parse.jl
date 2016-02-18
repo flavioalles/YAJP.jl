@@ -41,7 +41,7 @@ function trace(tracepath::AbstractString, configpath::AbstractString)
                 # and that events are chronologically ordered
                 ev = Event(splitline[8], parse(Float64, splitline[4]), parse(Float64, splitline[5]))
                 push!(tr.containers[end].events, ev)
-            elseif splitline[8] in config["discard"]
+            elseif haskey(config, "discard") && splitline[8] in config["discard"]
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container
                 # and that events are chronologically ordered
