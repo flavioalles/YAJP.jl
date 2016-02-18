@@ -8,4 +8,6 @@ events:
     - cl21
     - cl22
     - cl22_p
-discard: false
+discard: # optional
+    - Idle
+    - Sleeping
