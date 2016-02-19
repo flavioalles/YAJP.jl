@@ -4,13 +4,16 @@ function std(tr::Trace)
 end
 
 # TODO: doc
-function std{T<:Real}(tr::Trace, timestep::T)
+function std{T<:Real}(tr::Trace, timestep::T, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
     stds = Float64[]
     for ts in began(tr):timestep:ended(tr)
         if ts < ended(tr)
             push!(stds, std(map(x -> load(x, ts, ts+timestep), tr.containers)))
         end
+    end
+    if norm
+        stds = map(x -> (x - minimum(stds))/(maximum(stds) - minimum(stds)), stds)
     end
     return stds
 end
@@ -21,13 +24,16 @@ function skewness(tr::Trace)
 end
 
 # TODO: doc
-function skewness{T<:Real}(tr::Trace, timestep::T)
+function skewness{T<:Real}(tr::Trace, timestep::T, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
     skews = Float64[]
     for ts in began(tr):timestep:ended(tr)
         if ts < ended(tr)
             push!(skews, skewness(map(x -> load(x, ts, ts+timestep), tr.containers)))
         end
+    end
+    if norm
+        skews = map(x -> (x - minimum(skews))/(maximum(skews) - minimum(skews)), skews)
     end
     return skews
 end
@@ -38,13 +44,16 @@ function kurtosis(tr::Trace)
 end
 
 # TODO: doc
-function kurtosis{T<:Real}(tr::Trace, timestep::T)
+function kurtosis{T<:Real}(tr::Trace, timestep::T, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
     kurts = Float64[]
     for ts in began(tr):timestep:ended(tr)
         if ts < ended(tr)
             push!(kurts, kurtosis(map(x -> load(x, ts, ts+timestep), tr.containers)))
         end
+    end
+    if norm
+        kurts = map(x -> (x - minimum(kurts))/(maximum(kurts) - minimum(kurts)), kurts)
     end
     return kurts
 end
@@ -56,7 +65,7 @@ function pimbalance(tr::Trace)
 end
 
 # TODO: doc
-function pimbalance{T<:Real}(tr::Trace, timestep::T)
+function pimbalance{T<:Real}(tr::Trace, timestep::T, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
     ps = Float64[]
     for ts in began(tr):timestep:ended(tr)
@@ -64,6 +73,9 @@ function pimbalance{T<:Real}(tr::Trace, timestep::T)
             loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             push!(ps, ((maximum(loads)/mean(loads)) - 1)*100)
         end
+    end
+    if norm
+        ps = map(x -> (x - minimum(ps))/(maximum(ps) - minimum(ps)), ps)
     end
     return ps
 end
@@ -75,7 +87,7 @@ function imbalancep(tr::Trace)
 end
 
 # TODO: doc
-function imbalancep{T<:Real}(tr::Trace, timestep::T)
+function imbalancep{T<:Real}(tr::Trace, timestep::T, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
     ps = Float64[]
     for ts in began(tr):timestep:ended(tr)
@@ -83,6 +95,9 @@ function imbalancep{T<:Real}(tr::Trace, timestep::T)
             loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             push!(ps, ((maximum(loads) - mean(loads))/maximum(loads))*(length(loads)/(length(loads) - 1)))
         end
+    end
+    if norm
+        ps = map(x -> (x - minimum(ps))/(maximum(ps) - minimum(ps)), ps)
     end
     return ps
 end
@@ -94,7 +109,7 @@ function imbalancet(tr::Trace)
 end
 
 # TODO: doc
-function imbalancet{T<:Real}(tr::Trace, timestep::T)
+function imbalancet{T<:Real}(tr::Trace, timestep::T, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
     ps = Float64[]
     for ts in began(tr):timestep:ended(tr)
@@ -102,6 +117,9 @@ function imbalancet{T<:Real}(tr::Trace, timestep::T)
             loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             push!(ps, maximum(loads) - mean(loads))
         end
+    end
+    if norm
+        ps = map(x -> (x - minimum(ps))/(maximum(ps) - minimum(ps)), ps)
     end
     return ps
 end

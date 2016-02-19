@@ -59,7 +59,7 @@ function metrics(tr::Trace)
 end
 
 # TODO: doc
-function metrics(tr::Trace, timestep::Int)
+function metrics(tr::Trace, timestep::Int, norm::Bool=false)
     # create DataFrame
     df = DataFrame(slice = Int[],
                    timestep = Int[],
@@ -73,9 +73,9 @@ function metrics(tr::Trace, timestep::Int)
                    imbalancep = Float64[],
                    imbalancet = Float64[])
     # insert slices
-    for (slice,metrics) in enumerate(zip(std(tr,timestep), skewness(tr,timestep),
-                                 kurtosis(tr,timestep), pimbalance(tr,timestep),
-                                 imbalancep(tr,timestep), imbalancet(tr,timestep)))
+    for (slice,metrics) in enumerate(zip(std(tr,timestep,norm), skewness(tr,timestep,norm),
+                                 kurtosis(tr,timestep,norm), pimbalance(tr,timestep,norm),
+                                 imbalancep(tr,timestep,norm), imbalancet(tr,timestep,norm)))
         bg = began(tr) + timestep*(slice-1)
         bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
         midpoint = bg +  (ed - bg)/2
