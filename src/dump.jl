@@ -32,7 +32,7 @@ function loads(tr::Trace, timestep::Int)
     for (slice,ts) in enumerate(began(tr):timestep:ended(tr))
         if ts != ended(tr)
             ts + timestep < ended(tr)? ed = ts + timestep : ed = ended(tr)
-            midpoint = ts + (ed - ts)/2
+            midpoint = ts + timestep/2
             for ct in tr.containers
                 ld = load(ct, ts, ed)
                 norm = ld/(ed - ts)
@@ -78,7 +78,7 @@ function metrics(tr::Trace, timestep::Int, drop::Int=0, norm::Bool=false)
                                  imbalancep(tr,timestep,drop,norm), imbalancet(tr,timestep,drop,norm)))
         bg = began(tr) + timestep*(slice-1+drop)
         bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
-        midpoint = bg +  (ed - bg)/2
+        midpoint = bg +  timestep/2
         push!(df, [slice timestep bg midpoint ed metrics[1] metrics[2] metrics[3] metrics[4] metrics[5] metrics[6]])
     end
     return df
