@@ -54,6 +54,7 @@ function metrics(tr::Trace, f::Function)
                      began = @data([began(tr)]),
                      midpoint = @data([(ended(tr)-began(tr))/2]),
                      ended = @data([ended(tr)]),
+                     metric = @data([string(f)]),
                      value = @data([f(tr)]))
 end
 
@@ -84,13 +85,14 @@ function metrics(tr::Trace, f::Function, timestep::Int, drop::Int=0, norm::Bool=
                    began = Float64[],
                    midpoint = Float64[],
                    ended = Float64[],
+                   metric = ByteString[],
                    value = Float64[])
     # insert slices
     for (slice,value) in enumerate(f(tr,timestep,drop,norm))
         bg = began(tr) + timestep*(slice-1+drop)
         bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
         midpoint = bg +  timestep/2
-        push!(df, [slice timestep bg midpoint ed value])
+        push!(df, [slice timestep bg midpoint ed string(f) value])
     end
     return df
 end
