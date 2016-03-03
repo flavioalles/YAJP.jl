@@ -43,21 +43,6 @@ function loads(tr::Trace, timestep::Int)
     return df
 end
 
-
-# TODO: doc
-function metrics(tr::Trace, f::Function)
-    # assert proper mtr
-    fs = [std, skewness, kurtosis,
-          pimbalance, imbalancep, imbalancet]
-    @assert f in fs "Unrecognized metric function"
-    return DataFrame(slice = @data([1]),
-                     began = @data([began(tr)]),
-                     midpoint = @data([(ended(tr)-began(tr))/2]),
-                     ended = @data([ended(tr)]),
-                     metric = @data([string(f)]),
-                     value = @data([f(tr)]))
-end
-
 # TODO: doc
 function metrics(tr::Trace)
     # create DataFrame
@@ -74,27 +59,17 @@ function metrics(tr::Trace)
 end
 
 # TODO: doc
-function metrics(tr::Trace, f::Function, timestep::Int, drop::Int=0, norm::Bool=false)
+function metrics(tr::Trace, f::Function)
     # assert proper mtr
     fs = [std, skewness, kurtosis,
           pimbalance, imbalancep, imbalancet]
     @assert f in fs "Unrecognized metric function"
-    # create DataFrame
-    df = DataFrame(slice = Int[],
-                   timestep = Int[],
-                   began = Float64[],
-                   midpoint = Float64[],
-                   ended = Float64[],
-                   metric = ByteString[],
-                   value = Float64[])
-    # insert slices
-    for (slice,value) in enumerate(f(tr,timestep,drop,norm))
-        bg = began(tr) + timestep*(slice-1+drop)
-        bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
-        midpoint = bg +  timestep/2
-        push!(df, [slice timestep bg midpoint ed string(f) value])
-    end
-    return df
+    return DataFrame(slice = @data([1]),
+                     began = @data([began(tr)]),
+                     midpoint = @data([(ended(tr)-began(tr))/2]),
+                     ended = @data([ended(tr)]),
+                     metric = @data([string(f)]),
+                     value = @data([f(tr)]))
 end
 
 # TODO: doc
@@ -119,6 +94,30 @@ function metrics(tr::Trace, timestep::Int, drop::Int=0, norm::Bool=false)
         bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
         midpoint = bg +  timestep/2
         push!(df, [slice timestep bg midpoint ed metrics[1] metrics[2] metrics[3] metrics[4] metrics[5] metrics[6]])
+    end
+    return df
+end
+
+# TODO: doc
+function metrics(tr::Trace, f::Function, timestep::Int, drop::Int=0, norm::Bool=false)
+    # assert proper mtr
+    fs = [std, skewness, kurtosis,
+          pimbalance, imbalancep, imbalancet]
+    @assert f in fs "Unrecognized metric function"
+    # create DataFrame
+    df = DataFrame(slice = Int[],
+                   timestep = Int[],
+                   began = Float64[],
+                   midpoint = Float64[],
+                   ended = Float64[],
+                   metric = ByteString[],
+                   value = Float64[])
+    # insert slices
+    for (slice,value) in enumerate(f(tr,timestep,drop,norm))
+        bg = began(tr) + timestep*(slice-1+drop)
+        bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
+        midpoint = bg +  timestep/2
+        push!(df, [slice timestep bg midpoint ed string(f) value])
     end
     return df
 end
