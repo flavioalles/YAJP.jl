@@ -91,8 +91,8 @@ function metrics(tr::Trace, timestep::Int, drop::Int=0, norm::Bool=false)
                                  kurtosis(tr,timestep,drop,norm), pimbalance(tr,timestep,drop,norm),
                                  imbalancep(tr,timestep,drop,norm), imbalancet(tr,timestep,drop,norm)))
         bg = began(tr) + drop + timestep*(slice-1)
+        bg + timestep <=  ended(tr) - drop? ed = bg + timestep : ed = ended(tr) - drop
         midpoint = bg +  timestep/2
-        ed = bg + timestep
         push!(df, [slice timestep bg midpoint ed metrics[1] metrics[2] metrics[3] metrics[4] metrics[5] metrics[6]])
     end
     return df
@@ -115,8 +115,8 @@ function metrics(tr::Trace, f::Function, timestep::Int, drop::Int=0, norm::Bool=
     # insert slices
     for (slice,value) in enumerate(f(tr,timestep,drop,norm))
         bg = began(tr) + drop + timestep*(slice-1)
+        bg + timestep <=  ended(tr) - drop? ed = bg + timestep : ed = ended(tr) - drop
         midpoint = bg +  timestep/2
-        ed = bg + timestep
         push!(df, [slice timestep bg midpoint ed string(f) value])
     end
     return df
