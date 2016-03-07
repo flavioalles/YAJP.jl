@@ -35,12 +35,12 @@ function trace(tracepath::AbstractString, configpath::AbstractString)
             ct = Container(splitline[end], parse(Float64, splitline[4]), parse(Float64, splitline[5]), Vector{Event}(), Vector{Event}())
             push!(tr.containers, ct)
         elseif splitline[3] in config["states"]
-            if splitline[8] in config["keep"]
+            if haskey(config, "keep") && splitline[8] in config["keep"]
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container
                 # and that events are chronologically ordered
                 ev = Event(splitline[8], parse(Float64, splitline[4]), parse(Float64, splitline[5]))
-                push!(tr.containers[end].events, ev)
+                push!(tr.containers[end].kept, ev)
             elseif haskey(config, "discard") && splitline[8] in config["discard"]
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container

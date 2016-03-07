@@ -1,5 +1,5 @@
-const REQUIRED = ["containers", "states", "keep"]
-const OPTIONAL = ["discard"]
+const REQUIRED = ["containers", "states"]
+const OPTIONAL = ["keep", "discard"]
 
 "Checks if YAML config. file represented by `config` is consistent"
 function checkconfig(path::AbstractString)

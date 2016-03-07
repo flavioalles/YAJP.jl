@@ -133,7 +133,7 @@ function events(tr::Trace)
     # iterate over containers
     for ct in tr.containers
         # iterate over events
-        for event in ct.events
+        for event in ct.kept
             push!(df, [event.kind ct.name event.began event.ended span(event)])
         end
     end
