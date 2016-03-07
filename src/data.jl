@@ -94,6 +94,8 @@ end
 
 "Return `ct`'s load - considering events starting between `start` and `finish`"
 function load(ct::Container, start::Float64, finish::Float64, norm::Bool=false)
+    @assert start >= ct.began "Invalid starting timestamp"
+    @assert finish <= ct.ended "Invalid ending timestamp"
     ld = zero(Float64)
     # get kept events
     for ev in events(ct, start, finish)
