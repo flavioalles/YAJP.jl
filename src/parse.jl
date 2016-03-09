@@ -14,6 +14,16 @@ function trace(tracepath::AbstractString, configpath::AbstractString)
     @assert checkconfig(configpath) "Inconsistent config. file"
     # get configuration
     config = getconfig(configpath)
+    # get denominator for time stamps
+    if haskey(config, "unit")
+        if config["unit"] == "ms"
+            denom = 1000
+        else # config["unit"] == "s"
+            denom = 1
+        end
+    else
+        denom = 1
+    end
     # build trace (FYI: trace is a reserved word (its a function))
     tr = Trace(Vector{Container}())
     # set field separator Char according to file extension (csv or wsv)
@@ -32,20 +42,20 @@ function trace(tracepath::AbstractString, configpath::AbstractString)
         # check what line represents and react accordingly
         if splitline[3] in config["containers"]
             # build Container and push it to return array
-            ct = Container(splitline[end], parse(Float64, splitline[4]), parse(Float64, splitline[5]), Vector{Event}(), Vector{Event}())
+            ct = Container(splitline[end], parse(Float64, splitline[4])/denom, parse(Float64, splitline[5])/denom, Vector{Event}(), Vector{Event}())
             push!(tr.containers, ct)
         elseif splitline[3] in config["states"]
             if haskey(config, "keep") && splitline[8] in config["keep"]
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container
                 # and that events are chronologically ordered
-                ev = Event(splitline[8], parse(Float64, splitline[4]), parse(Float64, splitline[5]))
+                ev = Event(splitline[8], parse(Float64, splitline[4])/denom, parse(Float64, splitline[5])/denom)
                 push!(tr.containers[end].kept, ev)
             elseif haskey(config, "discard") && splitline[8] in config["discard"]
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container
                 # and that events are chronologically ordered
-                ev = Event(splitline[8], parse(Float64, splitline[4]), parse(Float64, splitline[5]))
+                ev = Event(splitline[8], parse(Float64, splitline[4])/denom, parse(Float64, splitline[5])/denom)
                 push!(tr.containers[end].discarded, ev)
             end
         end

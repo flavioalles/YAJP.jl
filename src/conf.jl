@@ -1,5 +1,6 @@
 const REQUIRED = ["containers", "states"]
-const OPTIONAL = ["keep", "discard"]
+const OPTIONAL = ["keep", "discard", "unit"]
+const UNITS = ["s", "ms"]
 
 "Checks if YAML config. file represented by `config` is consistent"
 function checkconfig(path::AbstractString)
@@ -14,7 +15,9 @@ function checkconfig(path::AbstractString)
     for field in keys(config)
         if !(field in REQUIRED || field in OPTIONAL)
             return false
-        elseif typeof(config[field]) != Array{Any,1}
+        elseif field != "unit" && typeof(config[field]) != Array{Any,1}
+            return false
+        elseif field == "unit" && !(config[field] in UNITS)
             return false
         end
     end
