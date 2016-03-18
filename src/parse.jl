@@ -67,3 +67,73 @@ function trace(tracepath::AbstractString, configpath::AbstractString)
     close(file)
     return tr
 end
+
+"""
+    trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, start::T, finish::T)
+
+In addition to the arguments described above, this method also accepts `start` and `finish` points. Those arguments determine at what point the parsing of the trace `tracepath` should begin and end.
+"""
+function trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, start::T, finish::T)
+    # error checking
+    @assert isfile(tracepath) "Inexistent trace file"
+    @assert isfile(configpath) "Inexistent config. file"
+    @assert checkconfig(configpath) "Inconsistent config. file"
+    @assert start >= zero(Float64) "Start argument must be positive Real number"
+    @assert finish > zero(Float64) "Finish argument must be positive (non-zero) Real number"
+    # get configuration
+    config = getconfig(configpath)
+    # get denominator for time stamps
+    if haskey(config, "unit")
+        if config["unit"] == "ms"
+            denom = 1000
+        elseif config["unit"] == "us"
+            denom = 1000000
+        elseif config["unit"] == "ns"
+            denom = 1000000000
+        else # config["unit"] == "s"
+            denom = 1
+        end
+    else
+        denom = 1
+    end
+    # build trace (FYI: trace is a reserved word (its a function))
+    tr = Trace(Vector{Container}())
+    # set field separator Char according to file extension (csv or wsv)
+    if split(basename(tracepath), '.')[end] == "csv"
+        sep = ','
+    elseif split(basename(tracepath), '.')[end] == "wsv"
+        sep = ' '
+    else
+        error("Unrecognized trace file extension.")
+    end
+    # open trace stream
+    file = open(tracepath, "r")
+    for line in eachline(file)
+        # split line, remove whitespace and trailing newline
+        splitline = map(strip, split(line, sep, keep=true))
+        # check what line represents and react accordingly
+        if splitline[3] in config["containers"]
+            # build Container and push it to return array
+            start > parse(Float64, splitline[4])/denom? bg = start : bg = parse(Float64, splitline[4])/denom
+            finish < parse(Float64, splitline[5])/denom? ed = finish : ed = parse(Float64, splitline[5])/denom
+            ct = Container(splitline[end], bg, ed, Vector{Event}(), Vector{Event}())
+            push!(tr.containers, ct)
+        elseif splitline[3] in config["states"] && (parse(Float64, splitline[4])/denom < finish && parse(Float64, splitline[5])/denom > start)
+            if haskey(config, "keep") && splitline[8] in config["keep"]
+                # build event object and add to container
+                # assumes that the current event always belongs to the most recently added Container
+                # and that events are chronologically ordered
+                ev = Event(splitline[8], parse(Float64, splitline[4])/denom, parse(Float64, splitline[5])/denom)
+                push!(tr.containers[end].kept, ev)
+            elseif haskey(config, "discard") && splitline[8] in config["discard"]
+                # build event object and add to container
+                # assumes that the current event always belongs to the most recently added Container
+                # and that events are chronologically ordered
+                ev = Event(splitline[8], parse(Float64, splitline[4])/denom, parse(Float64, splitline[5])/denom)
+                push!(tr.containers[end].discarded, ev)
+            end
+        end
+    end
+    close(file)
+    return tr
+end
