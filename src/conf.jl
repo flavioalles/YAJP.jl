@@ -1,6 +1,6 @@
 const REQUIRED = ["containers", "states"]
 const OPTIONAL = ["keep", "discard", "unit"]
-const UNITS = ["s", "ms"]
+const UNITS = ["s", "ms", "us", "ns"]
 
 "Checks if YAML config. file represented by `config` is consistent"
 function checkconfig(path::AbstractString)

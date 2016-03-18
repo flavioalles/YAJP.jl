@@ -18,6 +18,10 @@ function trace(tracepath::AbstractString, configpath::AbstractString)
     if haskey(config, "unit")
         if config["unit"] == "ms"
             denom = 1000
+        elseif config["unit"] == "us"
+            denom = 1000000
+        elseif config["unit"] == "ns"
+            denom = 1000000000
         else # config["unit"] == "s"
             denom = 1
         end
