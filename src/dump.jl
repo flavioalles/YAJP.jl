@@ -12,7 +12,7 @@ function loads(tr::Trace)
     for ct in tr.containers
         ld = load(ct)
         norm = ld/(ended(tr) - began(tr))
-        push!(df, [1, began(tr), (ended(tr)-began(tr))/2, ended(tr), ct.name, ld, norm])
+        push!(df, [1, began(tr), began(tr)+((ended(tr)-began(tr))/2), ended(tr), ct.name, ld, norm])
     end
     return df
 end
@@ -48,7 +48,7 @@ function metrics(tr::Trace)
     # create DataFrame
     return DataFrame(slice = @data([1]),
                      began = @data([began(tr)]),
-                     midpoint = @data([(ended(tr)-began(tr))/2]),
+                     midpoint = @data([began(tr)+((ended(tr)-began(tr))/2)]),
                      ended = @data([ended(tr)]),
                      std = @data([std(tr)]),
                      skewness = @data([skewness(tr)]),
@@ -66,7 +66,7 @@ function metrics(tr::Trace, f::Function)
     @assert f in fs "Unrecognized metric function"
     return DataFrame(slice = @data([1]),
                      began = @data([began(tr)]),
-                     midpoint = @data([(ended(tr)-began(tr))/2]),
+                     midpoint = @data([began(tr)+((ended(tr)-began(tr))/2)]),
                      ended = @data([ended(tr)]),
                      metric = @data([string(f)]),
                      value = @data([f(tr)]))
