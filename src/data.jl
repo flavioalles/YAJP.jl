@@ -32,9 +32,9 @@ type Container
     discarded::Vector{Event}
 end
 
-==(x::Container, y::Container) = (x.name == y.name)? true : false
+==(x::Container, y::Container) = (x.name == y.name)
 
-isequal(x::Container, y::Container) = (x.name == y.name)? true : false
+isequal(x::Container, y::Container) = (x.name == y.name)
 
 show(io::IO, x::Container) = print(io, "Container \"$(x.name)\" holding $(length(x.kept)) kept Events and $(length(x.discarded)) discarded Events.")
 
