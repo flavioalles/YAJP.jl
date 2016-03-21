@@ -8,13 +8,20 @@ type Event
     kind::ByteString # splitline[8]
     began::Float64 # splitline[4]
     ended::Float64 # splitline[5]
+    imbrication::Int # splitline[7]
 end
 
-show(io::IO, x::Event) = print(io, "$(x.kind) $(x.began) $(x.ended)")
+show(io::IO, x::Event) = print(io, "$(x.kind) $(x.began) $(x.ended) $(x.imbrication)")
 
-==(x::Event, y::Event) = x.kind == y.kind && x.began == y.began && x.ended == y.ended? true : false
+==(x::Event, y::Event) = (x.kind == y.kind &&
+                          x.began == y.began &&
+                          x.ended == y.ended &&
+                          x.imbrication == y.imbrication)
 
-isequal(x::Event, y::Event) = x.kind == y.kind && x.began == y.began && x.ended == y.ended? true : false
+isequal(x::Event, y::Event) = (x.kind == y.kind &&
+                               x.began == y.began &&
+                               x.ended == y.ended &&
+                               x.imbrication == y.imbrication)
 
 "Return event `ev` span"
 span(ev::Event) = ev.ended - ev.began

@@ -129,12 +129,13 @@ function events(tr::Trace)
                    resource = ByteString[],
                    began = Float64[],
                    ended = Float64[],
-                   span = Float64[])
+                   span = Float64[],
+                   imbrication = Int[])
     # iterate over containers
     for ct in tr.containers
         # iterate over events
         for event in ct.kept
-            push!(df, [event.kind ct.name event.began event.ended span(event)])
+            push!(df, [event.kind ct.name event.began event.ended span(event) event.imbrication])
         end
     end
     return df
