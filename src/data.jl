@@ -19,13 +19,6 @@ isequal(x::Event, y::Event) = x.kind == y.kind && x.began == y.began && x.ended 
 "Return event `ev` span"
 span(ev::Event) = ev.ended - ev.began
 
-# TODO: document
-function dump(ev::Event, container::AbstractString, sep::AbstractString)
-    # gather ev info
-    str = "$(ev.kind)$(sep)$(container)$(sep)$(ev.began)$(sep)$(ev.ended)$(sep)$(span(ev))\n"
-    return str
-end
-
 """
 Type that will represent information gathered from each container (i.e. process). Below follows a description of what each field represents.
     * `name`: the name of the container (i.e. the name of the Pajé Container that represented the container).
