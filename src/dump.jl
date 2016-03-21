@@ -123,7 +123,7 @@ function metrics(tr::Trace, f::Function, timestep::Int, drop::Int=0, norm::Bool=
 end
 
 # TODO: doc
-function events(tr::Trace)
+function events(tr::Trace, discarded=false)
     # create DataFrame
     df = DataFrame(event = ByteString[],
                    resource = ByteString[],
@@ -134,7 +134,8 @@ function events(tr::Trace)
     # iterate over containers
     for ct in tr.containers
         # iterate over events
-        for event in ct.kept
+        discarded? evs = ct.discarded : evs = ct.kept
+        for event in evs
             push!(df, [event.kind ct.name event.began event.ended span(event) event.imbrication])
         end
     end
