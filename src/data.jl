@@ -3,6 +3,7 @@ Type that represents an individual event execution. What follows below is a list
     * `kind`: string that identifies the event type. `type` would be a better name for this field but it is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/types/#composite-types) in Julia.
     * `began`: marks at what point - relative to the beginning of the execution - the event began to execute.
     * `ended`: marks at what point - relative to the beginning of the execution - the event ended execution.
+    * `imbrication`: `Int` that determines level of event in the call stack.
 """
 type Event
     kind::ByteString # splitline[8]
@@ -29,7 +30,10 @@ span(ev::Event) = ev.ended - ev.began
 """
 Type that will represent information gathered from each container (i.e. process). Below follows a description of what each field represents.
     * `name`: the name of the container (i.e. the name of the Pajé Container that represented the container).
-    * `kept`: list of `Event`s associated with the Container
+    * `began`: marks at what point - relative to the beginning of the execution - the `Container` was created.
+    * `ended`: marks at what point - relative to the beginning of the execution - the `Container` was destructed.
+    * `kept`: list of `Event`s associated with the Container whose `span`s should be considered load.
+    * `discarded`: list of `Event`s associated with the Container whose `span`s should not be considered load.
 """
 type Container
     name::ByteString
