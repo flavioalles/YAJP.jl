@@ -52,7 +52,7 @@ function trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, s
             # build Container and push it to return array
             start > parse(Float64, splitline[4])/denom? bg = start : bg = parse(Float64, splitline[4])/denom
             finish < parse(Float64, splitline[5])/denom? ed = finish : ed = parse(Float64, splitline[5])/denom
-            ct = Container(splitline[end], bg, ed, Vector{Event}(), Vector{Event}())
+            ct = Container(splitline[end], splitline[3], bg, ed, Vector{Event}(), Vector{Event}())
             push!(tr.containers, ct)
         elseif splitline[3] in config["states"] && (parse(Float64, splitline[4])/denom < finish && parse(Float64, splitline[5])/denom > start)
             if haskey(config, "keep") && splitline[8] in config["keep"]

@@ -6,13 +6,14 @@ function loads(tr::Trace)
                    midpoint = Float64[],
                    ended = Float64[],
                    container = ByteString[],
+                   kind = ByteString[],
                    load = Float64[],
                    normalized = Float64[])
     # insert slice loads
     for ct in tr.containers
         ld = load(ct)
         norm = ld/(ended(tr) - began(tr))
-        push!(df, [1, began(tr), began(tr)+((ended(tr)-began(tr))/2), ended(tr), ct.name, ld, norm])
+        push!(df, [1, began(tr), began(tr)+((ended(tr)-began(tr))/2), ended(tr), ct.name, ct.kind, ld, norm])
     end
     return df
 end
@@ -26,6 +27,7 @@ function loads(tr::Trace, timestep::Int)
                    midpoint = Float64[],
                    ended = Float64[],
                    container = ByteString[],
+                   kind = ByteString[],
                    load = Float64[],
                    normalized = Float64[])
     # insert slice loads
@@ -36,7 +38,7 @@ function loads(tr::Trace, timestep::Int)
             for ct in tr.containers
                 ld = load(ct, ts, ed)
                 norm = ld/(ed - ts)
-                push!(df, [slice, timestep, ts, midpoint, ed, ct.name, ld, norm])
+                push!(df, [slice, timestep, ts, midpoint, ed, ct.name, ct.kind, ld, norm])
             end
         end
     end

@@ -30,6 +30,7 @@ span(ev::Event) = ev.ended - ev.began
 """
 Type that will represent information gathered from each container (i.e. process). Below follows a description of what each field represents.
     * `name`: the name of the container (i.e. the name of the Pajé Container that represented the container).
+    * `kind`: `Container` type.
     * `began`: marks at what point - relative to the beginning of the execution - the `Container` was created.
     * `ended`: marks at what point - relative to the beginning of the execution - the `Container` was destructed.
     * `kept`: list of `Event`s associated with the Container whose `span`s should be considered load.
@@ -37,17 +38,18 @@ Type that will represent information gathered from each container (i.e. process)
 """
 type Container
     name::ByteString
+    kind::ByteString
     began::Float64
     ended::Float64
     kept::Vector{Event}
     discarded::Vector{Event}
 end
 
-==(x::Container, y::Container) = (x.name == y.name)
+==(x::Container, y::Container) = (x.name == y.name) && (x.kind == y.kind)
 
-isequal(x::Container, y::Container) = (x.name == y.name)
+isequal(x::Container, y::Container) = (x.name == y.name) && (x.kind == y.kind)
 
-show(io::IO, x::Container) = print(io, "Container \"$(x.name)\" holding $(length(x.kept)) kept Events and $(length(x.discarded)) discarded Events.")
+show(io::IO, x::Container) = print(io, "Container \"$(x.name)\" of type \"$(x.kind)\" holding $(length(x.kept)) kept Events and $(length(x.discarded)) discarded Events.")
 
 "Return how many events `Container` `ct` holds"
 function count(ct::Container, discarded::Bool=false)
