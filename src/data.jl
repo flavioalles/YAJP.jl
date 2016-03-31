@@ -56,15 +56,6 @@ function count(ct::Container, discarded::Bool=false)
     discarded? length(ct.discarded) : length(ct.kept)
 end
 
-"Return how many times events of type `name` were executed on container `ct`"
-function count(ct::Container, name::ByteString)
-    exec = 0
-    for ev in ct.kept
-        (ev.name == name)? exec+= 1 : nothing
-    end
-    return exec
-end
-
 "Return collection of `Container` (`ct`) events that executed - totally or partially - between `start` and `finish`"
 function events(ct::Container, start::Float64, finish::Float64, discarded::Bool=false)
     evs = Vector{Event}()
