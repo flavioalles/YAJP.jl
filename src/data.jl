@@ -1,25 +1,25 @@
 """
 Type that represents an individual event execution. What follows below is a list describing what each field stands for.
-    * `kind`: string that identifies the event type. `type` would be a better name for this field but it is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/types/#composite-types) in Julia.
+    * `name`: string that identifies the event type. `type` would be a better name for this field but it is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/types/#composite-types) in Julia.
     * `began`: marks at what point - relative to the beginning of the execution - the event began to execute.
     * `ended`: marks at what point - relative to the beginning of the execution - the event ended execution.
     * `imbrication`: `Int` that determines level of event in the call stack.
 """
 type Event
-    kind::ByteString # splitline[8]
+    name::ByteString # splitline[8]
     began::Float64 # splitline[4]
     ended::Float64 # splitline[5]
     imbrication::Int # splitline[7]
 end
 
-show(io::IO, x::Event) = print(io, "$(x.kind) $(x.began) $(x.ended) $(x.imbrication)")
+show(io::IO, x::Event) = print(io, "$(x.name) $(x.began) $(x.ended) $(x.imbrication)")
 
-==(x::Event, y::Event) = (x.kind == y.kind &&
+==(x::Event, y::Event) = (x.name == y.name &&
                           x.began == y.began &&
                           x.ended == y.ended &&
                           x.imbrication == y.imbrication)
 
-isequal(x::Event, y::Event) = (x.kind == y.kind &&
+isequal(x::Event, y::Event) = (x.name == y.name &&
                                x.began == y.began &&
                                x.ended == y.ended &&
                                x.imbrication == y.imbrication)
@@ -56,11 +56,11 @@ function count(ct::Container, discarded::Bool=false)
     discarded? length(ct.discarded) : length(ct.kept)
 end
 
-"Return how many times events of type `kind` were executed on container `ct`"
-function count(ct::Container, kind::ByteString)
+"Return how many times events of type `name` were executed on container `ct`"
+function count(ct::Container, name::ByteString)
     exec = 0
     for ev in ct.kept
-        (ev.kind == kind)? exec+= 1 : nothing
+        (ev.name == name)? exec+= 1 : nothing
     end
     return exec
 end
@@ -80,11 +80,11 @@ end
 "Return `ct`s span"
 span(ct::Container) = ct.ended - ct.began
 
-"Return the aggregated span of events of type `kind` on container `ct`"
-function span(ct::Container, kind::ByteString)
+"Return the aggregated span of events named `name` on container `ct`"
+function span(ct::Container, name::ByteString)
     aggspan = 0
     for ev in ct.kept
-        (ev.kind == kind)? aggspan += span(ev) : nothing
+        (ev.name == name)? aggspan += span(ev) : nothing
     end
     return aggspan
 end
