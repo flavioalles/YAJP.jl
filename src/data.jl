@@ -60,7 +60,7 @@ function count(ct::Container, discarded::Bool=false)
 end
 
 "Return collection of `Container` (`ct`) events that executed - totally or partially - between `start` and `finish`"
-function events(ct::Container, start::Float64, finish::Float64, discarded::Bool=false)
+function events(ct::Container, start::Real, finish::Real, discarded::Bool=false)
     evs = Vector{Event}()
     discarded? eventslist = ct.discarded : eventslist = ct.kept
     for ev in eventslist
@@ -96,7 +96,7 @@ function load(ct::Container, norm::Bool=false)
 end
 
 "Return `ct`'s load - considering events starting between `start` and `finish`"
-function load(ct::Container, start::Float64, finish::Float64, norm::Bool=false)
+function load(ct::Container, start::Real, finish::Real, norm::Bool=false)
     ld = zero(Float64)
     # get kept events
     if length(ct.kept) == 0

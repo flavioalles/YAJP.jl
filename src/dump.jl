@@ -19,10 +19,10 @@ function loads(tr::Trace)
 end
 
 # TODO: doc
-function loads(tr::Trace, timestep::Int)
+function loads(tr::Trace, timestep::Real)
     # create DataFrame
     df = DataFrame(slice = Int[],
-                   timestep = Int[],
+                   timestep = Real[],
                    began = Float64[],
                    midpoint = Float64[],
                    ended = Float64[],
@@ -75,10 +75,10 @@ function metrics(tr::Trace, f::Function)
 end
 
 # TODO: doc
-function metrics(tr::Trace, timestep::Int, drop::Int=0, norm::Bool=false)
+function metrics(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     # create DataFrame
     df = DataFrame(slice = Int[],
-                   timestep = Int[],
+                   timestep = Real[],
                    began = Float64[],
                    midpoint = Float64[],
                    ended = Float64[],
@@ -101,14 +101,14 @@ function metrics(tr::Trace, timestep::Int, drop::Int=0, norm::Bool=false)
 end
 
 # TODO: doc
-function metrics(tr::Trace, f::Function, timestep::Int, drop::Int=0, norm::Bool=false)
+function metrics(tr::Trace, f::Function, timestep::Real, drop::Real=0, norm::Bool=false)
     # assert proper mtr
     fs = [std, skewness, kurtosis,
           pimbalance, imbalancep, imbalancet]
     @assert f in fs "Unrecognized metric function"
     # create DataFrame
     df = DataFrame(slice = Int[],
-                   timestep = Int[],
+                   timestep = Real[],
                    began = Float64[],
                    midpoint = Float64[],
                    ended = Float64[],
