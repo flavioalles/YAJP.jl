@@ -59,7 +59,7 @@ function trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, s
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container
                 # and that events are chronologically ordered
-                ev = Event(splitline[8],
+                ev = Event(splitline[8], splitline[3],
                            parse(Float64, splitline[4])/denom,
                            parse(Float64, splitline[5])/denom,
                            convert(Int, floor(parse(Float64, splitline[7]))))
@@ -68,7 +68,7 @@ function trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, s
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container
                 # and that events are chronologically ordered
-                ev = Event(splitline[8],
+                ev = Event(splitline[8], splitline[3],
                            parse(Float64, splitline[4])/denom,
                            parse(Float64, splitline[5])/denom,
                            convert(Int, floor(parse(Float64, splitline[7]))))

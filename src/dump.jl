@@ -128,6 +128,7 @@ end
 function events(tr::Trace, discarded=false)
     # create DataFrame
     df = DataFrame(event = ByteString[],
+                   kind = ByteString[],
                    resource = ByteString[],
                    began = Float64[],
                    ended = Float64[],
@@ -138,7 +139,7 @@ function events(tr::Trace, discarded=false)
         # iterate over events
         discarded? evs = ct.discarded : evs = ct.kept
         for event in evs
-            push!(df, [event.name ct.name event.began event.ended span(event) event.imbrication])
+            push!(df, [event.name event.kind ct.name event.began event.ended span(event) event.imbrication])
         end
     end
     return df

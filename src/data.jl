@@ -7,6 +7,7 @@ Type that represents an individual event execution. What follows below is a list
 """
 type Event
     name::ByteString # splitline[8]
+    kind::ByteString # splitline[3]
     began::Float64 # splitline[4]
     ended::Float64 # splitline[5]
     imbrication::Int # splitline[7]
@@ -15,11 +16,13 @@ end
 show(io::IO, x::Event) = print(io, "$(x.name) $(x.began) $(x.ended) $(x.imbrication)")
 
 ==(x::Event, y::Event) = (x.name == y.name &&
+                          x.kind == y.kind &&
                           x.began == y.began &&
                           x.ended == y.ended &&
                           x.imbrication == y.imbrication)
 
 isequal(x::Event, y::Event) = (x.name == y.name &&
+                               x.kind == y.kind &&
                                x.began == y.began &&
                                x.ended == y.ended &&
                                x.imbrication == y.imbrication)
