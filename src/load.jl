@@ -4,9 +4,9 @@ function std(tr::Trace)
 end
 
 # TODO: doc
-function std{T<:Real}(tr::Trace, timestep::T, drop::Int=0, norm::Bool=false)
+function std(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive integer"
+    @assert drop >= zero(Int) "Drop must be positive real number"
     @assert drop < span(tr)/2 "Drop is larger than possible"
     stds = Float64[]
     for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
@@ -31,9 +31,9 @@ function skewness(tr::Trace)
 end
 
 # TODO: doc
-function skewness{T<:Real}(tr::Trace, timestep::T, drop::Int=0, norm::Bool=false)
+function skewness(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive integer"
+    @assert drop >= zero(Int) "Drop must be positive real number"
     @assert drop < span(tr)/2 "Drop is larger than possible"
     skews = Float64[]
     for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
@@ -58,9 +58,9 @@ function kurtosis(tr::Trace)
 end
 
 # TODO: doc
-function kurtosis{T<:Real}(tr::Trace, timestep::T, drop::Int=0, norm::Bool=false)
+function kurtosis(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive integer"
+    @assert drop >= zero(Int) "Drop must be positive real number"
     @assert drop < span(tr)/2 "Drop is larger than possible"
     kurts = Float64[]
     for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
@@ -86,9 +86,9 @@ function pimbalance(tr::Trace)
 end
 
 # TODO: doc
-function pimbalance{T<:Real}(tr::Trace, timestep::T, drop::Int=0, norm::Bool=false)
+function pimbalance(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive integer"
+    @assert drop >= zero(Int) "Drop must be positive real number"
     @assert drop < span(tr)/2 "Drop is larger than possible"
     ps = Float64[]
     for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
@@ -115,9 +115,9 @@ function imbalancep(tr::Trace)
 end
 
 # TODO: doc
-function imbalancep{T<:Real}(tr::Trace, timestep::T, drop::Int=0, norm::Bool=false)
+function imbalancep(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive integer"
+    @assert drop >= zero(Int) "Drop must be positive real number"
     @assert drop < span(tr)/2 "Drop is larger than possible"
     ps = Float64[]
     for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
@@ -144,9 +144,9 @@ function imbalancet(tr::Trace)
 end
 
 # TODO: doc
-function imbalancet{T<:Real}(tr::Trace, timestep::T, drop::Int=0, norm::Bool=false)
+function imbalancet(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive integer"
+    @assert drop >= zero(Int) "Drop must be positive real number"
     @assert drop < span(tr)/2 "Drop is larger than possible"
     ps = Float64[]
     for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
