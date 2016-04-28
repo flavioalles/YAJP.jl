@@ -5,7 +5,7 @@ Type that represents an individual event execution. What follows below is a list
     * `ended`: marks at what point - relative to the beginning of the execution - the event ended execution.
     * `imbrication`: `Int` that determines level of event in the call stack.
 """
-type Event
+type FullEvent
     name::ByteString # splitline[8]
     kind::ByteString # splitline[3]
     began::Float64 # splitline[4]
@@ -13,22 +13,22 @@ type Event
     imbrication::Int # splitline[7]
 end
 
-show(io::IO, x::Event) = print(io, "$(x.name) $(x.began) $(x.ended) $(x.imbrication)")
+show(io::IO, x::FullEvent) = print(io, "$(x.name) $(x.began) $(x.ended) $(x.imbrication)")
 
-==(x::Event, y::Event) = (x.name == y.name &&
+==(x::FullEvent, y::FullEvent) = (x.name == y.name &&
                           x.kind == y.kind &&
                           x.began == y.began &&
                           x.ended == y.ended &&
                           x.imbrication == y.imbrication)
 
-isequal(x::Event, y::Event) = (x.name == y.name &&
+isequal(x::FullEvent, y::FullEvent) = (x.name == y.name &&
                                x.kind == y.kind &&
                                x.began == y.began &&
                                x.ended == y.ended &&
                                x.imbrication == y.imbrication)
 
 "Return event `ev` span"
-span(ev::Event) = ev.ended - ev.began
+span(ev::FullEvent) = ev.ended - ev.began
 
 """
 Type that will represent information gathered from each container (i.e. process). Below follows a description of what each field represents.
@@ -36,16 +36,16 @@ Type that will represent information gathered from each container (i.e. process)
     * `kind`: `Container` type.
     * `began`: marks at what point - relative to the beginning of the execution - the `Container` was created.
     * `ended`: marks at what point - relative to the beginning of the execution - the `Container` was destructed.
-    * `kept`: list of `Event`s associated with the Container whose `span`s should be considered load.
-    * `discarded`: list of `Event`s associated with the Container whose `span`s should not be considered load.
+    * `kept`: list of `FullEvent`s associated with the Container whose `span`s should be considered load.
+    * `discarded`: list of `FullEvent`s associated with the Container whose `span`s should not be considered load.
 """
 type Container
     name::ByteString
     kind::ByteString
     began::Float64
     ended::Float64
-    kept::Vector{Event}
-    discarded::Vector{Event}
+    kept::Vector{FullEvent}
+    discarded::Vector{FullEvent}
 end
 
 ==(x::Container, y::Container) = (x.name == y.name) && (x.kind == y.kind)
@@ -61,7 +61,7 @@ end
 
 "Return collection of `Container` (`ct`) events that executed - totally or partially - between `start` and `finish`"
 function events(ct::Container, start::Real, finish::Real, discarded::Bool=false)
-    evs = Vector{Event}()
+    evs = Vector{FullEvent}()
     discarded? eventslist = ct.discarded : eventslist = ct.kept
     for ev in eventslist
         if ev.began < finish && ev.ended > start

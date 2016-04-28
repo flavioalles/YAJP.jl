@@ -52,14 +52,14 @@ function trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, s
             # build Container and push it to return array
             start > parse(Float64, splitline[4])/denom? bg = start : bg = parse(Float64, splitline[4])/denom
             finish < parse(Float64, splitline[5])/denom? ed = finish : ed = parse(Float64, splitline[5])/denom
-            ct = Container(splitline[end], splitline[3], bg, ed, Vector{Event}(), Vector{Event}())
+            ct = Container(splitline[end], splitline[3], bg, ed, Vector{FullEvent}(), Vector{FullEvent}())
             push!(tr.containers, ct)
         elseif splitline[3] in config["states"] && (parse(Float64, splitline[4])/denom < finish && parse(Float64, splitline[5])/denom > start)
             if haskey(config, "keep") && splitline[8] in config["keep"]
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container
                 # and that events are chronologically ordered
-                ev = Event(splitline[8], splitline[3],
+                ev = FullEvent(splitline[8], splitline[3],
                            parse(Float64, splitline[4])/denom,
                            parse(Float64, splitline[5])/denom,
                            convert(Int, floor(parse(Float64, splitline[7]))))
@@ -68,7 +68,7 @@ function trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, s
                 # build event object and add to container
                 # assumes that the current event always belongs to the most recently added Container
                 # and that events are chronologically ordered
-                ev = Event(splitline[8], splitline[3],
+                ev = FullEvent(splitline[8], splitline[3],
                            parse(Float64, splitline[4])/denom,
                            parse(Float64, splitline[5])/denom,
                            convert(Int, floor(parse(Float64, splitline[7]))))
