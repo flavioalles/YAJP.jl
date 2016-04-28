@@ -1,6 +1,27 @@
 """Abstract type from which `BareEvent` and `FullEvent` are subtypes"""
 abstract AbstractEvent
 
+"Return event `ev` span"
+span(ev::AbstractEvent) = ev.ended - ev.began
+
+"""
+Type that represents an individual event execution. What follows below is a list describing what each field stands for.
+    * `began`: marks at what point - relative to the beginning of the execution - the event began to execute.
+    * `ended`: marks at what point - relative to the beginning of the execution - the event ended execution.
+"""
+type BareEvent <: AbstractEvent
+    began::Float32 # splitline[4]
+    ended::Float32 # splitline[5]
+end
+
+show(io::IO, x::BareEvent) = print(io, "BareEvent: $(x.began) $(x.ended)")
+
+==(x::BareEvent, y::BareEvent) = (x.began == y.began &&
+                                  x.ended == y.ended)
+
+isequal(x::BareEvent, y::BareEvent) = (x.began == y.began &&
+                                       x.ended == y.ended)
+
 """
 Type that represents an individual event execution. What follows below is a list describing what each field stands for.
     * `name`: string that identifies the event type. `type` would be a better name for this field but it is a [reserved word](http://docs.julialang.org/en/release-0.4/manual/types/#composite-types) in Julia.
@@ -29,9 +50,6 @@ isequal(x::FullEvent, y::FullEvent) = (x.name == y.name &&
                                x.began == y.began &&
                                x.ended == y.ended &&
                                x.imbrication == y.imbrication)
-
-"Return event `ev` span"
-span(ev::FullEvent) = ev.ended - ev.began
 
 """
 Type that will represent information gathered from each container (i.e. process). Below follows a description of what each field represents.
@@ -81,7 +99,11 @@ span(ct::Container) = ct.ended - ct.began
 function span(ct::Container, name::ByteString)
     aggspan = 0
     for ev in ct.kept
-        (ev.name == name)? aggspan += span(ev) : nothing
+        if isa(ev, BareEvent)
+            error("BareEvent does not have name field.")
+        else
+            (ev.name == name)? aggspan += span(ev) : nothing
+        end
     end
     return aggspan
 end

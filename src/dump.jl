@@ -139,7 +139,11 @@ function events(tr::Trace, discarded=false)
         # iterate over events
         discarded? evs = ct.discarded : evs = ct.kept
         for event in evs
-            push!(df, [event.name event.kind ct.name event.began event.ended span(event) event.imbrication])
+            if isa(event, BareEvent)
+                push!(df, [NA NA ct.name event.began event.ended span(event) NA])
+            else
+                push!(df, [event.name event.kind ct.name event.began event.ended span(event) event.imbrication])
+            end
         end
     end
     return df
