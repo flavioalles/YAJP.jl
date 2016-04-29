@@ -9,7 +9,7 @@ Type that represents an individual event execution. What follows below is a list
     * `began`: marks at what point - relative to the beginning of the execution - the event began to execute.
     * `ended`: marks at what point - relative to the beginning of the execution - the event ended execution.
 """
-type BareEvent <: AbstractEvent
+immutable BareEvent <: AbstractEvent
     began::Float32 # splitline[4]
     ended::Float32 # splitline[5]
 end
