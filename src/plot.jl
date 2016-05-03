@@ -1,4 +1,8 @@
-# """TODO"""
+"""
+    heatmap(tr::YAJP.Trace, timestep::Real)
+
+Returns a [Gadfly] plot depicting `tr`s normalized load evolution (at every `timestep`) as a [Gadfly] `rectbin`.
+"""
 function heatmap(tr::YAJP.Trace, timestep::Real)
     # get loads
     lds = loads(tr, timestep)
@@ -35,7 +39,11 @@ function heatmap(tr::YAJP.Trace, timestep::Real)
                Theme(guide_title_position=:center))
 end
 
-# """TODO"""
+"""
+    heatmap(tr::YAJP.Trace, f::Function, timestep::Real, drop::Int=0)
+
+Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`.
+"""
 function heatmap(tr::YAJP.Trace, f::Function, timestep::Real, drop::Int=0)
     # retrieve metric
     mtr = metrics(tr, f, timestep, drop)
