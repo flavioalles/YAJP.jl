@@ -90,13 +90,13 @@ function metrics(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
                    imbalancep = Float64[],
                    imbalancet = Float64[])
     # insert slices
-    for (slice,metrics) in enumerate(zip(std(tr,timestep,drop,norm), skewness(tr,timestep,drop,norm),
+    for (slice,values) in enumerate(zip(std(tr,timestep,drop,norm), skewness(tr,timestep,drop,norm),
                                  kurtosis(tr,timestep,drop,norm), pimbalance(tr,timestep,drop,norm),
                                  imbalancep(tr,timestep,drop,norm), imbalancet(tr,timestep,drop,norm)))
         bg = began(tr) + drop + timestep*(slice-1)
         bg + timestep <=  ended(tr) - drop? ed = bg + timestep : ed = ended(tr) - drop
         midpoint = bg +  timestep/2
-        push!(df, [slice timestep bg midpoint ed metrics[1] metrics[2] metrics[3] metrics[4] metrics[5] metrics[6]])
+        push!(df, [slice timestep bg midpoint ed values[1] values[2] values[3] values[4] values[5] values[6]])
     end
     return df
 end
