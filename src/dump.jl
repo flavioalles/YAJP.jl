@@ -20,6 +20,7 @@ end
 
 # TODO: doc
 function loads(tr::Trace, timestep::Real)
+    @assert timestep > zero(Real) "Time step must be positive Real number."
     # create DataFrame
     df = DataFrame(slice = Int[],
                    timestep = Real[],

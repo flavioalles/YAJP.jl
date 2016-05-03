@@ -122,6 +122,8 @@ end
 
 "Return `ct`'s load - considering events starting between `start` and `finish`"
 function load(ct::Container, start::Real, finish::Real, norm::Bool=false)
+    @assert start >= zero(Real) && finish > zero(Real) "Time stamps must be positive."
+    @assert start < finish "Start time stamp must be smaller than finish time stamp."
     ld = zero(Float64)
     # get kept events
     if length(ct.kept) == 0
