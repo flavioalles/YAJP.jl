@@ -1,5 +1,5 @@
 # integer used as step in xticks def.
-STEPDENOM = 30
+STEPDENOM = 20
 
 """
     heatmap(tr::YAJP.Trace, timestep::Real)
