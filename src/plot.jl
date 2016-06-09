@@ -84,7 +84,8 @@ function heatmap(tr::YAJP.Trace, f::Function, timestep::Real, drop::Int=0)
         text = "Imbalance Time (s)"
     end
     # plot metric heat map
-    return plot(mtr, x="midpoint", y="metric", color="value", Geom.rectbin,
+    return plot(mtr[!isnan(mtr[:value]), :],
+                x="midpoint", y="metric", color="value", Geom.rectbin,
                 Coord.cartesian(xmin=YAJP.began(tr)+drop,
                                 xmax=YAJP.ended(tr)-drop),
                 Guide.xticks(ticks=collect(
