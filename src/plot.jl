@@ -2,11 +2,11 @@
 STEPDENOM = 30
 
 """
-    heatmap(tr::YAJP.Trace, timestep::Real)
+    loadplot(tr::YAJP.Trace, timestep::Real)
 
 Returns a [Gadfly] plot depicting `tr`s normalized load evolution (at every `timestep`) as a [Gadfly] `rectbin`.
 """
-function heatmap(tr::YAJP.Trace, timestep::Real)
+function loadplot(tr::YAJP.Trace, timestep::Real)
     # major labels font size
     MAJORLABEL = 18pt
     # minor labels font size
