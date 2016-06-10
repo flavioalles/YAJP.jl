@@ -102,7 +102,10 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
         end
         # plot metric heat map
         push!(plots, plot(mtr[!isnan(mtr[:value]), :],
-                     x="midpoint", y="value", Geom.line,
+                     layer(x="midpoint", y="value",
+                           Geom.line, order=1),
+                     layer(x="midpoint", y="value",
+                           Geom.point, order=2),
                      Coord.cartesian(xmin=YAJP.began(tr)+drop,
                                      xmax=YAJP.ended(tr)-drop),
                      Guide.xticks(ticks=collect(
