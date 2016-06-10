@@ -82,32 +82,26 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
         if f == pimbalance
             verticallabel = "Percent Imbalance"
             horizontallabel = nothing
-            tickslabeled = false
             plotcolor = "blue"
         elseif f == imbalancep
             verticallabel = "Imbalance Percentage"
             horizontallabel = nothing
-            tickslabeled = false
             plotcolor = "green"
         elseif f == imbalancet
             verticallabel = "Imbalance Time (s)"
             horizontallabel = nothing
-            tickslabeled = false
             plotcolor = "red"
         elseif f == std
             verticallabel = "Standard Deviation (s)"
             horizontallabel = nothing
-            tickslabeled = false
             plotcolor = "orange"
         elseif f == skewness
             verticallabel = "Skewness"
             horizontallabel = nothing
-            tickslabeled = false
             plotcolor = "yellow"
         else
             verticallabel = "Kurtosis"
             horizontallabel = "Time (s)"
-            tickslabeled = true
             plotcolor = "purple"
         end
         # plot metric heat map
@@ -122,7 +116,7 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
                                      convert(Int, floor(YAJP.began(tr)+drop)):
                                      convert(Int, round(YAJP.span(tr)/STEPDENOM)):
                                      convert(Int, ceil(YAJP.ended(tr)-drop))),
-                                  label=tickslabeled,
+                                  label=true,
                                   orientation=:horizontal),
                      Guide.xlabel(horizontallabel, orientation=:horizontal),
                      Guide.ylabel(verticallabel, orientation=:vertical),
