@@ -59,6 +59,10 @@ end
 Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`.
 """
 function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
+    # line width
+    LINEWIDTH = 3pt
+    # point size
+    POINTSIZE = 3pt
     # major labels font size
     MAJORLABEL = 14pt
     # minor labels font size
@@ -79,26 +83,32 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
             verticallabel = "Percent Imbalance"
             horizontallabel = nothing
             tickslabeled = false
+            plotcolor = "blue"
         elseif f == imbalancep
             verticallabel = "Imbalance Percentage"
             horizontallabel = nothing
             tickslabeled = false
+            plotcolor = "green"
         elseif f == imbalancet
             verticallabel = "Imbalance Time (s)"
             horizontallabel = nothing
             tickslabeled = false
+            plotcolor = "red"
         elseif f == std
             verticallabel = "Standard Deviation (s)"
             horizontallabel = nothing
             tickslabeled = false
+            plotcolor = "orange"
         elseif f == skewness
             verticallabel = "Skewness"
             horizontallabel = nothing
             tickslabeled = false
+            plotcolor = "yellow"
         else
             verticallabel = "Kurtosis"
             horizontallabel = "Time (s)"
             tickslabeled = true
+            plotcolor = "purple"
         end
         # plot metric heat map
         push!(plots, plot(mtr[!isnan(mtr[:value]), :],
@@ -116,7 +126,11 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
                                   orientation=:horizontal),
                      Guide.xlabel(horizontallabel, orientation=:horizontal),
                      Guide.ylabel(verticallabel, orientation=:vertical),
-                     Theme(major_label_font_size=MAJORLABEL,
+                     Theme(default_color=parse(Gadfly.Colorant, plotcolor),
+                           line_width=LINEWIDTH,
+                           default_point_size=POINTSIZE,
+                           key_position=:none,
+                           major_label_font_size=MAJORLABEL,
                            minor_label_font_size=MINORLABEL)))
     end
     return vstack(plots)
