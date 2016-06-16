@@ -158,7 +158,7 @@ end
 """
     metricsplot(tr::YAJP.Trace, f::Function, timestep::Real...)
 
-Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`.
+Returns [Gadfly] plots - as many as there are `timestep`'s - depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`).
 """
 function metricsplot(tr::YAJP.Trace, f::Function, timestep::Real...)
     # line width
