@@ -79,7 +79,7 @@ function loadplot(tr::YAJP.Trace, timestep::Real...)
 end
 
 """
-    metricsplot(tr::YAJP.Trace, f::Function, timestep::Real)
+    metricsplot(tr::YAJP.Trace, timestep::Real)
 
 Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`.
 """
