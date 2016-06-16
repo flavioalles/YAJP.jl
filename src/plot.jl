@@ -152,7 +152,7 @@ function metricsplot(tr::YAJP.Trace, timestep::Real)
                            major_label_font_size=MAJORLABEL,
                            minor_label_font_size=MINORLABEL)))
     end
-    return vstack(plots)
+    return plots
 end
 
 """
