@@ -7,14 +7,25 @@ STEPDENOM = 30
 Returns a container of [Gadfly] plots depicting `tr`s normalized load evolution (at every `timestep`) as a [Gadfly] `rectbin`s.
 """
 function loadplot(tr::YAJP.Trace, timestep::Real...)
-    # major labels font size
-    MAJORLABEL = 18pt
-    # minor labels font size
-    MINORLABEL = 12pt
-    # key title font size
-    KEYTITLE = 14pt
-    # key label font size
-    KEYLABEL = 14pt
+    if length(timestep) == 1
+        # major labels font size
+        MAJORLABEL = 18pt
+        # minor labels font size
+        MINORLABEL = 12pt
+        # key title font size
+        KEYTITLE = 14pt
+        # key label font size
+        KEYLABEL = 14pt
+    else
+        # major labels font size
+        MAJORLABEL = 12pt
+        # minor labels font size
+        MINORLABEL = 8pt
+        # key title font size
+        KEYTITLE = 12pt
+        # key label font size
+        KEYLABEL = 12pt
+    end
     # plots container
     plots = Plot[]
     for (id,ts) in enumerate(timestep)
