@@ -154,3 +154,75 @@ function metricsplot(tr::YAJP.Trace, timestep::Real)
     end
     return vstack(plots)
 end
+
+"""
+    metricsplot(tr::YAJP.Trace, f::Function, timestep::Real...)
+
+Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`.
+"""
+function metricsplot(tr::YAJP.Trace, f::Function, timestep::Real...)
+    # line width
+    LINEWIDTH = 3pt
+    # point size
+    POINTSIZE = 3pt
+    # major labels font size
+    MAJORLABEL = 14pt
+    # minor labels font size
+    MINORLABEL = 12pt
+    # plots container
+    plots = Plot[]
+    for (id,ts) in enumerate(timestep)
+        # retrieve metric
+        mtr = metrics(tr, f, ts)
+        # select appropriate metric  y-label
+        # and if x-label and ticks label should exist
+        if f == pimbalance
+            verticallabel = "Percent Imbalance"
+            plotcolor = "blue"
+        elseif f == imbalancep
+            verticallabel = "Imbalance Percentage"
+            plotcolor = "green"
+        elseif f == imbalancet
+            verticallabel = "Imbalance Time (s)"
+            plotcolor = "red"
+        elseif f == std
+            verticallabel = "Standard Deviation (s)"
+            plotcolor = "orange"
+        elseif f == skewness
+            verticallabel = "Skewness"
+            plotcolor = "yellow"
+        else
+            verticallabel = "Kurtosis"
+            plotcolor = "purple"
+        end
+        # horizontal label?
+        if id != length(timestep)
+            horizontallabel = nothing
+        else
+            horizontallabel = "Time (s)"
+        end
+        # plot metric heat map
+        push!(plots, plot(mtr[!isnan(mtr[:value]), :],
+                     layer(x="midpoint", y="value",
+                           Geom.line, order=1),
+                     layer(x="midpoint", y="value",
+                           Geom.point, order=2),
+                     Coord.cartesian(xmin=YAJP.began(tr),
+                                     xmax=YAJP.ended(tr)),
+                     Guide.xticks(ticks=collect(
+                                     convert(Int, floor(YAJP.began(tr))):
+                                     convert(Int, round(YAJP.span(tr)/STEPDENOM)):
+                                     convert(Int, ceil(YAJP.ended(tr)))),
+                                  label=true,
+                                  orientation=:horizontal),
+                     Guide.xlabel(horizontallabel, orientation=:horizontal),
+                     Guide.ylabel(verticallabel, orientation=:vertical),
+                     Theme(default_color=parse(Gadfly.Colorant, plotcolor),
+                           line_width=LINEWIDTH,
+                           default_point_size=POINTSIZE,
+                           key_position=:none,
+                           major_label_font_size=MAJORLABEL,
+                           minor_label_font_size=MINORLABEL)))
+    end
+    return plots
+end
