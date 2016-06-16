@@ -118,7 +118,7 @@ function metricsplot(tr::YAJP.Trace, timestep::Real)
             plotcolor = "red"
         elseif f == std
             verticallabel = "Standard Deviation (s)"
-            horizontallabel = nothing
+            horizontallabel = "Time (s)"
             plotcolor = "orange"
         elseif f == skewness
             verticallabel = "Skewness"
