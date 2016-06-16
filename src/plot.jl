@@ -51,10 +51,8 @@ function loadplot(tr::YAJP.Trace, timestep::Real...)
         end
         if id != length(timestep)
             horizontallabel = nothing
-            tickslabel = false
         else
             horizontallabel = "Time (s)"
-            tickslabel = true
         end
         # plot heat map of load evolution per resource
         push!(plots,
@@ -65,7 +63,7 @@ function loadplot(tr::YAJP.Trace, timestep::Real...)
                                     convert(Int, floor(YAJP.began(tr))):
                                     convert(Int, round(YAJP.span(tr)/STEPDENOM)):
                                     convert(Int, ceil(YAJP.ended(tr)))),
-                                label=tickslabel,
+                                label=true,
                                 orientation=:horizontal),
                    Guide.xlabel(horizontallabel, orientation=:horizontal),
                    Guide.ylabel("Resource", orientation=:vertical),
