@@ -79,11 +79,11 @@ function loadplot(tr::YAJP.Trace, timestep::Real...)
 end
 
 """
-    metricsplot(tr::YAJP.Trace, f::Function, timestep::Real, drop::Int=0)
+    metricsplot(tr::YAJP.Trace, f::Function, timestep::Real)
 
 Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`.
 """
-function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
+function metricsplot(tr::YAJP.Trace, timestep::Real)
     # line width
     LINEWIDTH = 3pt
     # point size
@@ -101,7 +101,7 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
               skewness,
               kurtosis]
         # retrieve metric
-        mtr = metrics(tr, f, timestep, drop)
+        mtr = metrics(tr, f, timestep)
         # select appropriate metric  y-label
         # and if x-label and ticks label should exist
         if f == pimbalance
@@ -135,12 +135,12 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Int=0)
                            Geom.line, order=1),
                      layer(x="midpoint", y="value",
                            Geom.point, order=2),
-                     Coord.cartesian(xmin=YAJP.began(tr)+drop,
-                                     xmax=YAJP.ended(tr)-drop),
+                     Coord.cartesian(xmin=YAJP.began(tr),
+                                     xmax=YAJP.ended(tr)),
                      Guide.xticks(ticks=collect(
-                                     convert(Int, floor(YAJP.began(tr)+drop)):
+                                     convert(Int, floor(YAJP.began(tr))):
                                      convert(Int, round(YAJP.span(tr)/STEPDENOM)):
-                                     convert(Int, ceil(YAJP.ended(tr)-drop))),
+                                     convert(Int, ceil(YAJP.ended(tr)))),
                                   label=true,
                                   orientation=:horizontal),
                      Guide.xlabel(horizontallabel, orientation=:horizontal),
