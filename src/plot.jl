@@ -123,7 +123,7 @@ function metricsplot(tr::YAJP.Trace, timestep::Real)
         elseif f == skewness
             verticallabel = "Skewness"
             horizontallabel = nothing
-            plotcolor = "yellow"
+            plotcolor = "gray"
         else
             verticallabel = "Kurtosis"
             horizontallabel = "Time (s)"
@@ -190,7 +190,7 @@ function metricsplot(tr::YAJP.Trace, f::Function, timestep::Real...)
             plotcolor = "orange"
         elseif f == skewness
             verticallabel = "Skewness"
-            plotcolor = "yellow"
+            plotcolor = "gray"
         else
             verticallabel = "Kurtosis"
             plotcolor = "purple"
