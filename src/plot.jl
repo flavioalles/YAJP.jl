@@ -115,11 +115,15 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Real=0, norm::Bool=fa
             horizontallabel = nothing
             plotcolor = "green"
         elseif f == imbalancet
-            verticallabel = "Imbalance Time (s)"
+            norm?
+                verticallabel = "Imbalance Time" :
+                verticallabel = "Imbalance Time (s)"
             horizontallabel = nothing
             plotcolor = "red"
         elseif f == std
-            verticallabel = "Standard Deviation (s)"
+            norm?
+                verticallabel = "Standard Deviation" :
+                verticallabel = "Standard Deviation (s)"
             horizontallabel = "Time (s)"
             plotcolor = "orange"
         elseif f == skewness
