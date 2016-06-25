@@ -20,7 +20,10 @@ function std(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     end
     # norm?
     if norm
-        stds = map(x -> (x - minimum(stds))/(maximum(stds) - minimum(stds)), stds)
+        l = [rem(i,2) == 0? 0 : timestep for i=1:length(tr.containers)]
+        maxstd = sqrt(mapreduce(x -> abs2(x - mean(l)), +, 0, l)/length(l))
+        minstd = zero(Float64)
+        stds = map(x -> (x - minstd)/(maxstd - minstd), stds)
     end
     return stds
 end
@@ -95,7 +98,10 @@ function pimbalance(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     end
     # norm?
     if norm
-        ps = map(x -> (x - minimum(ps))/(maximum(ps) - minimum(ps)), ps)
+        l = [i == 1? timestep : 0 for i=1:length(tr.containers)]
+        maxps = ((maximum(l)/mean(l)) - 1)*100
+        minps = zero(Float64)
+        ps = map(x -> (x - minps)/(maxps - minps), ps)
     end
     return ps
 end
@@ -124,7 +130,10 @@ function imbalancep(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     end
     # norm?
     if norm
-        ps = map(x -> (x - minimum(ps))/(maximum(ps) - minimum(ps)), ps)
+        l = [i == 1? timestep : 0 for i=1:length(tr.containers)]
+        maxps = ((maximum(l) - mean(l))/maximum(l))*(length(l)/(length(l) - 1))
+        minps = zero(Float64)
+        ps = map(x -> (x - minps)/(maxps - minps), ps)
     end
     return ps
 end
@@ -153,7 +162,10 @@ function imbalancet(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
     end
     # norm?
     if norm
-        ps = map(x -> (x - minimum(ps))/(maximum(ps) - minimum(ps)), ps)
+        l = [i == 1? timestep : 0 for i=1:length(tr.containers)]
+        maxps = maximum(l) - mean(l)
+        minps = zero(Float64)
+        ps = map(x -> (x - minps)/(maxps - minps), ps)
     end
     return ps
 end
