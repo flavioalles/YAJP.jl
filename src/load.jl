@@ -31,7 +31,7 @@ function skewness(tr::Trace)
 end
 
 # TODO: doc
-function skewness(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+function skewness(tr::Trace, timestep::Real, drop::Real=0)
     @assert timestep > zero(Int) "Time step must be positive"
     @assert drop >= zero(Int) "Drop must be positive real number"
     @assert drop < span(tr)/2 "Drop is larger than possible"
@@ -45,10 +45,6 @@ function skewness(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
             end
         end
     end
-    # norm?
-    if norm
-        skews = map(x -> (x - minimum(skews))/(maximum(skews) - minimum(skews)), skews)
-    end
     return skews
 end
 
@@ -58,7 +54,7 @@ function kurtosis(tr::Trace)
 end
 
 # TODO: doc
-function kurtosis(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+function kurtosis(tr::Trace, timestep::Real, drop::Real=0)
     @assert timestep > zero(Int) "Time step must be positive"
     @assert drop >= zero(Int) "Drop must be positive real number"
     @assert drop < span(tr)/2 "Drop is larger than possible"
@@ -71,10 +67,6 @@ function kurtosis(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
                 push!(kurts, kurtosis(map(x -> load(x, ts, ended(tr)-drop), tr.containers)))
             end
         end
-    end
-    # norm?
-    if norm
-        kurts = map(x -> (x - minimum(kurts))/(maximum(kurts) - minimum(kurts)), kurts)
     end
     return kurts
 end

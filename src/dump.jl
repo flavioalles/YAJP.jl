@@ -90,8 +90,8 @@ function metrics(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
                    imbalancep = Float64[],
                    imbalancet = Float64[])
     # insert slices
-    for (slice,values) in enumerate(zip(std(tr,timestep,drop,norm), skewness(tr,timestep,drop,norm),
-                                 kurtosis(tr,timestep,drop,norm), pimbalance(tr,timestep,drop,norm),
+    for (slice,values) in enumerate(zip(std(tr,timestep,drop,norm), skewness(tr,timestep,drop),
+                                 kurtosis(tr,timestep,drop), pimbalance(tr,timestep,drop,norm),
                                  imbalancep(tr,timestep,drop,norm), imbalancet(tr,timestep,drop,norm)))
         bg = began(tr) + drop + timestep*(slice-1)
         bg + timestep <=  ended(tr) - drop? ed = bg + timestep : ed = ended(tr) - drop
@@ -107,6 +107,7 @@ function metrics(tr::Trace, f::Function, timestep::Real, drop::Real=0, norm::Boo
     fs = [std, skewness, kurtosis,
           pimbalance, imbalancep, imbalancet]
     @assert f in fs "Unrecognized metric function"
+    @assert f in [skewness, kurtosis] && norm == false "Skewness and Kurtosis cannot be normalized"
     # create DataFrame
     df = DataFrame(slice = Int[],
                    timestep = Real[],
@@ -116,7 +117,10 @@ function metrics(tr::Trace, f::Function, timestep::Real, drop::Real=0, norm::Boo
                    metric = ByteString[],
                    value = Float64[])
     # insert slices
-    for (slice,value) in enumerate(f(tr,timestep,drop,norm))
+    f in [skewness, kurtosis]?
+        m = f(tr,timestep,drop) :
+        m = f(tr,timestep,drop,norm)
+    for (slice,value) in enumerate(m)
         bg = began(tr) + drop + timestep*(slice-1)
         bg + timestep <=  ended(tr) - drop? ed = bg + timestep : ed = ended(tr) - drop
         midpoint = bg +  timestep/2
