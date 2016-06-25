@@ -107,7 +107,7 @@ function metrics(tr::Trace, f::Function, timestep::Real, drop::Real=0, norm::Boo
     fs = [std, skewness, kurtosis,
           pimbalance, imbalancep, imbalancet]
     @assert f in fs "Unrecognized metric function"
-    @assert f in [skewness, kurtosis] && norm == false "Skewness and Kurtosis cannot be normalized"
+    @assert f in [skewness, kurtosis] && norm == true "Skewness and Kurtosis cannot be normalized"
     # create DataFrame
     df = DataFrame(slice = Int[],
                    timestep = Real[],
