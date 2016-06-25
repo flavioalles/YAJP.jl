@@ -101,7 +101,9 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Real=0, norm::Bool=fa
               skewness,
               kurtosis]
         # retrieve metric
-        mtr = metrics(tr, f, timestep, drop, norm)
+        f in [skewness, kurtosis]?
+            mtr = metrics(tr, f, timestep, drop) :
+            mtr = metrics(tr, f, timestep, drop, norm)
         # select appropriate metric  y-label
         # and if x-label and ticks label should exist
         if f == pimbalance
