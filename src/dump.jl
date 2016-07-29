@@ -76,7 +76,7 @@ function metrics(tr::Trace, f::Function)
 end
 
 # TODO: doc
-function metrics(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+function metrics(tr::Trace, timestep::Real, norm::Bool=false)
     # create DataFrame
     df = DataFrame(slice = Int[],
                    timestep = Real[],
@@ -90,11 +90,11 @@ function metrics(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
                    imbalancep = Float64[],
                    imbalancet = Float64[])
     # insert slices
-    for (slice,values) in enumerate(zip(std(tr,timestep,drop,norm), skewness(tr,timestep,drop),
-                                 kurtosis(tr,timestep,drop), pimbalance(tr,timestep,drop,norm),
-                                 imbalancep(tr,timestep,drop,norm), imbalancet(tr,timestep,drop,norm)))
-        bg = began(tr) + drop + timestep*(slice-1)
-        bg + timestep <=  ended(tr) - drop? ed = bg + timestep : ed = ended(tr) - drop
+    for (slice,values) in enumerate(zip(std(tr,timestep,norm), skewness(tr,timestep),
+                                 kurtosis(tr,timestep), pimbalance(tr,timestep,norm),
+                                 imbalancep(tr,timestep,norm), imbalancet(tr,timestep,norm)))
+        bg = began(tr) + timestep*(slice-1)
+        bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
         midpoint = bg +  timestep/2
         push!(df, [slice timestep bg midpoint ed values[1] values[2] values[3] values[4] values[5] values[6]])
     end
@@ -102,7 +102,7 @@ function metrics(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
 end
 
 # TODO: doc
-function metrics(tr::Trace, f::Function, timestep::Real, drop::Real=0, norm::Bool=false)
+function metrics(tr::Trace, f::Function, timestep::Real, norm::Bool=false)
     # assert proper mtr
     fs = [std, skewness, kurtosis,
           pimbalance, imbalancep, imbalancet]
@@ -120,11 +120,11 @@ function metrics(tr::Trace, f::Function, timestep::Real, drop::Real=0, norm::Boo
                    value = Float64[])
     # insert slices
     f in [skewness, kurtosis]?
-        m = f(tr,timestep,drop) :
-        m = f(tr,timestep,drop,norm)
+        m = f(tr,timestep) :
+        m = f(tr,timestep,norm)
     for (slice,value) in enumerate(m)
-        bg = began(tr) + drop + timestep*(slice-1)
-        bg + timestep <=  ended(tr) - drop? ed = bg + timestep : ed = ended(tr) - drop
+        bg = began(tr) + timestep*(slice-1)
+        bg + timestep <=  ended(tr)? ed = bg + timestep : ed = ended(tr)
         midpoint = bg +  timestep/2
         push!(df, [slice timestep bg midpoint ed string(f) value])
     end

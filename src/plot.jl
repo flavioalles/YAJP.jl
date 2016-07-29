@@ -59,11 +59,11 @@ function loadplot(tr::YAJP.Trace, timestep::Real)
 end
 
 """
-    metricsplot(tr::YAJP.Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+    metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false)
 
 Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`.
 """
-function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+function metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false)
     # line width
     LINEWIDTH = 3pt
     # point size
@@ -82,8 +82,8 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, drop::Real=0, norm::Bool=fa
               kurtosis]
         # retrieve metric
         f in [skewness, kurtosis]?
-            mtr = metrics(tr, f, timestep, drop) :
-            mtr = metrics(tr, f, timestep, drop, norm)
+            mtr = metrics(tr, f, timestep) :
+            mtr = metrics(tr, f, timestep, norm)
         # select appropriate metric  y-label
         # and if x-label and ticks label should exist
         if f == pimbalance

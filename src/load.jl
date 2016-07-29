@@ -4,17 +4,15 @@ function std(tr::Trace)
 end
 
 # TODO: doc
-function std(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+function std(tr::Trace, timestep::Real, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive real number"
-    @assert drop < span(tr)/2 "Drop is larger than possible"
     stds = Float64[]
-    for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
-        if ts < ended(tr) - drop
-            if ts + timestep <= ended(tr) - drop
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
+            if ts + timestep <= ended(tr)
                 push!(stds, std(map(x -> load(x, ts, ts+timestep), tr.containers)))
             else
-                push!(stds, std(map(x -> load(x, ts, ended(tr)-drop), tr.containers)))
+                push!(stds, std(map(x -> load(x, ts, ended(tr)), tr.containers)))
             end
         end
     end
@@ -34,17 +32,15 @@ function skewness(tr::Trace)
 end
 
 # TODO: doc
-function skewness(tr::Trace, timestep::Real, drop::Real=0)
+function skewness(tr::Trace, timestep::Real)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive real number"
-    @assert drop < span(tr)/2 "Drop is larger than possible"
     skews = Float64[]
-    for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
-        if ts < ended(tr) - drop
-            if ts + timestep <= ended(tr) - drop
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
+            if ts + timestep <= ended(tr)
                 push!(skews, skewness(map(x -> load(x, ts, ts+timestep), tr.containers)))
             else
-                push!(skews, skewness(map(x -> load(x, ts, ended(tr)-drop), tr.containers)))
+                push!(skews, skewness(map(x -> load(x, ts, ended(tr)), tr.containers)))
             end
         end
     end
@@ -57,17 +53,15 @@ function kurtosis(tr::Trace)
 end
 
 # TODO: doc
-function kurtosis(tr::Trace, timestep::Real, drop::Real=0)
+function kurtosis(tr::Trace, timestep::Real)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive real number"
-    @assert drop < span(tr)/2 "Drop is larger than possible"
     kurts = Float64[]
-    for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
-        if ts < ended(tr) - drop
-            if ts + timestep <= ended(tr) - drop
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
+            if ts + timestep <= ended(tr)
                 push!(kurts, kurtosis(map(x -> load(x, ts, ts+timestep), tr.containers)))
             else
-                push!(kurts, kurtosis(map(x -> load(x, ts, ended(tr)-drop), tr.containers)))
+                push!(kurts, kurtosis(map(x -> load(x, ts, ended(tr)), tr.containers)))
             end
         end
     end
@@ -81,17 +75,15 @@ function pimbalance(tr::Trace)
 end
 
 # TODO: doc
-function pimbalance(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+function pimbalance(tr::Trace, timestep::Real, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive real number"
-    @assert drop < span(tr)/2 "Drop is larger than possible"
     ps = Float64[]
-    for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
-        if ts < ended(tr) - drop
-            if ts + timestep <= ended(tr) - drop
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
+            if ts + timestep <= ended(tr)
                 loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             else
-                loads = map(x -> load(x, ts, ended(tr)-drop), tr.containers)
+                loads = map(x -> load(x, ts, ended(tr)), tr.containers)
             end
             push!(ps, ((maximum(loads)/mean(loads)) - 1)*100)
         end
@@ -113,17 +105,15 @@ function imbalancep(tr::Trace)
 end
 
 # TODO: doc
-function imbalancep(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+function imbalancep(tr::Trace, timestep::Real, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive real number"
-    @assert drop < span(tr)/2 "Drop is larger than possible"
     ps = Float64[]
-    for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
-        if ts < ended(tr) - drop
-            if ts + timestep <= ended(tr) - drop
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
+            if ts + timestep <= ended(tr)
                 loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             else
-                loads = map(x -> load(x, ts, ended(tr)-drop), tr.containers)
+                loads = map(x -> load(x, ts, ended(tr)), tr.containers)
             end
             push!(ps, ((maximum(loads) - mean(loads))/maximum(loads))*(length(loads)/(length(loads) - 1)))
         end
@@ -145,17 +135,15 @@ function imbalancet(tr::Trace)
 end
 
 # TODO: doc
-function imbalancet(tr::Trace, timestep::Real, drop::Real=0, norm::Bool=false)
+function imbalancet(tr::Trace, timestep::Real, norm::Bool=false)
     @assert timestep > zero(Int) "Time step must be positive"
-    @assert drop >= zero(Int) "Drop must be positive real number"
-    @assert drop < span(tr)/2 "Drop is larger than possible"
     ps = Float64[]
-    for ts in (began(tr)+drop):timestep:(ended(tr)-drop)
-        if ts < ended(tr) - drop
-            if ts + timestep <= ended(tr) - drop
+    for ts in began(tr):timestep:ended(tr)
+        if ts < ended(tr)
+            if ts + timestep <= ended(tr)
                 loads = map(x -> load(x, ts, ts+timestep), tr.containers)
             else
-                loads = map(x -> load(x, ts, ended(tr)-drop), tr.containers)
+                loads = map(x -> load(x, ts, ended(tr)), tr.containers)
             end
             push!(ps, maximum(loads) - mean(loads))
         end
