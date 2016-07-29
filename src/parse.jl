@@ -1,7 +1,7 @@
 """
-    trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, start::T, finish::T)
+    trace{T<:Real}(tracepath::AbstractString, configpath::AbstractString, bare::Bool, [start::T, finish::T])
 
-Acquires desired trace information - as described by `configpath` configuration file - from csv or wsv dump of Pajé trace.
+Acquires desired trace information - as described by `configpath` configuration file - from csv or wsv dump of Pajé trace. `bare` is supposed to be set to true if `BareEvent`s ought to be used instead of `FullEvent`s.
 
 The expected arguments are, respectively, a path to the csv (or wsv) trace that will be parsed (`tracepath`) and a path to the configuration file that will define what is to be kept (`configpath`) No checking is done to insure existence and/or readability of files - `SystemError` is thrown and propagated (i.e. not caught here) in case the file cannot be opened. Also, if the config. file is inconsistent (as determined by `Conf.get(::AbstractString)`), an `ErrorException` is thrown. If file is neither a csv nor a wsv (determined simply by checking its extension), an `ErrorException` is raised.
 
