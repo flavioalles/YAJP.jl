@@ -70,11 +70,11 @@ function loadplot(tr::YAJP.Trace, timestep::Real, labels::Bool=true)
 end
 
 """
-    metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false)
+    metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false, individual::Bool=false)
 
-Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`.
+Returns a [Gadfly] plot depicting `tr`s evolution for load imbalance metric `f` (at every `timestep`) as a [Gadfly] `rectbin`. `norm` will determine if severity plots are normalized. `individual` will prepare plots to be presented separately (containing all labels).
 """
-function metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false)
+function metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false, individual::Bool=false)
     # line width
     LINEWIDTH = 3pt
     # point size
@@ -99,31 +99,43 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false)
         # and if x-label and ticks label should exist
         if f == pimbalance
             verticallabel = "Percent Imbalance"
-            horizontallabel = nothing
+            individual?
+                horizontallabel = "Time (s)" :
+                horizontallabel = nothing
             plotcolor = "blue"
         elseif f == imbalancep
             verticallabel = "Imbalance Percentage"
-            horizontallabel = nothing
+            individual?
+                horizontallabel = "Time (s)" :
+                horizontallabel = nothing
             plotcolor = "green"
         elseif f == imbalancet
             norm?
                 verticallabel = "Imbalance Time" :
                 verticallabel = "Imbalance Time (s)"
-            horizontallabel = nothing
+            individual?
+                horizontallabel = "Time (s)" :
+                horizontallabel = nothing
             plotcolor = "red"
         elseif f == std
             norm?
                 verticallabel = "Standard Deviation" :
                 verticallabel = "Standard Deviation (s)"
-            horizontallabel = "Time (s)"
+            individual?
+                horizontallabel = "Time (s)" :
+                horizontallabel = nothing
             plotcolor = "orange"
         elseif f == skewness
             verticallabel = "Skewness"
-            horizontallabel = nothing
+            individual?
+                horizontallabel = "Time (s)" :
+                horizontallabel = nothing
             plotcolor = "gray"
         else
             verticallabel = "Kurtosis"
-            horizontallabel = "Time (s)"
+            individual?
+                horizontallabel = "Time (s)" :
+                horizontallabel = nothing
             plotcolor = "purple"
         end
         # plot metric heat map
