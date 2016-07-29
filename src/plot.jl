@@ -2,11 +2,11 @@
 STEPDENOM = 30
 
 """
-    loadplot(tr::YAJP.Trace, timestep::Real)
+    loadplot(tr::YAJP.Trace, timestep::Real, labels::Bool=true)
 
-Returns a [Gadfly](https://github.com/dcjones/Gadfly.jl) plot depicting `tr`s normalized load evolution (at every `timestep`) as a [`rectbin`](http://dcjones.github.io/Gadfly.jl/geom_rectbin.html).
+Returns a [Gadfly](https://github.com/dcjones/Gadfly.jl) plot depicting `tr`s normalized load evolution (at every `timestep`) as a [`rectbin`](http://dcjones.github.io/Gadfly.jl/geom_rectbin.html). The optional argument `labels` determines if plot is labelled or not.
 """
-function loadplot(tr::YAJP.Trace, timestep::Real)
+function loadplot(tr::YAJP.Trace, timestep::Real, labels::Bool=true)
     # major labels font size
     MAJORLABEL = 18pt
     # minor labels font size
@@ -35,7 +35,16 @@ function loadplot(tr::YAJP.Trace, timestep::Real)
             throw(e)
         end
     end
-    horizontallabel = "Time (s)"
+    # set labels and key position
+    if labels
+        horizontallabel = "Time (s)"
+        verticallabel = "Resource"
+        keyposition = :right
+    else
+        horizontallabel = nothing
+        verticallabel = nothing
+        keyposition = :none
+    end
     # plot heat map of load evolution per resource
     pl = plot(lds, x="midpoint", y="container", color="normalized",
               Geom.rectbin,
@@ -44,13 +53,15 @@ function loadplot(tr::YAJP.Trace, timestep::Real)
                             convert(Int, floor(YAJP.began(tr))):
                             convert(Int, round(YAJP.span(tr)/STEPDENOM)):
                             convert(Int, ceil(YAJP.ended(tr)))),
-                           label=true,
+                           label=labels,
                            orientation=:horizontal),
+              Guide.yticks(label=labels),
               Guide.xlabel(horizontallabel, orientation=:horizontal),
-              Guide.ylabel("Resource", orientation=:vertical),
+              Guide.ylabel(verticallabel, orientation=:vertical),
               Scale.color_continuous(minvalue=0.0, maxvalue=1.0),
               Guide.colorkey("Load"),
-              Theme(guide_title_position=:center,
+              Theme(key_position=keyposition,
+                    guide_title_position=:center,
                     major_label_font_size=MAJORLABEL,
                     minor_label_font_size=MINORLABEL,
                     key_title_font_size=KEYTITLE,
