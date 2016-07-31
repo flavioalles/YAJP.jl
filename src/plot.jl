@@ -167,7 +167,7 @@ end
 """
     mergedmetricsplot(tr::YAJP.Trace, timestep::Real)
 
-Returns an array of [Gadfly](https://github.com/dcjones/Gadfly.jl) plots depicting `tr`s evolution for each load imbalance metric (at every `timestep`). Plots are merged, mmeaning, severity and shape metrics are plotted together. Severity metrics are normalized.
+Returns an array of [Gadfly](https://github.com/dcjones/Gadfly.jl) plots depicting `tr`s evolution for each load imbalance metric (at every `timestep`). Plots are merged: severity and shape metrics are plotted together. Severity metrics are normalized.
 """
 function mergedmetricsplot(tr::YAJP.Trace, timestep::Real)
     # line width
