@@ -140,9 +140,7 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false, individua
                 verticallabel = "Standard Deviation (s)"
                 maxy = 1.1*maximum(mtr[:value])
             end
-            individual?
-                horizontallabel = "Time (s)" :
-                horizontallabel = nothing
+            horizontallabel = "Time (s)" :
             plotcolor = "orange"
         elseif f == skewness
             miny = 1.1*minimum(mtr[:value])
@@ -156,9 +154,7 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false, individua
             miny = 1.1*minimum(mtr[:value])
             maxy = 1.1*maximum(mtr[:value])
             verticallabel = "Kurtosis"
-            individual?
-                horizontallabel = "Time (s)" :
-                horizontallabel = nothing
+            horizontallabel = "Time (s)" :
             plotcolor = "purple"
         end
         # plot metric heat map
