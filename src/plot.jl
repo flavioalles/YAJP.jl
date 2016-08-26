@@ -96,42 +96,65 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false, individua
             mtr = metrics(tr, f, timestep) :
             mtr = metrics(tr, f, timestep, norm)
         # select appropriate metric  y-label
+        # set vertical min and max
         # and if x-label and ticks label should exist
         if f == pimbalance
             verticallabel = "Percent Imbalance"
+            miny = 0.0
+            norm?
+                maxy = 1.0 :
+                maxy = 1.1*maximum(mtr[:value])
             individual?
                 horizontallabel = "Time (s)" :
                 horizontallabel = nothing
             plotcolor = "blue"
         elseif f == imbalancep
             verticallabel = "Imbalance Percentage"
+            miny = 0.0
+            norm?
+                maxy = 1.0 :
+                maxy = 1.1*maximum(mtr[:value])
             individual?
                 horizontallabel = "Time (s)" :
                 horizontallabel = nothing
             plotcolor = "green"
         elseif f == imbalancet
-            norm?
-                verticallabel = "Imbalance Time" :
+            miny = 0.0
+            if norm
+                verticallabel = "Imbalance Time"
+                maxy = 1.0
+            else
                 verticallabel = "Imbalance Time (s)"
+                maxy = 1.1*maximum(mtr[:value])
+            end
             individual?
                 horizontallabel = "Time (s)" :
                 horizontallabel = nothing
             plotcolor = "red"
         elseif f == std
-            norm?
-                verticallabel = "Standard Deviation" :
+            miny = 0.0
+            if norm
+                verticallabel = "Standard Deviation"
+                maxy = 1.0
+            else
                 verticallabel = "Standard Deviation (s)"
+                maxy = 1.1*maximum(mtr[:value])
+            end
             individual?
                 horizontallabel = "Time (s)" :
                 horizontallabel = nothing
             plotcolor = "orange"
         elseif f == skewness
+            miny = 1.1*minimum(mtr[:value])
+            maxy = 1.1*maximum(mtr[:value])
             verticallabel = "Skewness"
             individual?
                 horizontallabel = "Time (s)" :
                 horizontallabel = nothing
             plotcolor = "gray"
         else
+            miny = 1.1*minimum(mtr[:value])
+            maxy = 1.1*maximum(mtr[:value])
             verticallabel = "Kurtosis"
             individual?
                 horizontallabel = "Time (s)" :
@@ -145,7 +168,9 @@ function metricsplot(tr::YAJP.Trace, timestep::Real, norm::Bool=false, individua
                      layer(x="midpoint", y="value",
                            Geom.point, order=2),
                      Coord.cartesian(xmin=YAJP.began(tr),
-                                     xmax=YAJP.ended(tr)),
+                                     xmax=YAJP.ended(tr),
+                                     ymin=miny,
+                                     ymax=maxy),
                      Guide.xticks(ticks=collect(
                                      convert(Int, floor(YAJP.began(tr))):
                                      convert(Int, round(YAJP.span(tr)/STEPDENOM)):
